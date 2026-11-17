@@ -9,11 +9,11 @@
     return {
       seq: 100,
       users: [
-        { id: 1, name: "Ana Gómez", email: "ana@ejemplo.com", phone: "3001234567", pass: H("demo1234"), city: "Bogotá", role: "V", admin: false, suspended: false, favs: [], since: t - 60 * D },
-        { id: 2, name: "Luis Herrera", email: "luis@ejemplo.com", phone: "3109876543", pass: H("demo1234"), city: "Bogotá", role: "C", admin: false, suspended: false, favs: [], since: t - 45 * D },
-        { id: 3, name: "Usuario de Prueba", email: "prueba1@ejemplo.com", phone: "3205551234", pass: H("demo1234"), city: "Bogotá", role: "V", admin: false, suspended: false, favs: [], since: t - 20 * D },
-        { id: 4, name: "Administración", email: "admin@segundamano.co", phone: "", pass: H("admin1234"), city: "Bogotá", role: "A", admin: true, suspended: false, favs: [], since: t - 90 * D },
-        { id: 5, name: "Marta Rojas", email: "marta@ejemplo.com", phone: "3154443322", pass: H("demo1234"), city: "Chía", role: "D", admin: false, suspended: false, favs: [], since: t - 30 * D },
+        { id: 1, name: "Ana Gómez", email: "ana@ejemplo.com", phone: "3001234567", pass: H("demo1234"), city: "Bogotá", role: "V", admin: false, suspended: false, favs: [], cart: [], since: t - 60 * D },
+        { id: 2, name: "Luis Herrera", email: "luis@ejemplo.com", phone: "3109876543", pass: H("demo1234"), city: "Bogotá", role: "C", admin: false, suspended: false, favs: [], cart: [], since: t - 45 * D },
+        { id: 3, name: "Usuario de Prueba", email: "prueba1@ejemplo.com", phone: "3205551234", pass: H("demo1234"), city: "Bogotá", role: "V", admin: false, suspended: false, favs: [], cart: [], since: t - 20 * D },
+        { id: 4, name: "Administración", email: "admin@segundamano.co", phone: "", pass: H("admin1234"), city: "Bogotá", role: "A", admin: true, suspended: false, favs: [], cart: [], since: t - 90 * D },
+        { id: 5, name: "Marta Rojas", email: "marta@ejemplo.com", phone: "3154443322", pass: H("demo1234"), city: "Chía", role: "D", admin: false, suspended: false, favs: [], cart: [], since: t - 30 * D },
       ],
       posts: [
         { id: 1, owner: 1, mode: "venta", title: "Bicicleta de montaña rin 29", desc: "Marco de aluminio, 21 cambios Shimano. Llantas nuevas y frenos revisados en septiembre.", cat: "Deportes", cond: "Usado - buen estado", price: 420000, city: "Bogotá", zone: "Suba", imgs: [], status: "activa", at: t - 2 * D },
@@ -22,7 +22,7 @@
         { id: 4, owner: 5, mode: "donacion", title: "Libros de cálculo y física", desc: "Stewart (Cálculo de una variable) y Serway (Física, tomo 1). Con algunas notas a lápiz.", cat: "Libros", cond: "Usado - con detalles", price: 0, city: "Chía", zone: "Centro", imgs: [], status: "activa", at: t - 5 * D },
         { id: 5, owner: 3, mode: "venta", title: "Sofá de dos puestos", desc: "Tela gris, 1,60 m de ancho. Sin manchas. Se entrega en el barrio.", cat: "Hogar", cond: "Usado - buen estado", price: 380000, city: "Bogotá", zone: "Engativá", imgs: [], status: "activa", at: t - 4 * D },
         { id: 6, owner: 5, mode: "donacion", title: "Chaquetas de invierno talla M", desc: "Tres chaquetas impermeables en buen estado, ideales para el frío de la Sabana.", cat: "Ropa", cond: "Usado - buen estado", price: 0, city: "Chía", zone: "Bojacá", imgs: [], status: "activa", at: t - 6 * D },
-        { id: 7, owner: 3, mode: "venta", title: "Silla de escritorio ergonómica", desc: "Soporte lumbar ajustable y brazos regulables. Ruedas en perfecto estado.", cat: "Hogar", cond: "Nuevo", price: 210000, city: "Bogotá", zone: "Usaquén", imgs: [], status: "activa", at: t - 8 * D },
+        { id: 7, owner: 3, mode: "venta", title: "Silla de escritorio ergonómica", desc: "Soporte lumbar ajustable y brazos regulables. Ruedas en perfecto estado.", cat: "Hogar", cond: "Nuevo", price: 210000, stock: 3, city: "Bogotá", zone: "Usaquén", imgs: [], status: "activa", at: t - 8 * D },
         { id: 8, owner: 5, mode: "donacion", title: "Juego de ollas de acero", desc: "Cinco ollas con tapa. Funcionan en estufa de gas y eléctrica.", cat: "Hogar", cond: "Usado - buen estado", price: 0, city: "Chía", zone: "Centro", imgs: [], status: "activa", at: t - 9 * D },
         { id: 9, owner: 3, mode: "venta", title: "Guitarra acústica Yamaha C40", desc: "Incluye estuche blando y afinador. Cuerdas cambiadas hace un mes.", cat: "Música", cond: "Usado - buen estado", price: 300000, city: "Bogotá", zone: "Teusaquillo", imgs: [], status: "activa", at: t - 10 * D },
         { id: 10, owner: 3, mode: "venta", title: "Patineta completa", desc: "Tabla de arce, ejes de 8 pulgadas.", cat: "Deportes", cond: "Usado - con detalles", price: 150000, city: "Bogotá", zone: "Usaquén", imgs: [], status: "cerrada", at: t - 15 * D },
@@ -62,6 +62,7 @@
         { id: 5, user: 2, kind: "resena", post: 11, text: "Ya puedes calificar a Ana Gómez por “Lámpara de pie”.", link: "transacciones", read: false, at: t - 7 * D },
       ],
       reports: [{ id: 1, reporter: 1, type: "post", target: 9, reason: "Información falsa", comment: "La foto no corresponde al modelo C40.", status: "pendiente", action: null, at: t - 0.3 * D }],
+      orders: [],
       resets: [],
       mails: [],
     };

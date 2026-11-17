@@ -66,3 +66,23 @@ data/                se crea solo: base de datos (db.json) y fotos subidas
 ```
 
 El administrador puede restablecer los datos de demostración con el botón del pie de página.
+
+## Novedades: compras y pagos, Google y chat con fotos y ubicación
+
+- **Compra completa:** botón **⚡ Comprar ahora** y **🛒 Agregar al carrito** en cada artículo en venta, carrito (agregar, quitar, cambiar cantidad), checkout con datos de entrega (en persona gratis o a domicilio $ 12.000), pago, **confirmación**, **Mis pedidos** (historial) y **Mis ventas**. Estados: **Pendiente → Pagado → En proceso → Completado** (o Cancelado). Las unidades se descuentan solas; al agotarse, la publicación sale del catálogo.
+- **Pagos:** sin credenciales funciona la **pasarela de pruebas** (no cobra): tarjeta `4242 4242 4242 4242`, fecha `12/30`, CVC `123`; rechazada: `4000 0000 0000 0002`. Con las variables de Wompi se cobra con **Wompi** (tarjeta, PSE, Nequi, Bancolombia). Nunca se guarda el número de la tarjeta ni el CVC.
+- **Google:** botón **Continuar con Google** (registro automático, vinculación con la cuenta existente, cierre de sesión).
+- **Inicio de sesión más seguro:** correo validado, contraseña de 8+ caracteres con letras y números (no comunes), confirmación de contraseña, bloqueo de 15 minutos tras 5 intentos fallidos, sesiones que vencen a los 7 días, cada persona solo recibe sus propios datos.
+- **Chat:** enviar fotos 📷 (cámara o galería) y ubicación 📍 (mapa dentro del chat + Google Maps). Las fotos del chat solo las ven los dos participantes. Se identifica quién es Vendedor y quién Comprador.
+
+## Variables de entorno (Render → Environment)
+
+| Variable | Para qué | Dónde se obtiene |
+|---|---|---|
+| `GOOGLE_CLIENT_ID` | Activa "Continuar con Google" | console.cloud.google.com → APIs y servicios → Credenciales → ID de cliente OAuth (Aplicación web). En **Orígenes de JavaScript autorizados** agrega `https://segunda-mano-express.onrender.com` |
+| `WOMPI_PUBLIC_KEY` | Llave pública (`pub_test_…` sandbox o `pub_prod_…`) | comercios.wompi.co → Desarrolladores |
+| `WOMPI_INTEGRITY_SECRET` | Firma de integridad | comercios.wompi.co → Desarrolladores → Secretos |
+| `WOMPI_EVENTS_SECRET` | Valida el webhook (opcional) | igual; URL de eventos: `https://segunda-mano-express.onrender.com/api/wompi/events` |
+| `PUBLIC_URL` | (opcional) `https://segunda-mano-express.onrender.com` | — |
+
+Si no se configuran, la página funciona igual: sin el botón de Google y con la pasarela de pruebas.

@@ -311,6 +311,63 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
 }
 @media (max-width: 380px) { .cards { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+/* ---------- Compras y pagos, Google, chat con fotos y ubicación ---------- */
+.navcart .count { background: var(--accent); color: #1E2B22; font-size: .7rem; font-weight: 700; border-radius: 9px; padding: 1px 6px; margin-left: 4px; }
+.buybox { display: grid; gap: 10px; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.qty { display: flex; align-items: center; gap: 8px; font-size: .88rem; font-weight: 600; }
+.qty select { width: auto; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); }
+.stepper { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); }
+.stepper button { border: 0; background: var(--surface-2); width: 36px; height: 36px; cursor: pointer; font-size: 1.1rem; }
+.stepper button[disabled] { opacity: .4; cursor: not-allowed; }
+.stepper span { min-width: 36px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+.cartgrid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+@media (max-width: 900px) { .cartgrid { grid-template-columns: 1fr; } }
+.sumbox { display: grid; gap: 10px; position: sticky; top: 80px; }
+.sumrow { display: flex; justify-content: space-between; gap: 12px; font-size: .92rem; }
+.sumrow.total { font-family: var(--font-display); font-size: 1.3rem; font-weight: 600; border-top: 1px solid var(--line); padding-top: 10px; }
+.order { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 16px; display: grid; gap: 12px; }
+.order .it { display: flex; gap: 10px; align-items: center; }
+.order .it .grow { flex: 1; min-width: 0; display: grid; }
+.order .meta2 { display: flex; gap: 6px 18px; flex-wrap: wrap; font-size: .85rem; color: var(--fg-soft); }
+.choice { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--line); border-radius: 10px; padding: 12px; cursor: pointer; background: var(--surface); }
+.choice:has(input:checked) { border-color: var(--fg); box-shadow: inset 0 0 0 1px var(--fg); background: var(--surface-2); }
+.choice input, .field .choice input { width: auto; flex: none; padding: 0; margin-top: 4px; accent-color: var(--fg); }
+.order .mini { width: 56px; height: 56px; border-radius: 10px; font-size: 1.7rem; flex: none; aspect-ratio: auto; }
+@media (max-width: 720px) { .order .mini { width: 48px; height: 48px; } .order { padding: 12px; } }
+.choices { display: grid; gap: 10px; }
+.testnote { border: 1px dashed var(--accent); }
+.testnote code { font-size: .85rem; background: var(--surface); padding: 1px 6px; border-radius: 5px; }
+.ok-hero { text-align: center; display: grid; gap: 10px; justify-items: center; }
+.ok-hero .big { font-size: 3rem; line-height: 1; }
+.secure { font-size: .8rem; color: var(--fg-soft); display: flex; gap: 6px; align-items: center; }
+.gsi { min-height: 44px; display: flex; justify-content: center; }
+.divider { display: flex; align-items: center; gap: 10px; color: var(--fg-soft); font-size: .82rem; }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.passwrap { position: relative; display: block; }
+.passwrap input { padding-right: 46px; }
+.passwrap button { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); border: 0; background: none; cursor: pointer; font-size: 1rem; padding: 8px; color: var(--fg-soft); }
+.rules { display: flex; gap: 4px 12px; flex-wrap: wrap; font-size: .8rem; color: var(--fg-soft); }
+.rules .on { color: var(--venta); font-weight: 600; }
+.msg.media { padding: 5px 5px 6px; }
+.msgimg img { display: block; max-width: min(260px, 100%); max-height: 280px; border-radius: 9px; object-fit: cover; background: var(--surface-2); }
+.msgloc { display: grid; gap: 6px; font-size: .85rem; }
+.msgloc iframe { width: min(300px, 68vw); height: 190px; border: 0; border-radius: 9px; background: var(--surface-2); }
+.msgloc a { font-weight: 600; }
+.msg small .who { font-weight: 600; }
+.composer .iconbtn { flex: none; font-size: 1.1rem; padding: 6px 10px; }
+.composer .file { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.chatroles { display: flex; gap: 6px; flex-wrap: wrap; font-size: .78rem; }
+.orderbar { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+@media (max-width: 1180px) {
+  .menu-btn { display: inline-flex; }
+  .nav { display: none; width: 100%; flex-direction: column; align-items: stretch; padding-bottom: 8px; }
+  .nav.open { display: flex; }
+  .nav a, .nav button.link { padding: 11px 10px; font-size: 1rem; text-align: left; }
+  .bell-txt { display: inline !important; margin-left: 6px; }
+  .bell .count { position: static; transform: none; display: inline-grid; margin-left: 6px; }
+  .rolesel { padding: 8px 10px; }
+  .rolesel select { flex: 1; padding: 10px; }
+}
 @media (max-width: 720px) {
   .topbar { position: static; }
   .cards { gap: 12px; }
@@ -330,12 +387,13 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
 <main id="main" tabindex="-1"></main>
 <footer>
   <div class="wrap">
-    <span><span class="syncdot off" id="syncdot"></span><span id="syncmode">Conectando…</span> · SegundaMano Express · Sprints 1, 2 y 3 (HUI 1 a HUI 13) · Patrones y Metodologías, UMB</span>
+    <span><span class="syncdot off" id="syncdot"></span><span id="syncmode">Conectando…</span> · SegundaMano Express · Sprints 1 a 3 (HUI 1 a HUI 13) + compras y pagos · Patrones y Metodologías, UMB</span>
     <span class="actions"><button class="btn accent sm" id="install" data-cy="instalar" hidden>📲 Instalar app</button><button class="btn ghost sm" id="reset" data-cy="reset">Restablecer datos de demostración</button></span>
   </div>
 </footer>
 <script src="seed.js"></script>
 <script src="core.js"></script>
+<script src="shop.js"></script>
 <script>
 /* SegundaMano Express — prototipo funcional (Sprints 1, 2 y 3)
  * HTML, CSS y JavaScript puro. Los datos se guardan en el navegador (localStorage)
@@ -388,8 +446,12 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
   /* ---------- "base de datos" ----------
    * Modo compartido: el servidor (server.js) guarda los datos y cada navegador envía solo lo que cambió.
    * Modo local: si no hay servidor, todo se guarda en este navegador (localStorage). */
-  const COLLS = ["users", "posts", "questions", "convs", "requests", "txs", "deliveries", "reviews", "notifs", "reports"];
+  const COLLS = ["users", "posts", "questions", "convs", "requests", "txs", "deliveries", "reviews", "notifs", "reports", "orders"];
   const localHash = (s) => hash(s);
+  const localVerify = (p, stored) => !!stored && localHash(p) === stored;
+  const SHOP = window.SME_SHOP;
+  /* Configuración que publica el servidor: Google y pasarela de pagos (las claves viven en variables de entorno del servidor) */
+  let CONFIG = { googleClientId: null, payments: "pruebas", wompiSandbox: null, shippingFee: SHOP.SHIPPING_FEE };
   let serverMode = false, connected = false, version = 0, epoch = 0;
   let sess = (() => { try { return JSON.parse(localStorage.getItem(SKEY)) || {}; } catch (e) { return {}; } })();
   function setSession(uid, token) {
@@ -399,7 +461,7 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
   function norm(d) {
     COLLS.forEach((c) => (d[c] = d[c] || []));
     d.resets = d.resets || []; d.seq = d.seq || 100;
-    d.users.forEach((u) => (u.favs = u.favs || []));
+    d.users.forEach((u) => { u.favs = u.favs || []; u.cart = u.cart || []; });
     d.posts.forEach((p) => { if (!Array.isArray(p.imgs)) p.imgs = p.img ? [p.img] : []; delete p.img; });
     return d;
   }
@@ -419,7 +481,8 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
       return;
     }
     const up = {}; let n = 0;
-    COLLS.forEach((c) => db[c].forEach((r) => {
+    // Los pedidos solo los cambia el servidor (compras, pagos y estados)
+    COLLS.filter((c) => c !== "orders").forEach((c) => db[c].forEach((r) => {
       const k = c + ":" + r.id, js = JSON.stringify(r);
       if (shadow[k] !== js) { (up[c] = up[c] || []).push(r); shadow[k] = js; n++; }
     }));
@@ -451,9 +514,10 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
     if (outbox.length) flush();
   }
   /* Fusiona el estado del servidor sobre los mismos objetos para no perder referencias abiertas en pantalla */
-  function mergeState(r) {
+  function mergeState(r, force) {
     if (!r || !r.state) return false;
-    if (r.epoch !== epoch) {
+    if (r.epoch === epoch && !force && r.version < version) return false;
+    if (r.epoch !== epoch || force) {
       epoch = r.epoch; version = r.version;
       db = norm(Object.assign({ seq: 100 }, r.state)); memory = db; snapshot();
       return "replace";
@@ -476,6 +540,7 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
     try {
       const r = await api("state?v=" + version);
       setConnected(true);
+      if (r.auth === false && sess.uid) { setSession(null); mergeState(r, true); toast("Tu sesión venció. Inicia sesión de nuevo."); return render(); }
       if (r.same && r.epoch === epoch) return;
       const how = mergeState(r);
       if (how) liveRefresh(how);
@@ -489,11 +554,19 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
     txt.textContent = !serverMode ? "Modo local: los datos se guardan solo en este navegador" : v ? "En línea · datos compartidos con todos" : "Sin conexión · reintentando…";
   }
   /* Cuentas: en modo compartido las valida el servidor; en modo local, este navegador (mismas reglas en core.js) */
+  /* Después de iniciar o cerrar sesión se descarga el estado completo: cada persona solo recibe sus datos privados */
+  async function refreshState() {
+    if (!serverMode) return;
+    try { const r = await api("state"); mergeState(r, true); } catch (e) { /* se reintenta en el siguiente ciclo */ }
+  }
+  async function settle() {
+    for (let i = 0; i < 60 && (sending || outbox.length); i++) await new Promise((r) => setTimeout(r, 100));
+  }
   async function doRegister(v) {
     if (serverMode) {
       const r = await api("register", v);
       if (r.errors) return r;
-      mergeState(r); setSession(r.uid, r.token);
+      setSession(r.uid, r.token); mergeState(r, true);
       return { user: user(r.uid) };
     }
     const r = window.SME_CORE.register(db, v, localHash, nextId);
@@ -502,10 +575,10 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
   }
   async function doLogin(email, pass) {
     if (serverMode) {
-      try { const r = await api("login", { email, pass }); setSession(r.uid, r.token); return { user: user(r.uid) }; }
+      try { const r = await api("login", { email, pass }); setSession(r.uid, r.token); await refreshState(); return { user: user(r.uid) }; }
       catch (e) { return { error: e.message }; }
     }
-    const r = window.SME_CORE.login(db, email, pass, localHash);
+    const r = window.SME_CORE.login(db, email, pass, localVerify);
     if (r.user) setSession(r.user.id);
     return r;
   }
@@ -517,10 +590,27 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
     if (serverMode) { try { return await api("reset/confirm", v); } catch (e) { return { errors: { code: e.message } }; } }
     const r = window.SME_CORE.resetConfirm(db, v, localHash); save(); return r;
   }
-  async function uploadImage(dataUrl) {
+  async function uploadImage(dataUrl, conv) {
     if (!serverMode) return dataUrl;
-    const r = await api("upload", { data: dataUrl });
+    const r = await api("upload", conv != null ? { data: dataUrl, conv } : { data: dataUrl });
+    if (!r.url) throw new Error((r.errors && Object.values(r.errors)[0]) || "No pudimos subir la foto.");
     return r.url;
+  }
+  /* Compras: en el modo compartido las procesa el servidor; en modo local, este navegador con las mismas reglas (shop.js) */
+  const shopCtx = { newId: () => nextId(), now: () => now() };
+  async function shopCall(kind, a, b) {
+    if (serverMode) {
+      await settle();
+      try {
+        const r = kind === "create" ? await api("orders", a) : kind === "pay" ? await api(`checkout/${a}/pay`, { card: b }) : await api(`orders/${a}/status`, b);
+        if (r.state) mergeState(r);
+        return r;
+      } catch (e) { if (e.status === 401) { setSession(null); render(); } if (e.status === 402) await refreshState(); return { error: e.message, declined: e.status === 402 }; }
+    }
+    const u = me();
+    const r = kind === "create" ? SHOP.createOrders(db, u.id, a, shopCtx) : kind === "pay" ? SHOP.payTest(db, u.id, a, b, shopCtx) : SHOP.setStatus(db, u.id, a, b.action, shopCtx, b.note);
+    save();
+    return r;
   }
 
   const nextId = () => (serverMode ? Date.now() * 1000 + Math.floor(Math.random() * 1000) : ++db.seq);
@@ -536,7 +626,7 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
     pregunta: ["pregunta nueva", "preguntas nuevas"], mensaje: ["mensaje nuevo", "mensajes nuevos"],
     respuesta: ["respuesta nueva", "respuestas nuevas"], solicitud: ["solicitud nueva", "solicitudes nuevas"],
     oferta: ["oferta nueva", "ofertas nuevas"], resena: ["aviso de reseña", "avisos de reseña"],
-    entrega: ["novedad de entrega", "novedades de entrega"],
+    entrega: ["novedad de entrega", "novedades de entrega"], venta: ["venta nueva", "ventas nuevas"], pedido: ["novedad de pedido", "novedades de pedido"],
   };
   function summaryHtml() {
     const u = me(); if (!u) return "";
@@ -556,8 +646,8 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
   const firstName = (id) => (user(id) ? user(id).name.split(" ")[0] : "Usuario");
   const fdateShort = (d) => new Date(String(d) + "T12:00:00").toLocaleDateString("es-CO", { weekday: "short", day: "numeric", month: "short" });
   const todayStr = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
-  const STATUS_TXT = { activa: "Activa", pausada: "Pausada", reservada: "Entrega acordada", cerrada: "Cerrada", oculta: "Oculta", eliminada: "Eliminada" };
-  const STATUS_CLS = { activa: "venta", pausada: "gray", reservada: "donacion", cerrada: "gray", oculta: "bad", eliminada: "bad" };
+  const STATUS_TXT = { activa: "Activa", pausada: "Pausada", reservada: "Entrega acordada", cerrada: "Cerrada", oculta: "Oculta", eliminada: "Eliminada", vendida: "Vendida · sin unidades" };
+  const STATUS_CLS = { activa: "venta", pausada: "gray", reservada: "donacion", cerrada: "gray", oculta: "bad", eliminada: "bad", vendida: "gray" };
   const statusBadge = (p) => `<span class="badge ${STATUS_CLS[p.status] || "gray"}" data-cy="estado-publicacion">${STATUS_TXT[p.status] || p.status}</span>`;
 
   /* ---------- HUI-11 favoritos ---------- */
@@ -591,6 +681,7 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
   /* ---------- HUI-10 pausar, reactivar y eliminar ---------- */
   function manageBtns(p) {
     if (p.status === "reservada") return `<span class="small muted" data-cy="bloqueada-entrega">Tiene una entrega acordada: no se puede editar, pausar ni eliminar.</span>`;
+    if (p.status === "vendida") return `<span class="rowactions"><a class="btn ghost sm" href="#editar-${p.id}" data-cy="agregar-unidades">➕ Agregar unidades</a></span>`;
     if (p.status !== "activa" && p.status !== "pausada") return "";
     return `<span class="rowactions"><a class="btn ghost sm" href="#editar-${p.id}" data-cy="editar">✏️ Editar</a>
       <button type="button" class="btn ghost sm" data-pause="${p.id}" data-cy="${p.status === "pausada" ? "reactivar" : "pausar"}">${p.status === "pausada" ? "▶️ Reactivar" : "⏸️ Pausar"}</button>
@@ -794,6 +885,10 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
       if (r === "C") links += a("pedir", "Pedir artículo") + a("mis-solicitudes", "Mis solicitudes") + a("transacciones", "Mis compras");
       if (r === "A") links += a("admin", "Panel de reportes");
       if (r !== "A") {
+        const sales = db.orders.filter((o) => o.seller === u.id && o.status === "pagado").length;
+        links += a("mis-pedidos", "Mis pedidos");
+        if (r === "V" || sales) links += a("mis-ventas", `Mis ventas${sales ? `<span class="navbadge" data-cy="ventas-pendientes">${sales}</span>` : ""}`);
+        links += `<a href="#carrito" class="navcart ${cur === "carrito" ? "on" : ""}" data-cy="carrito" aria-label="Carrito, ${cartCount()} artículos">🛒 Carrito${cartCount() ? `<span class="count" data-cy="contador-carrito">${cartCount()}</span>` : ""}</a>`;
         const pend = db.deliveries.filter((d) => d.status === "acordada" && ((d.seller === u.id && !d.sellerOk) || (d.buyer === u.id && !d.buyerOk))).length;
         links += a("mensajes", "Mensajes") + a("entregas", `Entregas${pend ? `<span class="navbadge" data-cy="entregas-pendientes">${pend}</span>` : ""}`);
         links += `<a href="#favoritos" class="navfav ${cur === "favoritos" ? "on" : ""}" data-cy="mis-favoritos">♥ Favoritos<span class="count" data-cy="contador-favoritos">${favCount()}</span></a>`;
@@ -815,9 +910,11 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
       go("catalogo");
     });
     const lo = $("#logout");
-    lo && lo.addEventListener("click", () => {
-      if (serverMode) api("logout", {}).catch(() => {});
-      setSession(null); toast("Cerraste sesión."); go("catalogo");
+    lo && lo.addEventListener("click", async () => {
+      lo.disabled = true;
+      if (serverMode) { await settle(); try { await api("logout", {}); } catch (e) { /* la sesión ya no existía */ } }
+      try { window.google && window.google.accounts.id.disableAutoSelect(); } catch (e) { /* Google no cargado */ }
+      setSession(null); await refreshState(); toast("Cerraste sesión."); go("catalogo");
     });
   }
 
@@ -913,11 +1010,13 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
     main().innerHTML = `<div class="wrap page"><div class="auth">${authSide()}<div class="panel">
       <form class="form" id="reg" novalidate>
         <div><h1>Crea tu cuenta</h1><p class="muted">Una sola cuenta para comprar, vender y donar. Puedes cambiar de rol cuando quieras.</p></div>
+        ${googleBlock("reg")}
         <div class="field"><label for="r-name">Nombre completo</label><input id="r-name" name="name" autocomplete="name" data-cy="reg-nombre"><span class="err"></span></div>
         <div class="grid2">
           <div class="field"><label for="r-email">Correo electrónico</label><input id="r-email" name="email" type="email" autocomplete="email" data-cy="reg-correo"><span class="err"></span></div>
           <div class="field"><label for="r-phone">Teléfono (opcional)</label><input id="r-phone" name="phone" inputmode="tel" autocomplete="tel" data-cy="reg-telefono" placeholder="Ej.: 3001234567"><span class="hint">Privado: solo se muestra si lo compartes en el chat.</span><span class="err"></span></div>
-          <div class="field"><label for="r-pass">Contraseña</label><input id="r-pass" name="pass" type="password" autocomplete="new-password" data-cy="reg-clave"><span class="hint">Mínimo 8 caracteres.</span><span class="err"></span></div>
+          <div class="field"><label for="r-pass">Contraseña</label>${passInput("r-pass", "pass", "new-password", "reg-clave")}<span class="rules" id="r-rules" data-cy="reglas-clave"></span><span class="err"></span></div>
+          <div class="field"><label for="r-pass2">Repite la contraseña</label>${passInput("r-pass2", "pass2", "new-password", "reg-clave2")}<span class="err"></span></div>
           <div class="field"><label for="r-city">Ciudad o municipio</label><select id="r-city" name="city" data-cy="reg-ciudad"><option value="">Selecciona…</option>${CITIES.map((c) => `<option>${c}</option>`).join("")}</select><span class="err"></span></div>
         </div>
         <div class="field"><span class="lbl">Elige tu rol para empezar</span>
@@ -930,23 +1029,24 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
         <p class="small muted">¿Ya tienes cuenta? <a href="#login">Inicia sesión</a></p>
       </form></div></div></div>`;
     const f = $("#reg");
+    wireGoogle("reg");
+    const rules = () => { $("#r-rules").innerHTML = passRules(f.pass.value, f.email.value); };
+    f.pass.addEventListener("input", rules); f.email.addEventListener("input", rules); rules();
     $$(".rolecard", f).forEach((b) => b.addEventListener("click", () => {
       picked = b.dataset.role; f.role.value = picked;
       $$(".rolecard", f).forEach((x) => x.classList.toggle("on", x === b)); setErr(f, "role", "");
     }));
     f.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const v = { name: f.elements.name.value.trim(), email: f.email.value.trim().toLowerCase(), pass: f.pass.value, city: f.city.value, phone: f.phone.value.replace(/[\s-]/g, ""), role: picked };
+      const v = { name: f.elements.name.value.trim(), email: f.email.value.trim().toLowerCase(), pass: f.pass.value, pass2: f.pass2.value, city: f.city.value, phone: f.phone.value.replace(/[\s-]/g, ""), role: picked };
       const btn = f.querySelector("[data-cy=reg-enviar]"); btn.disabled = true;
       let r;
       try { r = await doRegister(v); } catch (err) { r = { errors: { email: err.message } }; }
       btn.disabled = false;
-      ["name", "email", "pass", "city", "role", "phone"].forEach((k) => setErr(f, k, (r.errors || {})[k] || ""));
-      if (r.errors) return;
+      ["name", "email", "pass", "pass2", "city", "role", "phone"].forEach((k) => setErr(f, k, (r.errors || {})[k] || ""));
+      if (r.errors) { const bad = $(".field.bad", f); bad && bad.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
       const u = r.user;
-      toast(`Bienvenido, ${u.name.split(" ")[0]}. Tu cuenta está lista. Modo activo: ${ROLES[u.role]}.`);
-      if (pendingFav) applyPendingFav();
-      go("catalogo");
+      afterAuth(u, `Bienvenido, ${u.name.split(" ")[0]}. Tu cuenta está lista. Modo activo: ${ROLES[u.role]}.`);
     });
   }
 
@@ -956,10 +1056,11 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
     setTimeout(() => (flash = ""), 0);
     main().innerHTML = `<div class="wrap page"><div class="auth">${authSide()}<div class="panel">
       <form class="form" id="login-form" novalidate>
-        <div><h1>Inicia sesión</h1><p class="muted">Entra para publicar, chatear y seguir tus solicitudes.</p></div>
+        <div><h1>Inicia sesión</h1><p class="muted">Entra para comprar, publicar, chatear y seguir tus pedidos.</p></div>
+        ${googleBlock("login")}
         <div id="login-alert">${flash ? `<div class="alert ok" data-cy="login-aviso">${esc(flash)}</div>` : ""}</div>
         <div class="field"><label for="l-email">Correo electrónico</label><input id="l-email" name="email" type="email" autocomplete="email" data-cy="login-correo"><span class="err"></span></div>
-        <div class="field"><label for="l-pass">Contraseña</label><input id="l-pass" name="pass" type="password" autocomplete="current-password" data-cy="login-clave"><span class="err"></span></div>
+        <div class="field"><label for="l-pass">Contraseña</label>${passInput("l-pass", "pass", "current-password", "login-clave")}<span class="err"></span></div>
         <button class="btn" data-cy="login-enviar">Entrar</button>
         <p class="small"><a href="#recuperar" data-cy="olvide-clave">¿Olvidaste tu contraseña?</a></p>
         <p class="small muted">¿No tienes cuenta? <a href="#registro">Crea una</a></p>
@@ -970,21 +1071,19 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
           <span>Administrador: <code>admin@segundamano.co</code> · <code>admin1234</code></span></div>
       </form></div></div></div>`;
     const f = $("#login-form");
+    wireGoogle("login");
     f.addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = f.email.value.trim().toLowerCase();
-      let ok = setErr(f, "email", email ? "" : "Escribe tu correo electrónico.");
+      let ok = setErr(f, "email", !email ? "Escribe tu correo electrónico." : !window.SME_CORE.validEmail(email) ? "El correo no tiene un formato válido (ejemplo: nombre@correo.com)." : "");
       ok = setErr(f, "pass", f.pass.value ? "" : "Escribe tu contraseña.") && ok;
       if (!ok) return;
       const btn = f.querySelector("[data-cy=login-enviar]"); btn.disabled = true;
       const r = await doLogin(email, f.pass.value);
       btn.disabled = false;
-      if (!r.user) { $("#login-alert").innerHTML = `<div class="alert bad" data-cy="login-error">${esc(r.error)}</div>`; return; }
+      if (!r.user) { $("#login-alert").innerHTML = `<div class="alert bad" data-cy="login-error" role="alert">${esc(r.error)}</div>`; f.pass.value = ""; return; }
       const u = r.user;
-      toast(`Hola, ${u.name.split(" ")[0]}.`);
-      if (pendingFav) applyPendingFav();
-      const n = sessionNext; sessionNext = null;
-      go(n || (u.admin ? "admin" : "catalogo"));
+      afterAuth(u, `Hola, ${u.name.split(" ")[0]}.`);
     });
   }
 
@@ -1007,7 +1106,7 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
           <form class="form" id="rc-form" novalidate>
             <div class="field"><label for="rc-code">Código de 6 dígitos</label><input id="rc-code" name="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" data-cy="rec-codigo"><span class="err" data-cy="rec-error-codigo"></span></div>
             <div class="grid2">
-              <div class="field"><label for="rc-pass">Nueva contraseña</label><input id="rc-pass" name="pass" type="password" autocomplete="new-password" data-cy="rec-clave"><span class="hint">Mínimo 8 caracteres.</span><span class="err"></span></div>
+              <div class="field"><label for="rc-pass">Nueva contraseña</label><input id="rc-pass" name="pass" type="password" autocomplete="new-password" data-cy="rec-clave"><span class="hint">Mínimo 8 caracteres, con letras y números.</span><span class="err"></span></div>
               <div class="field"><label for="rc-pass2">Repite la contraseña</label><input id="rc-pass2" name="pass2" type="password" autocomplete="new-password" data-cy="rec-clave2"><span class="err"></span></div>
             </div>
             <button class="btn" data-cy="rec-confirmar" ${blocked ? "disabled" : ""}>Confirmar</button>
@@ -1064,7 +1163,7 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
     if (editing) {
       if (editing.owner !== me().id) return denied("Solo quien publicó el artículo puede editarlo.");
       if (editing.mode === "solicitud") return denied("Las solicitudes no se editan desde aquí.");
-      if (editing.status !== "activa" && editing.status !== "pausada") return denied(editing.status === "reservada" ? "No puedes editar una publicación con una entrega acordada. Cancela la entrega o espera a que se complete." : "Esta publicación ya no se puede editar.");
+      if (editing.status !== "activa" && editing.status !== "pausada" && editing.status !== "vendida") return denied(editing.status === "reservada" ? "No puedes editar una publicación con una entrega acordada. Cancela la entrega o espera a que se complete." : "Esta publicación ya no se puede editar.");
     } else if (role() !== "V" && role() !== "D") return denied("Para publicar cambia tu rol a Vendedor (venta) o Donante (donación) en el selector de la parte superior o en tu perfil.");
     const mode = editing ? editing.mode : role() === "V" ? "venta" : "donacion";
     const ev = editing || {};
@@ -1081,7 +1180,8 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
         <div class="grid2">
           <div class="field"><label for="p-cat">Categoría</label><select id="p-cat" name="cat" data-cy="pub-categoria"><option value="">Selecciona…</option>${opt(CATS, ev.cat)}</select><span class="err"></span></div>
           <div class="field"><label for="p-cond">Estado del artículo</label><select id="p-cond" name="cond" data-cy="pub-estado"><option value="">Selecciona…</option>${opt(CONDS, ev.cond)}</select><span class="err"></span></div>
-          ${mode === "venta" ? `<div class="field" id="price-field"><label for="p-price">Precio (COP)</label><input id="p-price" name="price" inputmode="numeric" data-cy="pub-precio" placeholder="Ej.: 150000" value="${editing ? esc(String(ev.price)) : ""}"><span class="hint">Solo números, mayor que 0.</span><span class="err"></span></div>` : ""}
+          ${mode === "venta" ? `<div class="field" id="price-field"><label for="p-price">Precio (COP)</label><input id="p-price" name="price" inputmode="numeric" data-cy="pub-precio" placeholder="Ej.: 150000" value="${editing ? esc(String(ev.price)) : ""}"><span class="hint">Solo números, mayor que 0.</span><span class="err"></span></div>
+          <div class="field"><label for="p-stock">Unidades disponibles</label><input id="p-stock" name="stock" inputmode="numeric" data-cy="pub-unidades" value="${editing ? SHOP.stockOf(editing) || "" : "1"}"><span class="hint">Cuántas tienes para vender (1 a 999). Se descuentan solas con cada compra.</span><span class="err"></span></div>` : ""}
           <div class="field"><label for="p-city">Ciudad o municipio</label><select id="p-city" name="city" data-cy="pub-ciudad">${opt(CITIES, ev.city || me().city)}</select><span class="err"></span></div>
           <div class="field"><label for="p-zone">Barrio o localidad</label><input id="p-zone" name="zone" maxlength="40" data-cy="pub-barrio" placeholder="Ej.: Suba" value="${esc(ev.zone || "")}"><span class="err"></span></div>
         </div>
@@ -1141,13 +1241,18 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
         else if (!/^\d+$/.test(v.price)) pe = "El precio solo puede tener números, sin letras, puntos ni signos.";
         else if (Number(v.price) <= 0) pe = "El precio debe ser mayor que 0.";
         ok = setErr(f, "price", pe) && ok;
+        const sv = f.stock.value.trim();
+        ok = setErr(f, "stock", !/^\d+$/.test(sv) ? "Escribe cuántas unidades tienes (solo números)." : Number(sv) < 1 || Number(sv) > 999 ? "Las unidades deben estar entre 1 y 999." : "") && ok;
       }
       if (!ok) { const bad = $(".field.bad", f); bad && bad.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
       const data = { title: v.title, desc: v.desc, cat: v.cat, cond: v.cond, price: mode === "venta" ? Number(v.price) : 0, city: v.city, zone: v.zone, imgs: [...imgs] };
+      if (mode === "venta") data.stock = Number(f.stock.value.trim());
       if (editing) {
         const oldPrice = editing.price;
         Object.assign(editing, data, { editedAt: now() });
-        if (mode === "venta" && data.price < oldPrice) {
+        if (editing.status === "vendida" && editing.stock > 0) editing.status = "activa";
+        // En el modo compartido el servidor avisa la baja de precio a quienes lo tienen en favoritos
+        if (!serverMode && mode === "venta" && data.price < oldPrice) {
           db.users.filter((x) => x.id !== editing.owner && (x.favs || []).includes(editing.id)).forEach((x) => notify(x.id, `Bajó el precio de “${editing.title}” en tus favoritos: ahora ${money(data.price)}.`, `pub-${editing.id}`, "otro", editing.id));
         }
         save(); toast("Publicación actualizada");
@@ -1210,12 +1315,23 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
     if (p.status === "cerrada") actions = `<div class="alert" data-cy="pub-cerrada">Esta publicación está cerrada: el artículo ya se entregó. No se pueden iniciar conversaciones nuevas.</div>`;
     else if (p.status === "oculta") actions = `<div class="alert bad">Esta publicación fue ocultada por moderación y no aparece en el catálogo.</div>`;
     else if (p.status === "pausada" && !mine) actions = `<div class="alert" data-cy="pub-pausada">Quien publicó pausó este artículo. Por ahora no está disponible.</div>`;
+    else if (p.status === "vendida" && !mine) actions = `<div class="alert" data-cy="pub-vendida">Este artículo se vendió: ya no quedan unidades disponibles.</div>${favBtn(p, true)}`;
+    else if (p.status === "vendida" && mine) actions = `<div class="alert" data-cy="aviso-vendida">Vendiste todas las unidades. Si consigues más, agrégalas y la publicación vuelve al catálogo.</div>${manageBtns(p)}`;
     else if (p.status === "reservada" && !mine && !inDelivery) actions = `<div class="alert" data-cy="pub-reservada">Este artículo tiene una entrega acordada con otra persona. Si se cancela, vuelve a estar disponible.</div>`;
     else if (mine) actions = (p.status === "pausada" ? `<div class="alert" data-cy="aviso-pausada">Tu publicación está pausada: no aparece en el catálogo ni en la búsqueda.</div>` : "") + (p.mode === "solicitud"
       ? `<div class="alert" data-cy="es-mia">Es tu solicitud. Las ofertas te llegan como conversaciones en <a href="#mensajes">Mensajes</a> y la gestionas en <a href="#mis-solicitudes">Mis solicitudes</a>.</div>`
       : `<div class="alert" data-cy="es-mia">Es tu publicación. Las solicitudes y conversaciones están en <a href="#mis-publicaciones">Mis publicaciones</a> y <a href="#mensajes">Mensajes</a>.</div>${manageBtns(p)}`);
     else if (p.mode === "solicitud") {
       actions = `<button class="btn accent" id="offer" data-cy="ofrecer">🎁 Ofrecer artículo</button>`;
+    } else if (p.mode === "venta" && !(u && u.admin)) {
+      const st = SHOP.stockOf(p), inCart = u && (u.cart || []).find((c) => c.post === p.id);
+      actions = `<div class="buybox" data-cy="caja-compra" style="flex-basis:100%">
+          <div class="pagehead" style="align-items:center"><span class="small ${st <= 2 ? "" : "muted"}" data-cy="unidades">${st === 1 ? "Última unidad disponible" : `${st} unidades disponibles`}</span>
+          ${st > 1 ? `<label class="qty" for="buy-qty">Cantidad <select id="buy-qty" data-cy="cantidad">${Array.from({ length: Math.min(st, 10) }, (_, i) => `<option>${i + 1}</option>`).join("")}</select></label>` : ""}</div>
+          <div class="actions"><button class="btn accent" id="buy-now" data-cy="comprar-ahora">⚡ Comprar ahora</button><button class="btn" id="add-cart" data-cy="agregar-carrito">🛒 Agregar al carrito</button></div>
+          ${inCart ? `<span class="small" data-cy="en-carrito">Ya tienes ${inCart.qty} en tu carrito · <a href="#carrito">Ver carrito</a></span>` : ""}
+          <span class="secure">🔒 Pago seguro en línea · el vendedor recibe el aviso y coordinan la entrega por el chat</span></div>
+        <button class="btn ghost" id="contact" data-cy="contactar">💬 Contactar</button>${favBtn(p, true)}`;
     } else {
       actions = `<button class="btn" id="contact" data-cy="contactar">Contactar</button>${favBtn(p, true)}`;
       if (p.mode === "donacion") {
@@ -1267,6 +1383,14 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
       if (!cv) { cv = { id: nextId(), post: p.id, buyer: u.id, seller: p.owner, shared: {}, msgs: [] }; db.convs.push(cv); save(); }
       go(`chat-${cv.id}`);
     });
+    const qtyNow = () => Number(($("#buy-qty") || {}).value || 1);
+    const bn = $("#buy-now");
+    bn && bn.addEventListener("click", () => {
+      if (!u) { pendingBuy = { pid: p.id, qty: qtyNow() }; return needLogin("checkout"); }
+      buyNow = { post: p.id, qty: qtyNow() }; go("checkout");
+    });
+    const ac = $("#add-cart");
+    ac && ac.addEventListener("click", () => { if (addToCart(p.id, qtyNow())) viewPost(id); });
     const of = $("#offer");
     of && of.addEventListener("click", () => {
       if (!u) return needLogin(`pub-${p.id}`);
@@ -1444,7 +1568,7 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
       }).join("") : `<div class="empty"><h3>Aún no tienes transacciones</h3><p class="muted">Aparecen aquí cuando un vendedor marca la entrega o un donante acepta tu solicitud.</p></div>`}</div></div>`;
     $$("[data-rate]").forEach((b) => b.addEventListener("click", () => rateModal(db.txs.find((t) => t.id === Number(b.dataset.rate)))));
   }
-  function rateModal(t) {
+  function rateModal(t, after) {
     const p = post(t.post), seller = user(t.seller);
     let stars = 0;
     modal(`<form id="rate" class="form" novalidate>
@@ -1465,7 +1589,7 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
         if (db.reviews.some((r) => r.tx === t.id)) { close(); toast("Ya calificaste esta transacción."); return; }
         db.reviews.push({ id: nextId(), tx: t.id, from: me().id, to: t.seller, stars, comment: f.comment.value.trim(), at: now() });
         notify(t.seller, `${me().name} te calificó con ${stars} ${stars === 1 ? "estrella" : "estrellas"} por “${p.title}”.`, `perfil-${t.seller}`, "resena", p.id);
-        save(); close(); toast("Reseña publicada en el perfil."); viewTransacciones();
+        save(); close(); toast("Reseña publicada en el perfil."); (after || viewTransacciones)();
       });
     });
   }
@@ -1491,13 +1615,32 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
         <div><h2>Configuración de la cuenta</h2><p class="muted small">Correo: ${esc(p.email)}${p.phone ? ` · Teléfono: ${esc(p.phone)}` : ""} (privados: otros usuarios no los ven)</p></div>
         <div class="field"><span class="lbl">Rol activo (modo de uso)</span>
           <div class="roles" data-cy="roles-perfil">${["C", "V", "D"].map((k) => `<button type="button" class="rolecard ${p.role === k ? "on" : ""}" data-prole="${k}" data-cy="perfil-rol-${k}"><b>${{ C: "🛒", V: "🏷️", D: "🎁" }[k]} ${ROLES[k]}${p.role === k ? " · activo" : ""}</b><span class="small muted">${ROLE_DESC[k]}</span></button>`).join("")}</div></div>
-        <p class="small muted" data-cy="historial">Tu historial se conserva al cambiar de rol: ${hist.pubs} publicaciones, ${hist.compras} compras o donaciones recibidas, ${hist.ventas} entregas, ${hist.resenas} reseñas y ${hist.chats} conversaciones.</p>
+        <p class="small muted" data-cy="historial">Tu historial se conserva al cambiar de rol: ${hist.pubs} publicaciones, ${hist.compras} compras o donaciones recibidas, ${hist.ventas} entregas, ${hist.resenas} reseñas, ${hist.chats} conversaciones y ${db.orders.filter((o) => o.buyer === p.id).length} pedidos.</p>
+      </section>
+      <section class="panel" style="display:grid;gap:12px" data-cy="seguridad">
+        <h2>Seguridad e inicio de sesión</h2>
+        <div class="row" style="background:var(--bg)"><div class="grow"><b>Contraseña</b><span class="small muted" data-cy="estado-clave">${p.hasPass === false ? "Tu cuenta no tiene contraseña: entras con Google." : "Configurada. Mínimo 8 caracteres con letras y números."}</span></div><a class="btn ghost sm" href="#recuperar" data-cy="cambiar-clave">${p.hasPass === false ? "Crear contraseña" : "Cambiar contraseña"}</a></div>
+        ${serverMode && CONFIG.googleClientId ? `<div class="row" style="background:var(--bg)"><div class="grow"><b>Cuenta de Google</b><span class="small muted" data-cy="estado-google">${p.google ? `Vinculada: ${esc(p.googleEmail || p.email)}. Puedes entrar con “Continuar con Google”.` : "Sin vincular. Vincúlala para entrar con un clic."}</span></div>
+          ${p.google ? `<button class="btn ghost sm" id="g-unlink" data-cy="desvincular-google">Desvincular</button>` : `<div class="gsi" id="gsi-link" data-cy="vincular-google"></div>`}</div>` : ""}
+        <p class="small muted">Tu sesión se cierra sola a los 7 días, al cambiar la contraseña o al pulsar <b>Salir</b>. Después de 5 intentos fallidos bloqueamos el inicio de sesión por 15 minutos.</p>
       </section>`; })() : ""}
       <section class="grid2" style="align-items:start">
         <div class="panel" style="display:grid;gap:12px"><h2>Reseñas recibidas</h2>${revs.length ? revs.map((r) => `<div class="q" data-cy="resena"><span class="stars">${starsTxt(r.stars)}</span><p>${esc(r.comment || "Sin comentario")}</p><span class="small muted">${esc(user(r.from).name)} · ${fdate(r.at)}</span></div>`).join("") : `<p class="muted">Sin reseñas todavía.</p>`}</div>
         <div class="panel" style="display:grid;gap:12px"><h2>Publicaciones activas</h2>${posts.length ? posts.map((x) => `<a class="row" href="#pub-${x.id}" style="text-decoration:none">${thumb(x, "thumb mini")}<div class="grow"><b>${esc(x.title)}</b><span class="small muted">${badge(x)} ${x.mode === "venta" ? money(x.price) : x.mode === "solicitud" ? "Se necesita" : "Gratis"}</span></div></a>`).join("") : `<p class="muted">No tiene publicaciones activas.</p>`}</div>
       </section></div>`;
     const r = $("#rep-user"); r && r.addEventListener("click", () => reportModal("user", p.id, p.name));
+    if (self && serverMode && CONFIG.googleClientId) {
+      const gl = $("#gsi-link");
+      gl && googleButton(gl, "continue_with", async (cred) => {
+        try { const r2 = await api("auth/google/link", { credential: cred }); mergeState(r2, true); toast("Cuenta de Google vinculada."); viewPerfil(id); }
+        catch (e) { toast(e.message); }
+      });
+      const gu = $("#g-unlink");
+      gu && gu.addEventListener("click", async () => {
+        try { const r2 = await api("auth/google/unlink", {}); mergeState(r2, true); toast("Desvinculaste tu cuenta de Google."); viewPerfil(id); }
+        catch (e) { toast(e.message); }
+      });
+    }
     $$("[data-prole]").forEach((b) => b.addEventListener("click", () => {
       const k = b.dataset.prole; if (k === p.role) return;
       p.role = k; save();
@@ -1521,7 +1664,7 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
   }
   /* Los correos y teléfonos escritos en el chat se ocultan hasta que su autor comparta sus datos explícitamente */
   function showMsg(c, m) {
-    if (m.from === 0 || m.contact) return m.text;
+    if (m.from === 0 || m.contact || m.type) return m.text;
     return (c.shared || {})[m.from] ? m.text : maskContact(m.text);
   }
   function viewChat(id) {
@@ -1534,20 +1677,28 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
     const dlast = db.deliveries.filter((d) => d.post === p.id && d.buyer === c.buyer).sort((a, b) => b.at - a.at)[0];
     const canAgree = p.mode !== "solicitud" && u.id === p.owner && p.status === "activa";
     const iShared = !!c.shared[u.id], otherShared = !!c.shared[other.id];
+    const roleIn = (id) => id === c.seller ? (p.mode === "venta" ? "Vendedor" : p.mode === "donacion" ? "Donante" : "Solicitante") : (p.mode === "venta" ? "Comprador" : p.mode === "donacion" ? "Interesado" : "Ofrece el artículo");
+    const ord = db.orders.filter((o) => o.buyer === c.buyer && o.seller === c.seller && o.items.some((it) => it.post === c.post) && o.status !== "cancelado").sort((a, b) => b.at - a.at)[0];
     main().innerHTML = `<div class="wrap page medium">
       <a href="#mensajes" class="small muted">← Todas las conversaciones</a>
       ${dlast ? deliveryHtml(dlast) : ""}
       ${canAgree ? `<div class="alert installbar" data-cy="aviso-acordar"><span>¿Ya acordaron fecha y lugar con ${esc(other.name.split(" ")[0])}? Regístralo para reservar el artículo.</span><button class="btn sm" id="agree-btn" data-cy="acordar-entrega">🤝 Acordar entrega</button></div>` : ""}
-      <div class="chatbox" style="grid-template-rows:auto auto minmax(260px, 50vh) auto">
+      <div class="chatbox" style="grid-template-rows:auto ${ord ? "auto " : ""}auto minmax(260px, 50vh) auto">
         <div class="chathead"><span class="avatar">${initials(other.name)}</span>
-          <div class="grow" style="flex:1;min-width:0"><b>${esc(other.name)}</b><div class="small muted">Chat de la publicación <a href="#pub-${p.id}" data-cy="chat-publicacion">${esc(p.title)}</a> · ${badge(p)} ${modeLabel(p)}</div></div></div>
+          <div class="grow" style="flex:1;min-width:0"><b>${esc(other.name)}</b> <span class="badge gray" data-cy="rol-otro">${roleIn(other.id)}</span><div class="small muted">Chat de la publicación <a href="#pub-${p.id}" data-cy="chat-publicacion">${esc(p.title)}</a> · ${badge(p)} ${modeLabel(p)}</div>
+          <div class="chatroles small muted" data-cy="roles-chat">${roleIn(c.seller)}: <b>${esc(user(c.seller).name)}</b> · ${roleIn(c.buyer)}: <b>${esc(user(c.buyer).name)}</b></div></div></div>
+        ${ord ? `<div class="contactbox orderbar" data-cy="pedido-chat"><span>🧾 Pedido ${esc(ord.code)} · <b>${SHOP.STATUS_TXT[ord.status]}</b> · ${money(ord.total)}</span><a class="small" href="#${ord.buyer === u.id ? "mis-pedidos" : "mis-ventas"}">Ver pedido →</a></div>` : ""}
         <div class="contactbox" data-cy="privacidad">
           <span>🔒 Datos de ${esc(other.name.split(" ")[0])}: ${otherShared ? `<b data-cy="contacto-otro">${esc(other.email)}${other.phone ? " · " + esc(other.phone) : ""}</b>` : `<span data-cy="contacto-oculto">correo y teléfono ocultos</span>`}</span>
           <span>${iShared ? `<span class="badge venta" data-cy="ya-compartido">Compartiste tus datos</span>` : `<button class="btn ghost sm" id="share" data-cy="compartir-datos">Compartir mis datos de contacto</button>`}</span>
         </div>
-        <div class="msgs" id="msgs" data-cy="mensajes">${c.msgs.length ? c.msgs.map((m) => `<div class="msg ${m.from === 0 ? "sys" : m.from === u.id ? "me" : ""}" data-cy="mensaje">${esc(showMsg(c, m))}<small>${m.from === 0 ? "" : esc(user(m.from).name.split(" ")[0]) + " · "}${ago(m.at)}</small></div>`).join("") : `<p class="muted small" style="margin:auto">Escribe el primer mensaje para coordinar la fecha, el lugar y el pago de la entrega.</p>`}</div>
+        <div class="msgs" id="msgs" data-cy="mensajes">${c.msgs.length ? c.msgs.map((m) => `<div class="msg ${m.from === 0 ? "sys" : m.from === u.id ? "me" : ""} ${m.type ? "media" : ""}" data-cy="mensaje">${msgBody(c, m)}<small>${m.from === 0 ? "" : `<span class="who">${esc(firstName(m.from))}</span> · ${roleIn(m.from)} · `}${ago(m.at)}</small></div>`).join("") : `<p class="muted small" style="margin:auto">Escribe el primer mensaje para coordinar la fecha, el lugar y el pago de la entrega. También puedes enviar fotos 📷 y tu ubicación 📍.</p>`}</div>
         ${closed ? `<div class="alert" style="margin:10px">${p.status === "eliminada" ? "La publicación fue eliminada." : "La publicación fue ocultada por moderación."} Ya no se pueden enviar mensajes en esta conversación.</div>` : `
-        <form class="composer" id="send"><input class="input" name="m" maxlength="500" placeholder="Escribe un mensaje…" aria-label="Mensaje" data-cy="campo-mensaje" autocomplete="off"><button class="btn" data-cy="enviar-mensaje">Enviar</button></form>`}
+        <form class="composer" id="send">
+          <label class="btn ghost sm iconbtn" for="chat-img" title="Enviar una foto" aria-label="Enviar una foto (cámara o galería)" data-cy="chat-foto">📷</label>
+          <input id="chat-img" class="file" type="file" accept="image/*" data-cy="chat-archivo" tabindex="-1">
+          <button type="button" class="btn ghost sm iconbtn" id="chat-loc" title="Compartir mi ubicación" aria-label="Compartir mi ubicación" data-cy="chat-ubicacion">📍</button>
+          <input class="input" name="m" maxlength="500" placeholder="Escribe un mensaje…" aria-label="Mensaje" data-cy="campo-mensaje" autocomplete="off"><button class="btn" data-cy="enviar-mensaje">Enviar</button></form>`}
       </div></div>`;
     const box = $("#msgs"); box.scrollTop = box.scrollHeight;
     db.notifs.filter((n) => n.user === u.id && n.link === `chat-${c.id}` && !n.read).forEach((n) => (n.read = true)); save(); header();
@@ -1563,6 +1714,44 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
     });
     const redraw = () => { viewChat(id); header(); };
     wireDelivery(redraw);
+    const pushMsg = (m, note) => {
+      c.msgs.push(Object.assign({ from: u.id, at: now() }, m));
+      notify(other.id, `${u.name} ${note} sobre “${p.title}”.`, `chat-${c.id}`, "mensaje", p.id);
+      save(); viewChat(id);
+    };
+    const fi = $("#chat-img");
+    fi && fi.addEventListener("change", async () => {
+      const file = fi.files && fi.files[0]; fi.value = "";
+      if (!file) return;
+      if (!/^image\//.test(file.type) && !/\.(jpe?g|png|webp|heic|heif)$/i.test(file.name)) return toast("El archivo debe ser una imagen (JPG, PNG o WEBP).");
+      if (file.size > 15 * 1024 * 1024) return toast("La imagen pesa más de 15 MB. Elige una más liviana.");
+      const lbl = $("[data-cy=chat-foto]"); lbl.textContent = "⏳";
+      try {
+        const data = await compressImage(file, serverMode ? 1280 : 720);
+        await settle();
+        const url = await uploadImage(data, c.id);
+        pushMsg({ type: "image", url, text: "📷 Foto" }, "te envió una foto");
+      } catch (err) { lbl.textContent = "📷"; toast(err.message === "bad" ? "No pudimos leer esta imagen. Prueba con una foto JPG o PNG." : err.message || "No pudimos enviar la foto. Intenta de nuevo."); }
+    });
+    const lc = $("#chat-loc");
+    lc && lc.addEventListener("click", () => {
+      if (!("geolocation" in navigator)) return toast("Este navegador no permite compartir la ubicación.");
+      if (!window.isSecureContext) return toast("Para compartir la ubicación abre la página con https (por ejemplo, la dirección de Render).");
+      modal(`<div style="display:grid;gap:12px" data-cy="confirmar-ubicacion"><h2>¿Compartir tu ubicación?</h2>
+        <p>${esc(other.name)} verá en este chat un mapa con tu ubicación actual. Solo se comparte en esta conversación.</p>
+        <div class="actions"><button class="btn" id="do-loc" data-cy="enviar-ubicacion">📍 Compartir ubicación</button><button class="btn ghost" data-close>Cancelar</button></div></div>`, (s, close) => {
+        $("#do-loc", s).addEventListener("click", () => {
+          const b = $("#do-loc", s); b.disabled = true; b.textContent = "Buscando tu ubicación…";
+          navigator.geolocation.getCurrentPosition((pos) => {
+            close();
+            pushMsg({ type: "location", lat: Math.round(pos.coords.latitude * 1e6) / 1e6, lng: Math.round(pos.coords.longitude * 1e6) / 1e6, acc: Math.round(pos.coords.accuracy || 0), text: "📍 Ubicación compartida" }, "compartió su ubicación");
+          }, (err) => {
+            close();
+            toast(err.code === 1 ? "No diste permiso de ubicación. Actívalo en la configuración del navegador e intenta de nuevo." : "No pudimos obtener tu ubicación. Revisa el GPS e intenta de nuevo.");
+          }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
+        });
+      });
+    });
     const ag = $("#agree-btn"); ag && ag.addEventListener("click", () => agreeModal(p, [c.buyer], redraw));
     const sh = $("#share");
     sh && sh.addEventListener("click", () => {
@@ -1671,6 +1860,453 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
     }));
   }
 
+  /* =====================================================================
+   * Compras: carrito, checkout, pago, confirmación, mis pedidos y mis ventas
+   * ===================================================================== */
+  let buyNow = null, pendingBuy = null, pendingCart = null;
+  const ORDER_STEPS = ["pendiente", "pagado", "en_proceso", "completado"];
+  const ORDER_CLS = { pendiente: "donacion", pagado: "venta", en_proceso: "solicitud", completado: "venta", cancelado: "bad" };
+  function cartCount() { const u = me(); return u ? (u.cart || []).reduce((a, c) => a + (c.qty || 0), 0) : 0; }
+  function addToCart(pid, qty) {
+    const u = me(), p = post(pid);
+    if (!u) { pendingCart = { pid, qty }; needLogin(`pub-${pid}`); return false; }
+    if (u.admin) { toast("La cuenta de administración no hace compras."); return false; }
+    if (!p || p.mode !== "venta" || p.status !== "activa") { toast("Este artículo no está disponible."); return false; }
+    if (p.owner === u.id) { toast("No puedes comprar tu propia publicación."); return false; }
+    const st = SHOP.stockOf(p);
+    u.cart = u.cart || [];
+    const it = u.cart.find((c) => c.post === pid);
+    const want = (it ? it.qty : 0) + qty, q = Math.min(want, st);
+    if (it) it.qty = q; else u.cart.push({ post: pid, qty: q });
+    save(); header();
+    toast(want > st ? `Solo hay ${st} ${st === 1 ? "unidad" : "unidades"}: dejamos ${q} en tu carrito.` : `Agregado al carrito (${q} ${q === 1 ? "unidad" : "unidades"}).`);
+    return true;
+  }
+  function cartLines(list) {
+    const u = me();
+    return (list || []).map((c) => {
+      const p = post(c.post); let ok = true, msg = "", qty = c.qty;
+      const st = p ? SHOP.stockOf(p) : 0;
+      if (!p || p.status === "eliminada") { ok = false; msg = "Este artículo ya no existe."; }
+      else if (u && p.owner === u.id) { ok = false; msg = "Es tu propia publicación."; }
+      else if (p.status === "vendida") { ok = false; msg = "Agotado: ya no quedan unidades."; }
+      else if (p.mode !== "venta" || p.status !== "activa" || (user(p.owner) || {}).suspended) { ok = false; msg = "No está disponible por ahora."; }
+      else if (qty > st) { qty = st; msg = `Solo ${st === 1 ? "queda 1 unidad" : `quedan ${st} unidades`}: ajustamos la cantidad.`; }
+      return { c, p, ok, msg, st, qty };
+    });
+  }
+  function afterAuth(u, msg) {
+    toast(msg);
+    if (pendingFav) applyPendingFav();
+    if (pendingCart) { const pc = pendingCart; pendingCart = null; if (!u.admin) addToCart(pc.pid, pc.qty); }
+    if (pendingBuy) {
+      const pb = pendingBuy, p = post(pb.pid); pendingBuy = null;
+      if (p && p.owner !== u.id && !u.admin) buyNow = { post: pb.pid, qty: pb.qty };
+      else { sessionNext = p ? `pub-${p.id}` : null; if (p && p.owner === u.id) setTimeout(() => toast("No puedes comprar tu propia publicación."), 2700); }
+    }
+    const n = sessionNext; sessionNext = null;
+    go(n || (u.admin ? "admin" : "catalogo"));
+  }
+
+  function viewCarrito() {
+    if (!me()) return needLogin("carrito");
+    if (me().admin) return denied("La cuenta de administración no hace compras.");
+    const u = me(); u.cart = u.cart || [];
+    const lines = cartLines(u.cart);
+    let fixed = false;
+    lines.forEach((l) => { if (l.ok && l.qty !== l.c.qty) { l.c.qty = l.qty; fixed = true; } });
+    if (fixed) save();
+    const okL = lines.filter((l) => l.ok);
+    const sub = okL.reduce((a, l) => a + l.p.price * l.qty, 0), units = okL.reduce((a, l) => a + l.qty, 0);
+    main().innerHTML = `<div class="wrap page">
+      <div class="pagehead"><div><h1>Tu carrito</h1><p class="muted" data-cy="carrito-resumen">${units} ${units === 1 ? "unidad lista" : "unidades listas"} para comprar${lines.length > okL.length ? ` · ${lines.length - okL.length} no disponible${lines.length - okL.length === 1 ? "" : "s"}` : ""}.</p></div>
+        ${lines.length ? `<button class="btn ghost sm" id="cart-clear" data-cy="vaciar-carrito">Vaciar carrito</button>` : ""}</div>
+      ${lines.length ? `<div class="cartgrid"><div class="list">${lines.map((l) => `
+        <div class="row" data-cy="item-carrito">${l.p ? thumb(l.p, "thumb mini") : ""}
+          <div class="grow">${l.p ? `<a href="#pub-${l.p.id}"><b>${esc(l.p.title)}</b></a>` : `<b>Artículo eliminado</b>`}
+            <span class="small muted">${l.p ? `Vende ${esc(firstName(l.p.owner))} · ${money(l.p.price)} c/u · 📍 ${esc(where(l.p))}` : ""}</span>
+            ${l.msg ? `<span class="small" style="color:var(--danger)" data-cy="aviso-item">${esc(l.msg)}</span>` : ""}</div>
+          ${l.ok ? `<span class="stepper" role="group" aria-label="Cantidad de ${esc(l.p.title)}"><button type="button" data-dec="${l.c.post}" aria-label="Quitar una unidad" data-cy="menos" ${l.qty <= 1 ? "disabled" : ""}>−</button><span data-cy="cantidad-item">${l.qty}</span><button type="button" data-inc="${l.c.post}" aria-label="Agregar una unidad" data-cy="mas" ${l.qty >= l.st ? "disabled" : ""}>+</button></span>
+            <b class="num" data-cy="subtotal-item" style="min-width:104px;text-align:right">${money(l.p.price * l.qty)}</b>` : ""}
+          <button type="button" class="btn ghost sm" data-rmc="${l.c.post}" data-cy="quitar-carrito">Quitar</button></div>`).join("")}</div>
+        <aside class="panel sumbox" data-cy="resumen-compra"><h2>Resumen de compra</h2>
+          ${okL.map((l) => `<div class="sumrow small"><span>${l.qty} × ${esc(l.p.title)}</span><span class="num">${money(l.p.price * l.qty)}</span></div>`).join("") || `<p class="small muted">No hay artículos disponibles para comprar.</p>`}
+          <div class="sumrow"><span>Subtotal</span><b class="num" data-cy="subtotal">${money(sub)}</b></div>
+          <div class="sumrow small muted"><span>Envío</span><span>Lo eliges en el siguiente paso</span></div>
+          <div class="sumrow total"><span>Total</span><span class="num" data-cy="total">${money(sub)}</span></div>
+          <button class="btn accent" id="to-checkout" data-cy="ir-checkout" ${okL.length ? "" : "disabled"}>Continuar con la compra</button>
+          <a class="btn ghost" href="#catalogo">Seguir comprando</a></aside></div>`
+      : `<div class="empty" data-cy="carrito-vacio"><h3>Tu carrito está vacío</h3><p class="muted">Abre un artículo en venta y pulsa “Agregar al carrito”.</p><a class="btn ghost" href="#catalogo">Ir al catálogo</a></div>`}</div>`;
+    const redraw = () => { viewCarrito(); header(); };
+    const setQty = (pid, d) => { const it = u.cart.find((c) => c.post === pid); if (!it) return; it.qty = Math.max(1, Math.min(SHOP.stockOf(post(pid)), it.qty + d)); save(); redraw(); };
+    $$("[data-dec]").forEach((b) => b.addEventListener("click", () => setQty(Number(b.dataset.dec), -1)));
+    $$("[data-inc]").forEach((b) => b.addEventListener("click", () => setQty(Number(b.dataset.inc), 1)));
+    $$("[data-rmc]").forEach((b) => b.addEventListener("click", () => { u.cart = u.cart.filter((c) => c.post !== Number(b.dataset.rmc)); save(); toast("Quitamos el artículo del carrito."); redraw(); }));
+    const cc = $("#cart-clear");
+    cc && cc.addEventListener("click", () => modal(`<div style="display:grid;gap:12px"><h2>¿Vaciar el carrito?</h2><p>Se quitan todos los artículos. No afecta tus pedidos.</p>
+      <div class="actions"><button class="btn danger" id="do-clear" data-cy="confirmar-vaciar">Vaciar</button><button class="btn ghost" data-close>Cancelar</button></div></div>`, (s, close) => {
+      $("#do-clear", s).addEventListener("click", () => { u.cart = []; save(); close(); toast("Carrito vacío."); redraw(); });
+    }));
+    const tc = $("#to-checkout"); tc && tc.addEventListener("click", () => { buyNow = null; go("checkout"); });
+  }
+
+  function viewCheckout() {
+    if (!me()) return needLogin("checkout");
+    if (me().admin) return denied("La cuenta de administración no hace compras.");
+    const u = me();
+    const lines = cartLines(buyNow ? [buyNow] : (u.cart || [])).filter((l) => l.ok);
+    if (!lines.length) {
+      buyNow = null;
+      main().innerHTML = `<div class="wrap page"><div class="empty" data-cy="checkout-vacio"><h2>No hay artículos para comprar</h2><p class="muted">Agrega artículos disponibles a tu carrito o usa “Comprar ahora” en una publicación.</p><a class="btn ghost" href="#catalogo">Ir al catálogo</a></div></div>`;
+      return;
+    }
+    const sellers = [...new Set(lines.map((l) => l.p.owner))];
+    const sub = lines.reduce((a, l) => a + l.p.price * l.qty, 0);
+    const back = buyNow ? `pub-${lines[0].p.id}` : "carrito";
+    main().innerHTML = `<div class="wrap page">
+      <div><a href="#${back}" class="small muted">← Volver</a><h1>Confirma tu compra</h1><p class="muted">Paso 1 de 2 · Revisa los artículos y los datos de entrega. En el paso 2 pagas en línea.</p></div>
+      <div class="cartgrid">
+        <form class="panel form" id="co-form" novalidate data-cy="form-checkout">
+          <div id="co-alert"></div>
+          <h2>¿Cómo quieres recibirlo?</h2>
+          <div class="field"><div class="choices">
+            <label class="choice"><input type="radio" name="method" value="persona" checked data-cy="entrega-persona"><span><b>Entrega en persona · Gratis</b><span class="small muted" style="display:block">Acuerdas con quien vende el lugar y la hora por el chat.</span></span></label>
+            <label class="choice"><input type="radio" name="method" value="domicilio" data-cy="entrega-domicilio"><span><b>Envío a domicilio · ${money(CONFIG.shippingFee)}${sellers.length > 1 ? " por vendedor" : ""}</b><span class="small muted" style="display:block">Quien vende lo envía a la dirección que escribas.</span></span></label>
+          </div><span class="err"></span></div>
+          <div class="grid2">
+            <div class="field"><label for="co-name">Nombre de quien recibe</label><input id="co-name" name="name" autocomplete="name" value="${esc(u.name)}" data-cy="co-nombre"><span class="err"></span></div>
+            <div class="field"><label for="co-phone">Teléfono de contacto</label><input id="co-phone" name="phone" inputmode="tel" autocomplete="tel" value="${esc(u.phone || "")}" placeholder="Ej.: 3001234567" data-cy="co-telefono"><span class="hint">Solo lo ve quien te vende, para coordinar la entrega.</span><span class="err"></span></div>
+            <div class="field"><label for="co-city">Ciudad o municipio</label><select id="co-city" name="city" data-cy="co-ciudad"><option value="">Selecciona…</option>${CITIES.map((c) => `<option ${u.city === c ? "selected" : ""}>${c}</option>`).join("")}</select><span class="err"></span></div>
+            <div class="field"><label for="co-zone">Barrio o punto de referencia</label><input id="co-zone" name="zone" maxlength="60" placeholder="Ej.: Suba, cerca al portal" data-cy="co-barrio"><span class="err"></span></div>
+          </div>
+          <div class="field" id="addr-field" hidden><label for="co-addr">Dirección de entrega</label><input id="co-addr" name="address" maxlength="100" autocomplete="street-address" placeholder="Ej.: Calle 145 # 91-19, apto 302" data-cy="co-direccion"><span class="err"></span></div>
+          <div class="field"><label for="co-notes">Indicaciones (opcional)</label><textarea id="co-notes" name="notes" maxlength="200" placeholder="Ej.: Llamar antes de llegar, portería 2" data-cy="co-notas" style="min-height:70px"></textarea><span class="err"></span></div>
+        </form>
+        <aside class="panel sumbox" data-cy="resumen-checkout"><h2>Resumen de compra</h2>
+          ${lines.map((l) => `<div class="sumrow small" data-cy="linea-resumen"><span>${l.qty} × ${esc(l.p.title)}<span class="muted" style="display:block">${money(l.p.price)} c/u · vende ${esc(firstName(l.p.owner))}</span></span><span class="num">${money(l.p.price * l.qty)}</span></div>`).join("")}
+          <div class="sumrow"><span>Subtotal</span><b class="num" data-cy="co-subtotal">${money(sub)}</b></div>
+          <div class="sumrow"><span>Envío</span><span class="num" id="co-ship" data-cy="co-envio">Gratis</span></div>
+          <div class="sumrow total"><span>Total</span><span class="num" id="co-total" data-cy="co-total">${money(sub)}</span></div>
+          ${sellers.length > 1 ? `<p class="small muted">Tu compra se divide en ${sellers.length} pedidos, uno por cada vendedor, y los pagas juntos.</p>` : ""}
+          <button class="btn accent" form="co-form" data-cy="confirmar-compra">Continuar al pago →</button>
+          <span class="secure">🔒 Todavía no se cobra nada. El pago se hace en el siguiente paso.</span></aside>
+      </div></div>`;
+    const f = $("#co-form");
+    const upd = () => {
+      const dom = f.querySelector("[name=method]:checked").value === "domicilio";
+      $("#addr-field").hidden = !dom;
+      const ship = dom ? CONFIG.shippingFee * sellers.length : 0;
+      $("#co-ship").textContent = ship ? money(ship) : "Gratis";
+      $("#co-total").textContent = money(sub + ship);
+    };
+    $$("[name=method]", f).forEach((r) => r.addEventListener("change", upd)); upd();
+    f.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = $("[data-cy=confirmar-compra]"); btn.disabled = true; btn.textContent = "Creando el pedido…";
+      const shipping = { name: f.elements.name.value, phone: f.phone.value, method: f.querySelector("[name=method]:checked").value, city: f.city.value, zone: f.zone.value, address: f.address.value, notes: f.notes.value };
+      const r = await shopCall("create", { items: lines.map((l) => ({ post: l.p.id, qty: l.qty })), shipping });
+      btn.disabled = false; btn.textContent = "Continuar al pago →";
+      ["name", "phone", "method", "city", "zone", "address"].forEach((k) => setErr(f, k, (r.errors || {})[k] || ""));
+      $("#co-alert").innerHTML = r.error ? `<div class="alert bad" data-cy="co-error" role="alert">${esc(r.error)}</div>` : "";
+      if (r.errors || r.error) { const bad = $(".field.bad, #co-alert .alert", f); bad && bad.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
+      buyNow = null;
+      toast("Pedido creado. Ahora realiza el pago.");
+      go(`pago-${r.group}`);
+    });
+  }
+
+  function orderSummary(list) {
+    const total = list.reduce((a, o) => a + o.total, 0);
+    return list.map((o) => `<div class="sumrow small"><b>Pedido ${esc(o.code)}</b><span class="muted">vende ${esc(user(o.seller).name)}</span></div>
+      ${o.items.map((it) => `<div class="sumrow small"><span>${it.qty} × ${esc(it.title)}</span><span class="num">${money(it.qty * it.price)}</span></div>`).join("")}
+      ${o.shipping ? `<div class="sumrow small"><span>Envío a domicilio</span><span class="num">${money(o.shipping)}</span></div>` : ""}`).join("")
+      + `<div class="sumrow total"><span>Total a pagar</span><span class="num" data-cy="total-pagar">${money(total)}</span></div>`;
+  }
+  function viewPago(group) {
+    if (!me()) return needLogin(`pago-${group}`);
+    const u = me(), orders = db.orders.filter((o) => o.group === group && o.buyer === u.id);
+    if (!orders.length) return denied("No encontramos esta compra o no te pertenece.");
+    const pend = orders.filter((o) => o.status === "pendiente");
+    if (!pend.length) return go(`compra-${group}`);
+    const total = pend.reduce((a, o) => a + o.total, 0);
+    const wompi = serverMode && CONFIG.payments === "wompi";
+    main().innerHTML = `<div class="wrap page">
+      <div><a href="#mis-pedidos" class="small muted">← Mis pedidos</a><h1>Pago seguro</h1><p class="muted">Paso 2 de 2 · Compra N.º ${esc(SHOP.code(group))} · ${pend.length} ${pend.length === 1 ? "pedido" : "pedidos"}</p></div>
+      <div class="cartgrid">
+        <section class="panel form" data-cy="pago">
+          <div id="pay-alert"></div>
+          ${wompi ? `<div class="alert" data-cy="aviso-wompi"><b>Pagas con Wompi</b>, la pasarela de pagos de Bancolombia: tarjeta débito o crédito, PSE, Nequi o Botón Bancolombia. Te llevamos a su página segura y al terminar vuelves aquí con la confirmación.${CONFIG.wompiSandbox ? " <b>Modo sandbox:</b> usa los datos de prueba de Wompi; no se cobra dinero real." : ""}</div>
+            <button class="btn accent" id="pay-wompi" data-cy="pagar-wompi">🔒 Pagar ${money(total)} con Wompi</button>
+            ${pend.some((o) => o.wompiTx) ? `<button class="btn ghost sm" id="pay-verify" data-cy="verificar-pago" style="justify-self:start">Ya pagué: verificar el pago</button>` : ""}
+            <span class="secure">🔒 Tus datos de pago los recibe Wompi directamente; SegundaMano Express no los ve ni los guarda.</span>`
+          : `<h2>Tarjeta débito o crédito</h2>
+            <div class="alert testnote" data-cy="aviso-pruebas"><b>🧪 Pasarela de pruebas:</b> no se hace ningún cobro real. Usa la tarjeta <code>4242 4242 4242 4242</code>, cualquier fecha futura (ej.: <code>12/30</code>) y CVC <code>123</code>. Para ver un pago rechazado usa <code>4000 0000 0000 0002</code>.</div>
+            <form id="card-form" class="form" novalidate>
+              <div class="field"><label for="cc-number">Número de la tarjeta</label><input id="cc-number" name="number" inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="0000 0000 0000 0000" data-cy="tarjeta-numero"><span class="err"></span></div>
+              <div class="field"><label for="cc-name">Nombre como aparece en la tarjeta</label><input id="cc-name" name="name" autocomplete="cc-name" value="${esc(u.name)}" data-cy="tarjeta-nombre"><span class="err"></span></div>
+              <div class="grid2">
+                <div class="field"><label for="cc-exp">Vence (MM/AA)</label><input id="cc-exp" name="exp" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="MM/AA" data-cy="tarjeta-vence"><span class="err"></span></div>
+                <div class="field"><label for="cc-cvc">Código de seguridad (CVC)</label><input id="cc-cvc" name="cvc" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="123" data-cy="tarjeta-cvc"><span class="err"></span></div>
+              </div>
+              <button class="btn accent" data-cy="pagar">🔒 Pagar ${money(total)}</button>
+              <span class="secure">🔒 No guardamos el número ni el código de tu tarjeta: solo la marca y los últimos 4 dígitos para tu comprobante.</span>
+            </form>`}
+        </section>
+        <aside class="panel sumbox" data-cy="resumen-pago"><h2>Tu compra</h2>${orderSummary(pend)}
+          <span class="small muted">Entrega: ${esc(SHOP.SHIP_METHODS[pend[0].ship.method])}</span>
+          <button class="btn ghost sm" id="pay-cancel" data-cy="cancelar-compra">Cancelar compra</button></aside>
+      </div></div>`;
+    const alertBox = (msg, cls) => { $("#pay-alert").innerHTML = msg ? `<div class="alert ${cls || "bad"}" data-cy="pago-error" role="alert">${esc(msg)}</div>` : ""; if (msg) $("#pay-alert").scrollIntoView({ block: "center", behavior: "smooth" }); };
+    const cf = $("#card-form");
+    if (cf) {
+      cf.number.addEventListener("input", () => { const d = cf.number.value.replace(/\D/g, "").slice(0, 19); cf.number.value = d.replace(/(\d{4})(?=\d)/g, "$1 "); });
+      cf.exp.addEventListener("input", (e) => { let d = cf.exp.value.replace(/\D/g, "").slice(0, 4); if (d.length > 2 || (d.length === 2 && e.inputType !== "deleteContentBackward")) d = d.slice(0, 2) + "/" + d.slice(2); cf.exp.value = d; });
+      cf.cvc.addEventListener("input", () => { cf.cvc.value = cf.cvc.value.replace(/\D/g, "").slice(0, 4); });
+      cf.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const btn = $("[data-cy=pagar]"); btn.disabled = true; btn.textContent = "Procesando el pago…";
+        alertBox("");
+        const r = await shopCall("pay", group, { number: cf.number.value, name: cf.elements.name.value, exp: cf.exp.value, cvc: cf.cvc.value });
+        btn.disabled = false; btn.textContent = `🔒 Pagar ${money(total)}`;
+        ["number", "name", "exp", "cvc"].forEach((k) => setErr(cf, k, (r.errors || {})[k] || ""));
+        if (r.errors) return;
+        if (r.error) { cf.number.value = ""; cf.cvc.value = ""; alertBox(r.error); return; }
+        cf.reset();
+        toast("Pago aprobado. ¡Gracias por tu compra!");
+        go(`compra-${group}`);
+      });
+    }
+    const pw = $("#pay-wompi");
+    pw && pw.addEventListener("click", async () => {
+      pw.disabled = true; pw.textContent = "Conectando con Wompi…";
+      try { const r = await api(`checkout/${group}/wompi`, {}); if (!r.url) throw new Error((r.errors && Object.values(r.errors)[0]) || "No pudimos iniciar el pago."); location.href = r.url; }
+      catch (err) { pw.disabled = false; pw.textContent = `🔒 Pagar ${money(total)} con Wompi`; alertBox(err.message); }
+    });
+    const pv = $("#pay-verify");
+    pv && pv.addEventListener("click", async () => {
+      try { const r = await api(`checkout/${group}/verify`, {}); mergeState(r); go(`compra-${group}`); } catch (err) { alertBox(err.message); }
+    });
+    $("#pay-cancel").addEventListener("click", () => modal(`<div style="display:grid;gap:12px" data-cy="confirmar-cancelar-compra"><h2>¿Cancelar esta compra?</h2><p>Los pedidos pendientes se cancelan y no se hace ningún cobro. Los artículos siguen en tu carrito.</p>
+      <div class="actions"><button class="btn danger" id="do-cancel" data-cy="confirmar-cancelar">Sí, cancelar</button><button class="btn ghost" data-close>Volver al pago</button></div></div>`, (s, close) => {
+      $("#do-cancel", s).addEventListener("click", async () => {
+        for (const o of pend) await shopCall("status", o.id, { action: "cancelar" });
+        close(); toast("Compra cancelada. No se hizo ningún cobro."); go("mis-pedidos");
+      });
+    }));
+  }
+
+  function payText(pay) {
+    if (!pay) return "";
+    const how = pay.last4 ? `${esc(pay.brand || pay.method)} •••• ${esc(pay.last4)}` : esc(pay.method);
+    return `${how} · ref. ${esc(pay.ref)} · ${pay.provider === "pruebas" ? "pasarela de pruebas (sin cobro real)" : `Wompi${pay.sandbox ? " sandbox" : ""}`}${pay.refund ? ` · <b>${pay.refund === "reembolsado" ? "Reembolsado" : "Reembolso pendiente en Wompi"}</b>` : ""}`;
+  }
+  function viewCompra(group) {
+    if (!me()) return needLogin(`compra-${group}`);
+    const u = me(), orders = db.orders.filter((o) => o.group === group && o.buyer === u.id);
+    if (!orders.length) return denied("No encontramos esta compra o no te pertenece.");
+    const paid = orders.filter((o) => ["pagado", "en_proceso", "completado"].includes(o.status));
+    if (!paid.length) {
+      const pend = orders.some((o) => o.status === "pendiente"), waiting = orders.some((o) => o.wompiStatus === "PENDING");
+      main().innerHTML = `<div class="wrap page medium"><section class="panel ok-hero" data-cy="compra-sin-pagar"><span class="big">${pend ? "⏳" : "❌"}</span>
+        <h1>${!pend ? "Compra cancelada" : waiting ? "Tu pago se está verificando" : "Esta compra aún no está pagada"}</h1>
+        <p class="muted">${!pend ? "No se hizo ningún cobro." : waiting ? "La entidad todavía no confirma el pago. Puede tardar unos minutos." : "Completa el pago para que quien vende reciba el pedido."}</p>
+        <div class="actions" style="justify-content:center">${pend ? `<a class="btn accent" href="#pago-${group}" data-cy="ir-pagar">Ir al pago</a>` : ""}<a class="btn ghost" href="#mis-pedidos">Mis pedidos</a></div></section></div>`;
+      return;
+    }
+    const total = paid.reduce((a, o) => a + o.total, 0), pay = paid[0].payment;
+    main().innerHTML = `<div class="wrap page medium">
+      <section class="panel ok-hero" data-cy="compra-confirmada"><span class="big" aria-hidden="true">✅</span><h1>¡Compra confirmada!</h1>
+        <p>Pagaste <b class="num" data-cy="total-pagado">${money(total)}</b> con ${pay.last4 ? `${esc(pay.brand)} •••• ${esc(pay.last4)}` : esc(pay.method)}.</p>
+        <p class="small muted">Compra N.º ${esc(SHOP.code(group))} · Referencia de pago <b data-cy="referencia-pago">${esc(pay.ref)}</b> · ${fdate(paid[0].paidAt)}</p>
+        <p class="small muted">${pay.provider === "pruebas" ? "Pasarela de pruebas: no se hizo un cobro real." : `Pago procesado por Wompi${pay.sandbox ? " (sandbox)" : ""}.`}</p></section>
+      <div class="list">${orders.map((o) => orderCard(o, "buyer")).join("")}</div>
+      <section class="panel" style="display:grid;gap:8px"><h2>¿Qué sigue?</h2>
+        <ol style="margin:0;padding-left:20px;display:grid;gap:6px"><li>Quien vende recibe el aviso y prepara tu pedido (estado <b>En proceso</b>).</li><li>Coordinan la entrega por el chat: ya te abrimos la conversación.</li><li>Cuando lo tengas, pulsa <b>Ya lo recibí</b> en Mis pedidos y califica la compra.</li></ol></section>
+      <div class="actions"><a class="btn" href="#mis-pedidos" data-cy="ver-pedidos">Ver mis pedidos</a><a class="btn ghost" href="#catalogo">Seguir comprando</a></div></div>`;
+    wireOrders(() => viewCompra(group));
+  }
+
+  function orderSteps(o) {
+    if (o.status === "cancelado") return `<div class="steps" data-cy="estado-pedido"><span class="st bad">Cancelado</span></div>`;
+    const i = ORDER_STEPS.indexOf(o.status);
+    return `<div class="steps" data-cy="estado-pedido">${ORDER_STEPS.map((st, k) => `<span class="st ${k <= i ? "done" : ""}" ${k === i ? 'aria-current="step"' : ""}>${{ pendiente: "Pendiente", pagado: "Pagado", en_proceso: "En proceso", completado: "Completado" }[st]}</span>`).join('<span aria-hidden="true">→</span>')}</div>`;
+  }
+  function orderCard(o, as) {
+    const otherId = as === "buyer" ? o.seller : o.buyer, other = user(otherId) || { name: "Usuario" };
+    const txOf = (pid) => db.txs.find((t) => t.order === o.id && t.post === pid);
+    let acts = "";
+    if (as === "buyer") {
+      if (o.status === "pendiente") acts = `<a class="btn accent sm" href="#pago-${o.group}" data-cy="pagar-pedido">Pagar ahora</a><button type="button" class="btn ghost sm" data-ocancel="${o.id}" data-cy="cancelar-pedido">Cancelar pedido</button>`;
+      if (o.status === "pagado" || o.status === "en_proceso") acts = `<button type="button" class="btn sm" data-orecv="${o.id}" data-cy="recibido">📦 Ya lo recibí</button>`;
+    } else {
+      if (o.status === "pagado") acts = `<button type="button" class="btn sm" data-oproc="${o.id}" data-cy="marcar-en-proceso">📦 Marcar En proceso</button><button type="button" class="btn ghost sm" data-orefund="${o.id}" data-cy="cancelar-venta">Cancelar y reembolsar</button>`;
+      if (o.status === "en_proceso") acts = `<span class="small muted">Esperando que ${esc(firstName(o.buyer))} confirme que lo recibió.</span>`;
+      if (o.status === "pendiente") acts = `<span class="small muted">${esc(firstName(o.buyer))} todavía no paga este pedido.</span>`;
+    }
+    if (o.conv && o.status !== "pendiente") acts += `<a class="btn ghost sm" href="#chat-${o.conv}" data-cy="chat-pedido">💬 Chat con ${esc(other.name.split(" ")[0])}</a>`;
+    const items = o.items.map((it) => {
+      const p = post(it.post), t = txOf(it.post), rv = t && db.reviews.find((r) => r.tx === t.id);
+      return `<div class="it">${p ? thumb(p, "thumb mini") : ""}<div class="grow">${p && p.status !== "eliminada" ? `<a href="#pub-${p.id}"><b>${esc(it.title)}</b></a>` : `<b>${esc(it.title)}</b>`}<span class="small muted">${it.qty} × ${money(it.price)}</span></div><b class="num">${money(it.qty * it.price)}</b>
+        ${as === "buyer" && o.status === "completado" && t ? (rv ? `<span class="badge venta" data-cy="pedido-calificado">Calificado</span>` : `<button type="button" class="btn accent sm" data-orate="${t.id}" data-cy="calificar-pedido">Calificar</button>`) : ""}</div>`;
+    }).join("");
+    const ship = `${SHOP.SHIP_METHODS[o.ship.method]} · ${esc(o.ship.city)}${o.ship.method === "domicilio" ? ` · ${esc(o.ship.address)}` : ""}${o.ship.zone ? ` · ${esc(o.ship.zone)}` : ""}`;
+    const lastTry = (o.attempts || []).slice(-1)[0];
+    return `<article class="order" data-cy="pedido">
+      <div class="pagehead" style="align-items:center"><div><b data-cy="codigo-pedido">Pedido ${esc(o.code)}</b> <span class="small muted">· ${fdate(o.at)} · ${as === "buyer" ? "vende" : "compra"} ${esc(other.name)}</span></div><span class="badge ${ORDER_CLS[o.status]}" data-cy="estado-texto">${SHOP.STATUS_TXT[o.status]}</span></div>
+      ${orderSteps(o)}
+      <div style="display:grid;gap:8px">${items}</div>
+      <div class="meta2"><span>Subtotal ${money(o.subtotal)}</span><span>Envío ${o.shipping ? money(o.shipping) : "gratis"}</span><b style="color:var(--fg)" data-cy="total-pedido">Total ${money(o.total)}</b></div>
+      <div class="meta2"><span>🚚 ${ship}</span>${as === "seller" ? `<span data-cy="datos-comprador">👤 ${esc(o.ship.name)} · 📞 ${esc(o.ship.phone)}</span>` : ""}${o.ship.notes ? `<span>📝 ${esc(o.ship.notes)}</span>` : ""}</div>
+      ${o.payment ? `<div class="meta2"><span data-cy="pago-pedido">💳 ${payText(o.payment)}</span></div>` : lastTry && o.status === "pendiente" ? `<div class="meta2"><span style="color:var(--danger)">Último intento de pago rechazado ${ago(lastTry.at)}.</span></div>` : ""}
+      ${o.status === "cancelado" ? `<span class="small">Cancelado ${o.cancelAt ? ago(o.cancelAt) : ""}${o.cancelReason ? `. Motivo: “${esc(o.cancelReason)}”` : ""}</span>` : ""}
+      ${acts ? `<div class="rowactions">${acts}</div>` : ""}</article>`;
+  }
+  function wireOrders(done) {
+    const after = (r, ok) => { toast(r.error || ok); done(); header(); };
+    $$("[data-ocancel]").forEach((b) => b.addEventListener("click", async () => { b.disabled = true; after(await shopCall("status", Number(b.dataset.ocancel), { action: "cancelar" }), "Pedido cancelado. No se hizo ningún cobro."); }));
+    $$("[data-orecv]").forEach((b) => b.addEventListener("click", () => {
+      const o = db.orders.find((x) => x.id === Number(b.dataset.orecv));
+      modal(`<div style="display:grid;gap:12px" data-cy="confirmar-recibido"><h2>¿Ya recibiste el pedido ${esc(o.code)}?</h2><p>Confirma solo si ya tienes el artículo y está como se describía. El pedido queda <b>Completado</b> y podrás calificar a ${esc(user(o.seller).name)}.</p>
+        <div class="actions"><button class="btn" id="do-recv" data-cy="confirmar-recibo">Sí, lo recibí</button><button class="btn ghost" data-close>Todavía no</button></div></div>`, (s, close) => {
+        $("#do-recv", s).addEventListener("click", async () => { $("#do-recv", s).disabled = true; const r = await shopCall("status", o.id, { action: "completar" }); close(); after(r, "¡Listo! Pedido completado. Ya puedes calificar la compra."); });
+      });
+    }));
+    $$("[data-oproc]").forEach((b) => b.addEventListener("click", () => {
+      const o = db.orders.find((x) => x.id === Number(b.dataset.oproc));
+      modal(`<form id="oproc" class="form" novalidate data-cy="form-en-proceso"><h2>Pedido ${esc(o.code)} en proceso</h2><p class="muted small">Le avisamos a ${esc(user(o.buyer).name)} que ya lo estás preparando o que lo enviaste.</p>
+        <div class="field"><label for="op-n">Nota para quien compra (opcional)</label><input id="op-n" name="note" maxlength="150" placeholder="${o.ship.method === "domicilio" ? "Ej.: Enviado por Servientrega, guía 123456" : "Ej.: Te lo entrego el sábado en Suba"}" data-cy="nota-proceso"><span class="err"></span></div>
+        <div class="actions"><button class="btn" data-cy="confirmar-en-proceso">Marcar En proceso</button><button type="button" class="btn ghost" data-close>Cancelar</button></div></form>`, (s, close) => {
+        $("#oproc", s).addEventListener("submit", async (e) => { e.preventDefault(); const r = await shopCall("status", o.id, { action: "procesar", note: $("#op-n", s).value.trim() }); close(); after(r, "Pedido en proceso. Le avisamos a quien compró."); });
+      });
+    }));
+    $$("[data-orefund]").forEach((b) => b.addEventListener("click", () => {
+      const o = db.orders.find((x) => x.id === Number(b.dataset.orefund));
+      modal(`<form id="oref" class="form" novalidate data-cy="form-cancelar-venta"><h2>Cancelar el pedido ${esc(o.code)}</h2><p class="muted small">Las unidades vuelven a tu publicación y ${o.payment && o.payment.provider === "pruebas" ? "el pago se reversa" : "debes anular el pago desde el panel de Wompi"}.</p>
+        <div class="field"><label for="or-r">Motivo</label><textarea id="or-r" name="reason" maxlength="200" placeholder="Ej.: El artículo se dañó y no lo puedo entregar" data-cy="motivo-cancelar-venta"></textarea><span class="err"></span></div>
+        <div class="actions"><button class="btn danger" data-cy="confirmar-cancelar-venta">Cancelar pedido</button><button type="button" class="btn ghost" data-close>Volver</button></div></form>`, (s, close) => {
+        const f = $("#oref", s);
+        f.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const reason = f.reason.value.trim();
+          if (!setErr(f, "reason", reason.length < 5 ? "Escribe el motivo (mínimo 5 caracteres)." : "")) return;
+          const r = await shopCall("status", o.id, { action: "cancelar", note: reason }); close(); after(r, "Pedido cancelado. Le avisamos a quien compró.");
+        });
+      });
+    }));
+    $$("[data-orate]").forEach((b) => b.addEventListener("click", () => rateModal(db.txs.find((t) => t.id === Number(b.dataset.orate)), done)));
+  }
+  function viewMisPedidos() {
+    if (!me()) return needLogin("mis-pedidos");
+    if (me().admin) return denied("La cuenta de administración no hace compras.");
+    const u = me(), list = db.orders.filter((o) => o.buyer === u.id).sort((a, b) => b.at - a.at);
+    const paid = list.filter((o) => ["pagado", "en_proceso", "completado"].includes(o.status));
+    main().innerHTML = `<div class="wrap page medium">
+      <div class="pagehead"><div><h1>Mis pedidos</h1><p class="muted" data-cy="pedidos-resumen">${list.length} ${list.length === 1 ? "pedido" : "pedidos"} · ${money(paid.reduce((a, o) => a + o.total, 0))} pagados · Estados: Pendiente → Pagado → En proceso → Completado.</p></div><a class="btn ghost" href="#carrito">🛒 Ver carrito</a></div>
+      <div class="list">${list.length ? list.map((o) => orderCard(o, "buyer")).join("") : `<div class="empty" data-cy="sin-pedidos"><h3>Aún no tienes pedidos</h3><p class="muted">Compra un artículo con “Comprar ahora” o desde tu carrito.</p><a class="btn ghost" href="#catalogo">Ir al catálogo</a></div>`}</div></div>`;
+    wireOrders(viewMisPedidos);
+  }
+  function viewMisVentas() {
+    if (!me()) return needLogin("mis-ventas");
+    if (me().admin) return denied("La cuenta de administración no vende artículos.");
+    const u = me(), list = db.orders.filter((o) => o.seller === u.id).sort((a, b) => b.at - a.at);
+    const paid = list.filter((o) => ["pagado", "en_proceso", "completado"].includes(o.status));
+    const todo = list.filter((o) => o.status === "pagado").length;
+    main().innerHTML = `<div class="wrap page medium">
+      <div class="pagehead"><div><h1>Mis ventas</h1><p class="muted" data-cy="ventas-resumen">${paid.length} ${paid.length === 1 ? "venta pagada" : "ventas pagadas"} · ${money(paid.reduce((a, o) => a + o.total, 0))} · ${todo} por preparar.</p></div><a class="btn ghost" href="#mis-publicaciones">Mis publicaciones</a></div>
+      <div class="list">${list.length ? list.map((o) => orderCard(o, "seller")).join("") : `<div class="empty" data-cy="sin-ventas"><h3>Aún no tienes ventas</h3><p class="muted">Cuando alguien pague uno de tus artículos, aparece aquí y te avisamos.</p></div>`}</div></div>`;
+    wireOrders(viewMisVentas);
+  }
+
+  /* =====================================================================
+   * Contraseñas y "Continuar con Google" (Google Identity Services)
+   * ===================================================================== */
+  function passInput(id, name, ac, cy) {
+    return `<span class="passwrap"><input id="${id}" name="${name}" type="password" autocomplete="${ac}" maxlength="64" data-cy="${cy}"><button type="button" data-eye="${id}" aria-label="Mostrar contraseña" data-cy="${cy}-ver">👁</button></span>`;
+  }
+  function passRules(pass, email) {
+    const err = window.SME_CORE.passwordError(pass, String(email || "").trim().toLowerCase());
+    const r = [[pass.length >= 8, "8 o más caracteres"], [/[a-zA-ZñÑáéíóúÁÉÍÓÚ]/.test(pass) && /\d/.test(pass), "letras y números"], [pass.length >= 8 && !err, "difícil de adivinar"]];
+    return r.map(([ok, t]) => `<span class="${ok ? "on" : ""}">${ok ? "✓" : "○"} ${t}</span>`).join("");
+  }
+  const googleOn = () => serverMode && !!CONFIG.googleClientId;
+  function googleBlock(kind) {
+    if (!googleOn()) return "";
+    return `<div style="display:grid;gap:12px"><div id="g-alert"></div><div class="gsi" id="gsi-${kind}" data-cy="google-${kind}"></div><div class="divider">o con tu correo</div></div>`;
+  }
+  let gisLoading = null, gisReady = false, gisHandler = null;
+  function loadGis() {
+    if (gisLoading) return gisLoading;
+    gisLoading = new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = "https://accounts.google.com/gsi/client"; s.async = true;
+      s.onload = resolve; s.onerror = () => { gisLoading = null; reject(new Error("No pudimos cargar el acceso con Google. Revisa tu conexión.")); };
+      document.head.appendChild(s);
+    });
+    return gisLoading;
+  }
+  async function googleButton(el, text, onCredential) {
+    if (!el) return;
+    try { await loadGis(); } catch (e) { el.innerHTML = `<p class="small muted">${esc(e.message)}</p>`; return; }
+    gisHandler = onCredential;
+    if (!gisReady) {
+      window.google.accounts.id.initialize({ client_id: CONFIG.googleClientId, callback: (r) => gisHandler && gisHandler(r.credential), auto_select: false, cancel_on_tap_outside: true, ux_mode: "popup" });
+      gisReady = true;
+    }
+    window.google.accounts.id.renderButton(el, { theme: "outline", size: "large", text, shape: "pill", logo_alignment: "left", width: Math.max(220, Math.min(380, el.clientWidth || 320)), locale: "es" });
+  }
+  function authAlert(msg) {
+    const box = $("#g-alert");
+    if (box) { box.innerHTML = `<div class="alert bad" data-cy="google-error" role="alert">${esc(msg)}</div>`; box.scrollIntoView({ block: "center" }); }
+    else toast(msg);
+  }
+  async function googleLogin(cred) {
+    let r;
+    try { r = await api("auth/google", { credential: cred }); } catch (e) { return authAlert(e.message); }
+    if (r.needsProfile) return googleProfileModal(r);
+    setSession(r.uid, r.token); await refreshState();
+    const u = me();
+    if (!u) return authAlert("No pudimos abrir tu cuenta. Intenta de nuevo.");
+    afterAuth(u, r.linked ? `Vinculamos tu cuenta de Google. Hola, ${u.name.split(" ")[0]}.` : `Hola, ${u.name.split(" ")[0]}.`);
+  }
+  function wireGoogle(kind) { if (googleOn()) googleButton($(`#gsi-${kind}`), kind === "reg" ? "signup_with" : "continue_with", googleLogin); }
+  function googleProfileModal(g) {
+    let picked = "";
+    modal(`<form id="gp" class="form" novalidate data-cy="google-completar"><h2>Completa tu registro</h2>
+      <p class="muted small">Cuenta de Google verificada: <b>${esc(g.name)}</b> · ${esc(g.email)}</p>
+      <div class="field"><label for="gp-city">Ciudad o municipio</label><select id="gp-city" name="city" data-cy="google-ciudad"><option value="">Selecciona…</option>${CITIES.map((c) => `<option>${c}</option>`).join("")}</select><span class="err"></span></div>
+      <div class="field"><span class="lbl">Elige tu rol para empezar</span><div class="roles"><input type="hidden" name="role">
+        ${["C", "V", "D"].map((k) => `<button type="button" class="rolecard" data-grole="${k}" data-cy="google-rol-${k}"><b>${{ C: "🛒", V: "🏷️", D: "🎁" }[k]} ${ROLES[k]}</b><span class="small muted">${ROLE_DESC[k]}</span></button>`).join("")}</div><span class="err"></span></div>
+      <div id="gp-alert"></div>
+      <div class="actions"><button class="btn" data-cy="google-crear">Crear mi cuenta</button><button type="button" class="btn ghost" data-close>Cancelar</button></div></form>`, (s, close) => {
+      const f = $("#gp", s);
+      $$("[data-grole]", f).forEach((b) => b.addEventListener("click", () => { picked = b.dataset.grole; f.role.value = picked; $$("[data-grole]", f).forEach((x) => x.classList.toggle("on", x === b)); setErr(f, "role", ""); }));
+      f.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        let r;
+        try { r = await api("auth/google/complete", { ticket: g.ticket, role: picked, city: f.city.value }); }
+        catch (err) { $("#gp-alert", s).innerHTML = `<div class="alert bad">${esc(err.message)}</div>`; return; }
+        ["city", "role"].forEach((k) => setErr(f, k, (r.errors || {})[k] || ""));
+        if (r.errors) return;
+        setSession(r.uid, r.token); mergeState(r, true); close();
+        const u = me();
+        afterAuth(u, `Bienvenido, ${u.name.split(" ")[0]}. Creamos tu cuenta con Google. Modo activo: ${ROLES[u.role]}.`);
+      });
+    });
+  }
+
+  /* ---------- chat: fotos y ubicación ---------- */
+  function msgBody(c, m) {
+    if (m.type === "image") return `<a class="msgimg" href="${esc(m.url)}" target="_blank" rel="noopener" data-cy="mensaje-imagen"><img src="${esc(m.url)}" alt="Foto enviada por ${esc(firstName(m.from))}" loading="lazy"></a>`;
+    if (m.type === "location") {
+      const lat = Number(m.lat), lng = Number(m.lng), d = 0.004;
+      const src = `https://www.openstreetmap.org/export/embed.html?bbox=${(lng - d).toFixed(6)}%2C${(lat - d * 0.7).toFixed(6)}%2C${(lng + d).toFixed(6)}%2C${(lat + d * 0.7).toFixed(6)}&layer=mapnik&marker=${lat}%2C${lng}`;
+      return `<div class="msgloc" data-cy="mensaje-ubicacion"><iframe title="Mapa con la ubicación de ${esc(firstName(m.from))}" src="${src}" loading="lazy" referrerpolicy="no-referrer"></iframe>
+        <span>📍 Ubicación de ${esc(firstName(m.from))}${m.acc ? ` · precisión ±${esc(m.acc)} m` : ""}</span>
+        <a href="https://www.google.com/maps/search/?api=1&query=${lat}%2C${lng}" target="_blank" rel="noopener" data-cy="abrir-mapa">Abrir en Google Maps ↗</a></div>`;
+    }
+    return esc(showMsg(c, m));
+  }
+
   /* ---------- enrutador por hash (#nombre) ---------- */
   function render() {
     const h = (location.hash || "#catalogo").slice(1);
@@ -1688,16 +2324,19 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
     if ((m = h.match(/^pub-(\d+)$/))) return viewPost(Number(m[1]));
     if ((m = h.match(/^chat-(\d+)$/))) return viewChat(Number(m[1]));
     if ((m = h.match(/^perfil-(\d+)$/))) return viewPerfil(Number(m[1]));
+    if ((m = h.match(/^pago-(\d+)$/))) return viewPago(Number(m[1]));
+    if ((m = h.match(/^compra-(\d+)$/))) return viewCompra(Number(m[1]));
     const views = {
       catalogo: viewCatalogo, registro: viewRegistro, login: viewLogin, publicar: viewPublicar, pedir: viewPedir,
       "mis-publicaciones": viewMisPublicaciones, "mis-solicitudes": viewMisSolicitudes, transacciones: viewTransacciones,
       mensajes: viewMensajes, notificaciones: viewNotificaciones, admin: viewAdmin,
       entregas: viewEntregas, favoritos: viewFavoritos, recuperar: viewRecuperar,
+      carrito: viewCarrito, checkout: viewCheckout, "mis-pedidos": viewMisPedidos, "mis-ventas": viewMisVentas,
     };
     (views[h] || viewCatalogo)();
   }
   /* Actualiza la pantalla cuando llegan cambios de otras personas, sin borrar lo que se está escribiendo */
-  const LIVE = /^(catalogo|pub-\d+|chat-\d+|perfil-\d+|mensajes|notificaciones|mis-publicaciones|mis-solicitudes|transacciones|entregas|favoritos|admin)$/;
+  const LIVE = /^(catalogo|pub-\d+|chat-\d+|perfil-\d+|mensajes|notificaciones|mis-publicaciones|mis-solicitudes|transacciones|entregas|favoritos|admin|carrito|mis-pedidos|mis-ventas|compra-\d+)$/;
   function liveRefresh(how) {
     if (me() && me().suspended) return render();
     header();
@@ -1734,6 +2373,12 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
   document.addEventListener("input", clearFieldErr);
   document.addEventListener("change", clearFieldErr);
   window.addEventListener("hashchange", render);
+  // Mostrar u ocultar la contraseña
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest && e.target.closest("[data-eye]"); if (!b) return;
+    const i = document.getElementById(b.dataset.eye); const show = i.type === "password";
+    i.type = show ? "text" : "password"; b.textContent = show ? "🙈" : "👁"; b.setAttribute("aria-label", show ? "Ocultar contraseña" : "Mostrar contraseña");
+  });
   window.addEventListener("storage", (e) => { if (!serverMode && (e.key === KEY || e.key === SKEY)) { db = loadLocal(); try { sess = JSON.parse(localStorage.getItem(SKEY)) || {}; } catch (x) { sess = {}; } render(); } });
 
   /* ---------- menú del celular e instalación como app ---------- */
@@ -1758,7 +2403,11 @@ footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-b
 
   async function boot() {
     if (/^https?:$/.test(location.protocol)) {
-      try { const r = await api("state"); if (r && r.state) { serverMode = true; mergeState(r); } } catch (e) { /* sin servidor: modo local */ }
+      try { const r = await api("state"); if (r && r.state) { serverMode = true; mergeState(r); if (r.auth === false) { setSession(null); toast("Tu sesión venció. Inicia sesión de nuevo."); } } } catch (e) { /* sin servidor: modo local */ }
+      if (serverMode) {
+        try { CONFIG = Object.assign(CONFIG, await api("config")); } catch (e) { /* sin configuración: valores por defecto */ }
+        if (sess.token) api("session", {}).catch((e) => { if (e.status === 401) { setSession(null); render(); } });
+      }
     }
     if (!serverMode) save();
     if (sess.uid && (!user(sess.uid) || (serverMode && !sess.token))) setSession(null);
