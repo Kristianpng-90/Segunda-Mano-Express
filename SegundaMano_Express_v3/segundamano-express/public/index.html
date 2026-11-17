@@ -1,0 +1,1779 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>SegundaMano Express</title>
+<meta name="theme-color" content="#1E2B22">
+<meta name="description" content="Compra, vende o regala artículos de segunda mano y coordina la entrega por chat.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SegundaMano">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: header de marca + franja de filtros + cuadrícula de tarjetas; vistas internas en una columna de lectura.
+   Identidad del Sprint 1 (Trello): verde bosque, ocre y fondos arena; Fraunces para títulos y Work Sans para texto. */
+:root {
+  --bg: #F3EEE4;
+  --surface: #FBF8F2;
+  --surface-2: #ECE5D7;
+  --line: #DCD3C2;
+  --fg: #1E2B22;
+  --fg-soft: #56635A;
+  --brand: #1E2B22;
+  --brand-fg: #F3EEE4;
+  --venta: #2E6B47;
+  --venta-bg: #DDEBDF;
+  --dona: #8A5A12;
+  --dona-bg: #F3E2C4;
+  --accent: #C98A2C;
+  --danger: #A63D2F;
+  --danger-bg: #F5DCD6;
+  --focus: #C98A2C;
+  --shadow: 0 1px 2px rgba(30, 43, 34, .06), 0 6px 18px rgba(30, 43, 34, .06);
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "Work Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --radius: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141B16; --surface: #1C251F; --surface-2: #243029; --line: #34433A;
+    --fg: #ECE6DA; --fg-soft: #A9B3A8; --brand: #0E1410; --brand-fg: #ECE6DA;
+    --venta: #8FD1A6; --venta-bg: #1F3A2A; --dona: #E9B565; --dona-bg: #3A2C15;
+    --accent: #E0A447; --danger: #F0907F; --danger-bg: #3E201B; --focus: #E0A447;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141B16; --surface: #1C251F; --surface-2: #243029; --line: #34433A;
+  --fg: #ECE6DA; --fg-soft: #A9B3A8; --brand: #0E1410; --brand-fg: #ECE6DA;
+  --venta: #8FD1A6; --venta-bg: #1F3A2A; --dona: #E9B565; --dona-bg: #3A2C15;
+  --accent: #E0A447; --danger: #F0907F; --danger-bg: #3E201B; --focus: #E0A447;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--brand); }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.15; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.1rem; }
+p { margin: 0; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.wrap {
+  max-width: 1160px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.muted { color: var(--fg-soft); }
+.small { font-size: .85rem; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* Header */
+.topbar { background: var(--brand); color: var(--brand-fg); position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; }
+.topbar .wrap { display: flex; align-items: center; gap: 14px; padding-block: 10px; flex-wrap: wrap; }
+.logo { display: flex; align-items: baseline; gap: 6px; text-decoration: none; color: var(--brand-fg); margin-right: auto; }
+.logo b { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; letter-spacing: -.01em; }
+.logo span { font-size: .72rem; text-transform: uppercase; letter-spacing: .14em; color: var(--accent); font-weight: 600; }
+.nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.nav a, .nav button.link {
+  text-decoration: none; padding: 7px 10px; border-radius: 8px; font-size: .92rem;
+  background: none; border: 0; cursor: pointer; color: var(--brand-fg);
+}
+.nav a:hover, .nav button.link:hover { background: rgba(255,255,255,.08); }
+.nav a.on { background: rgba(255,255,255,.12); font-weight: 600; }
+.bell { position: relative; }
+.bell .count {
+  position: absolute; top: 0; right: 0; transform: translate(30%, -20%);
+  background: var(--accent); color: #1E2B22; font-size: .7rem; font-weight: 700;
+  min-width: 18px; height: 18px; border-radius: 9px; display: grid; place-items: center; padding: 0 4px;
+}
+.rolesel { display: flex; align-items: center; gap: 6px; font-size: .8rem; }
+.rolesel select { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.25); color: var(--brand-fg); border-radius: 8px; padding: 5px 8px; }
+.rolesel select option { color: #1E2B22; background: #FBF8F2; }
+
+/* Buttons and forms */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border: 1px solid transparent; border-radius: 10px; padding: 10px 16px; cursor: pointer;
+  font-weight: 600; text-decoration: none; background: var(--fg); color: var(--bg);
+}
+.btn:hover { filter: brightness(1.1); }
+.btn.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+.btn.accent { background: var(--accent); color: #1E2B22; }
+.btn.danger { background: var(--danger); color: var(--surface); }
+.btn.sm { padding: 6px 11px; font-size: .85rem; border-radius: 8px; }
+.btn[disabled] { opacity: .45; cursor: not-allowed; filter: none; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label, .lbl { font-weight: 600; font-size: .88rem; }
+.field input, .field select, .field textarea, .input {
+  width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface);
+}
+.field textarea { min-height: 96px; resize: vertical; }
+.field .err { color: var(--danger); font-size: .82rem; min-height: 0; }
+.field.bad input, .field.bad select, .field.bad textarea { border-color: var(--danger); }
+.form { display: grid; gap: 16px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.hint { font-size: .82rem; color: var(--fg-soft); }
+
+/* Panels */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+.page { padding-block: 28px 56px; display: grid; gap: 22px; }
+.narrow { max-width: 560px; margin: 0 auto; width: 100%; }
+.medium { max-width: 820px; margin: 0 auto; width: 100%; }
+.pagehead { display: flex; align-items: end; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.alert { border-radius: 10px; padding: 12px 14px; font-size: .92rem; background: var(--surface-2); }
+.alert.bad { background: var(--danger-bg); color: var(--danger); }
+.alert.ok { background: var(--venta-bg); color: var(--venta); }
+
+/* Hero + filters */
+.hero { background: var(--brand); color: var(--brand-fg); }
+.hero .wrap { padding-block: 26px 30px; display: grid; gap: 18px; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: end; }
+.hero h1 { color: var(--brand-fg); font-size: clamp(1.8rem, 4.4vw, 2.7rem); }
+.hero h1 em { font-style: italic; color: var(--accent); }
+.hero p { color: #C9D2C7; max-width: 52ch; margin-top: 8px; }
+.stats { display: grid; grid-template-columns: repeat(2, auto); gap: 14px 28px; justify-content: end; }
+.auth-side .stats { justify-content: start; }
+.stats div { display: grid; }
+.stats b { font-family: var(--font-display); font-size: 1.6rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+.stats span { font-size: .78rem; color: #C9D2C7; }
+@media (max-width: 720px) { .hero .wrap { grid-template-columns: 1fr; } .stats { justify-content: flex-start; } }
+
+.filters { display: grid; gap: 12px; padding-block: 18px 6px; }
+.searchrow { display: flex; gap: 10px; flex-wrap: wrap; }
+.searchrow .input { flex: 1 1 260px; min-width: 0; }
+.searchrow select { flex: 0 1 200px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); }
+.seg button { border: 0; background: none; padding: 9px 14px; cursor: pointer; font-weight: 500; }
+.seg button.on { background: var(--fg); color: var(--bg); }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 13px; cursor: pointer; font-size: .88rem; }
+.chip.on { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.resultbar { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+/* Cards */
+.cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+@media (max-width: 880px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.badge.solicitud { background: #DCE4EE; color: #2F4E73; }
+:root[data-theme="dark"] .badge.solicitud { background: #22324A; color: #A9C4E6; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .badge.solicitud { background: #22324A; color: #A9C4E6; } }
+.price.need { color: #2F4E73; font-size: 1.05rem; }
+.card.req { border-style: dashed; border-width: 2px; border-color: #9DB2CC; }
+.summary { display: grid; gap: 6px; border-left: 4px solid var(--accent); }
+.summary a { font-weight: 600; }
+.auth { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 22px; align-items: stretch; max-width: 980px; margin: 0 auto; width: 100%; }
+.auth-side { background: var(--brand); color: var(--brand-fg); border-radius: var(--radius); padding: 28px; display: grid; gap: 16px; align-content: center; }
+.auth-side h2 { color: var(--brand-fg); }
+.auth-side h2 em { color: var(--accent); }
+.auth-side p, .auth-side li { color: #C9D2C7; }
+.auth-side ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; }
+.auth .panel { margin: 0; }
+@media (max-width: 880px) { .auth { grid-template-columns: 1fr; } .auth-side { display: none; } }
+.contactbox { font-size: .8rem; padding: 8px 16px; border-bottom: 1px solid var(--line); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; background: var(--surface-2); }
+.msg.sys { align-self: center; background: var(--surface-2); font-size: .82rem; text-align: center; }
+.btn.locked { opacity: .55; cursor: not-allowed; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; text-decoration: none; color: inherit; transition: transform .15s ease, box-shadow .15s ease; }
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.thumb { aspect-ratio: 4 / 3; width: 100%; max-width: 100%; display: grid; place-items: center; font-size: 3.2rem; overflow: hidden; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+.card .body { padding: 12px 14px 14px; display: grid; gap: 6px; }
+.card h3 { font-size: 1.02rem; font-family: var(--font-body); font-weight: 600; }
+.price { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.price.free { color: var(--dona); }
+.meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: .82rem; color: var(--fg-soft); }
+.badge { display: inline-block; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-radius: 6px; padding: 3px 8px; }
+.badge.venta { background: var(--venta-bg); color: var(--venta); }
+.badge.donacion { background: var(--dona-bg); color: var(--dona); }
+.badge.gray { background: var(--surface-2); color: var(--fg-soft); }
+.badge.bad { background: var(--danger-bg); color: var(--danger); }
+.empty { text-align: center; padding: 48px 16px; border: 1px dashed var(--line); border-radius: var(--radius); display: grid; gap: 8px; justify-items: center; }
+
+/* Detail */
+.detail { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 26px; align-items: start; }
+@media (max-width: 800px) { .detail { grid-template-columns: 1fr; } }
+.detail .thumb { border-radius: var(--radius); font-size: 6rem; }
+.facts { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; font-size: .92rem; }
+.facts dt { color: var(--fg-soft); }
+.facts dd { margin: 0; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.seller { display: flex; align-items: center; gap: 12px; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; background: var(--surface-2); flex: none; }
+.stars { color: var(--accent); letter-spacing: 1px; }
+
+/* Q&A, chat, lists */
+.qa { display: grid; gap: 14px; }
+.q { border-bottom: 1px solid var(--line); padding-bottom: 12px; display: grid; gap: 6px; }
+.q .a { padding-left: 14px; border-left: 2px solid var(--line); color: var(--fg-soft); }
+.list { display: grid; gap: 10px; }
+.row { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.row .grow { flex: 1 1 240px; min-width: 0; display: grid; gap: 3px; }
+.row .mini { width: 56px; height: 56px; border-radius: 10px; font-size: 1.7rem; flex: none; aspect-ratio: auto; }
+.row.unread { border-left: 4px solid var(--accent); }
+.chatbox { display: grid; grid-template-rows: auto minmax(260px, 50vh) auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.chathead { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.msgs { overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 8px; background: var(--bg); }
+.msg { max-width: 78%; padding: 8px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.msg.me { align-self: flex-end; background: var(--venta-bg); border-color: transparent; }
+.msg small { display: block; font-size: .72rem; color: var(--fg-soft); margin-top: 2px; }
+.composer { display: flex; gap: 8px; padding: 10px; border-top: 1px solid var(--line); }
+.composer input { flex: 1; min-width: 0; }
+.starpick { display: flex; gap: 4px; }
+.starpick button { background: none; border: 0; font-size: 1.8rem; cursor: pointer; color: var(--line); padding: 0 2px; line-height: 1; }
+.starpick button.on { color: var(--accent); }
+.tablewrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--fg-soft); }
+.roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+.rolecard { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 14px; cursor: pointer; display: grid; gap: 4px; text-align: left; }
+.rolecard.on { border-color: var(--fg); box-shadow: inset 0 0 0 1px var(--fg); background: var(--surface-2); }
+.rolecard b { font-family: var(--font-display); font-size: 1.05rem; }
+.demo { font-size: .85rem; display: grid; gap: 4px; }
+.demo code { font-size: .82rem; background: var(--surface-2); padding: 1px 6px; border-radius: 5px; }
+
+/* Modal + toast */
+.scrim { position: fixed; inset: 0; background: rgba(20, 27, 22, .55); display: grid; place-items: center; z-index: 50; padding: 16px; }
+.modal { background: var(--surface); border-radius: 14px; padding: 22px; width: min(480px, 100%); display: grid; gap: 14px; max-height: 90vh; overflow-y: auto; }
+.toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 10px; z-index: 60; box-shadow: var(--shadow); max-width: calc(100% - 32px); }
+footer { border-top: 1px solid var(--line); }
+footer .wrap { padding-block: 18px 28px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center; font-size: .82rem; color: var(--fg-soft); }
+
+/* ---------- Sprint 3: favoritos, entregas, fotos, celular ---------- */
+.cardwrap { position: relative; display: flex; }
+.cardwrap .card { flex: 1; min-width: 0; }
+.fav { position: absolute; top: 8px; right: 8px; width: 38px; height: 38px; border-radius: 50%; border: 0; cursor: pointer; display: grid; place-items: center; font-size: 1.15rem; background: rgba(251,248,242,.92); box-shadow: var(--shadow); color: #A63D2F; line-height: 1; }
+.fav.on { background: #A63D2F; color: #fff; }
+.fav.big { position: static; width: auto; height: auto; border-radius: 10px; padding: 10px 16px; font-size: .95rem; font-weight: 600; gap: 6px; display: inline-flex; border: 1px solid var(--line); background: var(--surface); color: var(--fg); box-shadow: none; }
+.fav.big.on { background: var(--danger-bg); color: var(--danger); border-color: transparent; }
+.navfav .count, .navbadge { background: var(--accent); color: #1E2B22; font-size: .7rem; font-weight: 700; border-radius: 9px; padding: 1px 6px; margin-left: 4px; }
+.gallery { display: grid; gap: 10px; }
+.gallery .thumbs { display: flex; gap: 8px; flex-wrap: wrap; }
+.gallery .thumbs button { width: 64px; height: 64px; border-radius: 10px; overflow: hidden; padding: 0; border: 2px solid transparent; cursor: pointer; background: var(--surface-2); }
+.gallery .thumbs button.on { border-color: var(--accent); }
+.gallery .thumbs img { width: 100%; height: 100%; object-fit: cover; }
+.photopick { display: grid; gap: 10px; }
+.photopick .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.photopick .btns label { cursor: pointer; }
+.photopick input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.photos { display: flex; gap: 10px; flex-wrap: wrap; }
+.photos .ph { position: relative; width: 96px; height: 96px; border-radius: 10px; overflow: hidden; background: var(--surface-2); }
+.photos .ph img { width: 100%; height: 100%; object-fit: cover; }
+.photos .ph button { position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; border-radius: 50%; border: 0; background: rgba(20,27,22,.75); color: #fff; cursor: pointer; line-height: 1; }
+.photos .ph .cover { position: absolute; left: 4px; bottom: 4px; font-size: .65rem; font-weight: 700; background: var(--accent); color: #1E2B22; padding: 1px 6px; border-radius: 5px; }
+.delivery { border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 10px; background: var(--surface); }
+.steps { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: .85rem; }
+.steps .st { padding: 4px 10px; border-radius: 999px; background: var(--surface-2); color: var(--fg-soft); font-weight: 600; }
+.steps .st.done { background: var(--venta-bg); color: var(--venta); }
+.steps .st.bad { background: var(--danger-bg); color: var(--danger); }
+.checks { display: flex; gap: 14px; flex-wrap: wrap; font-size: .85rem; }
+.rowactions { display: flex; gap: 6px; flex-wrap: wrap; }
+.mailbox { border: 1px dashed var(--accent); border-radius: 12px; padding: 14px; display: grid; gap: 6px; background: var(--surface-2); }
+.mailbox .code { font-family: var(--font-display); font-size: 2rem; letter-spacing: .25em; font-variant-numeric: tabular-nums; }
+.bell-txt { display: none; }
+.menu-btn { display: none; background: none; border: 1px solid rgba(255,255,255,.25); color: var(--brand-fg); border-radius: 8px; padding: 6px 10px; font-size: 1.1rem; cursor: pointer; }
+.syncdot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: #8FD1A6; margin-right: 6px; vertical-align: middle; }
+.syncdot.off { background: #E0A447; }
+.installbar { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+@media (max-width: 720px) {
+  .menu-btn { display: inline-flex; }
+  .topbar .wrap { flex-wrap: wrap; }
+  .nav { display: none; width: 100%; flex-direction: column; align-items: stretch; padding-bottom: 8px; }
+  .nav.open { display: flex; }
+  .nav a, .nav button.link { padding: 12px 10px; font-size: 1rem; text-align: left; }
+  .bell-txt { display: inline !important; margin-left: 6px; }
+  .bell .count { position: static; transform: none; display: inline-grid; margin-left: 6px; }
+  .rolesel { padding: 8px 10px; }
+  .rolesel select { flex: 1; padding: 10px; }
+  .btn { padding: 12px 16px; }
+  .btn.sm { padding: 9px 12px; }
+  .field input, .field select, .field textarea, .input { font-size: 16px; padding: 12px; }
+  .chatbox { grid-template-rows: auto auto minmax(300px, 60vh) auto !important; }
+  .msg { max-width: 88%; }
+  .composer input { font-size: 16px; }
+  .row .mini { width: 48px; height: 48px; }
+  .page { padding-block: 18px 40px; }
+  .panel { padding: 16px; }
+  .detail .thumb { font-size: 4.5rem; }
+  .modal { padding: 18px; }
+  table { font-size: .85rem; }
+}
+@media (max-width: 380px) { .cards { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (max-width: 720px) {
+  .topbar { position: static; }
+  .cards { gap: 12px; }
+  .card .body { padding: 10px; }
+  .thumb { font-size: 2.6rem; }
+  .price { font-size: 1.08rem; }
+}
+
+</style>
+<header class="topbar">
+  <div class="wrap">
+    <a class="logo" href="#catalogo" data-cy="logo"><b>SegundaMano</b><span>Express</span></a>
+    <button class="menu-btn" id="menu-btn" aria-label="Abrir menú" aria-expanded="false" aria-controls="topnav" data-cy="menu">☰</button>
+    <nav class="nav" id="topnav" aria-label="Principal"></nav>
+  </div>
+</header>
+<main id="main" tabindex="-1"></main>
+<footer>
+  <div class="wrap">
+    <span><span class="syncdot off" id="syncdot"></span><span id="syncmode">Conectando…</span> · SegundaMano Express · Sprints 1, 2 y 3 (HUI 1 a HUI 13) · Patrones y Metodologías, UMB</span>
+    <span class="actions"><button class="btn accent sm" id="install" data-cy="instalar" hidden>📲 Instalar app</button><button class="btn ghost sm" id="reset" data-cy="reset">Restablecer datos de demostración</button></span>
+  </div>
+</footer>
+<script src="seed.js"></script>
+<script src="core.js"></script>
+<script>
+/* SegundaMano Express — prototipo funcional (Sprints 1, 2 y 3)
+ * HTML, CSS y JavaScript puro. Los datos se guardan en el navegador (localStorage)
+ * para simular la base de datos MySQL del diseño final.
+ * Historias: HUI-01 registro y rol · HUI-02 publicación · HUI-03 catálogo · HUI-04 chat
+ * HUI-05 solicitud de donación · HUI-06 preguntas · HUI-07 reseñas · HUI-08 notificaciones
+ * HUI-09 reportes y moderación
+ * Sprint 3: HUI-10 editar, pausar y eliminar publicaciones · HUI-11 favoritos
+ * HUI-12 estado de la entrega (Acordada → Entregada) · HUI-13 recuperación de contraseña
+ * Multiusuario: si la página se abre desde server.js, los datos se comparten entre todos
+ * los navegadores; si se abre el archivo directamente, funciona en modo local (localStorage).
+ */
+(function () {
+  "use strict";
+
+  const KEY = "sme_db_v3", SKEY = "sme_session_v3";
+  const ROLES = { C: "Comprador", V: "Vendedor", D: "Donante", A: "Administrador" };
+  const ROLE_DESC = { C: "Busca en el catálogo, pide artículos que necesitas y califica.", V: "Publica artículos en venta con precio y gestiona tu inventario.", D: "Regala artículos gratis a la comunidad (etiqueta Donación)." };
+  const CITIES = ["Bogotá", "Medellín", "Cali", "Barranquilla", "Bucaramanga", "Chía", "Soacha", "Zipaquirá", "Mosquera", "Funza"];
+  const CATS = ["Hogar", "Tecnología", "Deportes", "Ropa", "Libros", "Bebés", "Música"];
+  const CAT_ICON = { Hogar: "🛋️", "Tecnología": "💻", Deportes: "🚲", Ropa: "🧥", Libros: "📚", "Bebés": "🍼", "Música": "🎸" };
+  const CAT_TINT = { Hogar: "#E6D9C2", "Tecnología": "#D6DFE0", Deportes: "#D9E6D5", Ropa: "#E8D6D0", Libros: "#E3DCC8", "Bebés": "#EADFE6", "Música": "#DCD8E6" };
+  const CONDS = ["Nuevo", "Usado - como nuevo", "Usado - buen estado", "Usado - con detalles"];
+  const REASONS = ["Fraude o estafa", "Contenido inapropiado", "Artículo prohibido", "Información falsa", "Otro"];
+  /* Detecta correos y teléfonos (10 dígitos o más) para proteger datos personales */
+  const EMAIL_RE = /[^\s@]+@[^\s@]+\.[^\s@]{2,}/;
+  const PHONE_RE = /(?:\+?\d[\s.-]?){10,}/;
+  const hasContact = (t) => EMAIL_RE.test(t) || PHONE_RE.test(t);
+  const maskContact = (t) => String(t).replace(new RegExp(EMAIL_RE.source, "g"), "[correo oculto]").replace(new RegExp(PHONE_RE.source, "g"), "[teléfono oculto] ");
+
+  /* ---------- utilidades ---------- */
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
+  const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const money = (n) => "$ " + Number(n).toLocaleString("es-CO");
+  const hash = (s) => { let h = 5381; for (const ch of String(s)) h = ((h << 5) + h + ch.charCodeAt(0)) | 0; return "h" + (h >>> 0).toString(36); };
+  const now = () => Date.now();
+  const ago = (t) => {
+    const m = Math.round((now() - t) / 60000);
+    if (m < 1) return "hace un momento";
+    if (m < 60) return `hace ${m} min`;
+    const h = Math.round(m / 60); if (h < 24) return `hace ${h} h`;
+    const d = Math.round(h / 24); return d === 1 ? "ayer" : `hace ${d} días`;
+  };
+  const initials = (name) => name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+  const starsTxt = (n) => "★".repeat(Math.round(n)) + "☆".repeat(5 - Math.round(n));
+  const fdate = (t) => new Date(t).toLocaleDateString("es-CO", { day: "numeric", month: "short", year: "numeric" });
+  const where = (p) => (p.zone ? `${p.zone}, ${p.city}` : p.city);
+
+  /* ---------- "base de datos" ----------
+   * Modo compartido: el servidor (server.js) guarda los datos y cada navegador envía solo lo que cambió.
+   * Modo local: si no hay servidor, todo se guarda en este navegador (localStorage). */
+  const COLLS = ["users", "posts", "questions", "convs", "requests", "txs", "deliveries", "reviews", "notifs", "reports"];
+  const localHash = (s) => hash(s);
+  let serverMode = false, connected = false, version = 0, epoch = 0;
+  let sess = (() => { try { return JSON.parse(localStorage.getItem(SKEY)) || {}; } catch (e) { return {}; } })();
+  function setSession(uid, token) {
+    sess = uid ? { uid, token: token || null } : {};
+    try { localStorage.setItem(SKEY, JSON.stringify(sess)); } catch (e) { /* sin almacenamiento */ }
+  }
+  function norm(d) {
+    COLLS.forEach((c) => (d[c] = d[c] || []));
+    d.resets = d.resets || []; d.seq = d.seq || 100;
+    d.users.forEach((u) => (u.favs = u.favs || []));
+    d.posts.forEach((p) => { if (!Array.isArray(p.imgs)) p.imgs = p.img ? [p.img] : []; delete p.img; });
+    return d;
+  }
+  const seed = () => norm(window.SME_SEED(localHash));
+  let memory = null;
+  function loadLocal() {
+    try { const raw = localStorage.getItem(KEY); if (raw) return norm(JSON.parse(raw)); } catch (e) { /* sin almacenamiento */ }
+    return memory || seed();
+  }
+  let db = loadLocal();
+  let shadow = {}, outbox = [], sending = false;
+  function snapshot() { shadow = {}; COLLS.forEach((c) => db[c].forEach((r) => (shadow[c + ":" + r.id] = JSON.stringify(r)))); }
+  function save() {
+    memory = db;
+    if (!serverMode) {
+      try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) { toast("El navegador se quedó sin espacio. Usa el servidor para guardar más fotos."); }
+      return;
+    }
+    const up = {}; let n = 0;
+    COLLS.forEach((c) => db[c].forEach((r) => {
+      const k = c + ":" + r.id, js = JSON.stringify(r);
+      if (shadow[k] !== js) { (up[c] = up[c] || []).push(r); shadow[k] = js; n++; }
+    }));
+    if (n) { outbox.push(up); flush(); }
+  }
+  async function api(path, body) {
+    const r = await fetch("api/" + path, {
+      method: body === undefined ? "GET" : "POST", cache: "no-store",
+      headers: { "Content-Type": "application/json", "X-Token": sess.token || "" },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+    let j = {}; try { j = await r.json(); } catch (e) { /* respuesta vacía */ }
+    if (!r.ok && !j.errors) { const err = new Error(j.error || "No pudimos conectar con el servidor."); err.status = r.status; throw err; }
+    return j;
+  }
+  async function flush() {
+    if (sending || !outbox.length) return;
+    sending = true;
+    const up = outbox.shift();
+    try {
+      const r = await api("sync", { upserts: up });
+      setConnected(true);
+      if (!outbox.length) { const how = mergeState(r); if (how) liveRefresh(how); }
+    } catch (e) {
+      if (e.status === 401 || e.status === 403) { setSession(null); toast(e.message); render(); }
+      else { outbox.unshift(up); setConnected(false); setTimeout(() => { sending = false; flush(); }, 3000); return; }
+    }
+    sending = false;
+    if (outbox.length) flush();
+  }
+  /* Fusiona el estado del servidor sobre los mismos objetos para no perder referencias abiertas en pantalla */
+  function mergeState(r) {
+    if (!r || !r.state) return false;
+    if (r.epoch !== epoch) {
+      epoch = r.epoch; version = r.version;
+      db = norm(Object.assign({ seq: 100 }, r.state)); memory = db; snapshot();
+      return "replace";
+    }
+    if (r.version === version) return false;
+    version = r.version;
+    COLLS.forEach((c) => {
+      const map = new Map(db[c].map((x) => [x.id, x]));
+      r.state[c].forEach((rec) => {
+        const cur = map.get(rec.id);
+        if (cur) { Object.keys(cur).forEach((k) => { if (!(k in rec)) delete cur[k]; }); Object.assign(cur, rec); }
+        else db[c].push(rec);
+      });
+    });
+    norm(db); snapshot();
+    return "merge";
+  }
+  async function poll() {
+    if (!serverMode || sending || outbox.length) return;
+    try {
+      const r = await api("state?v=" + version);
+      setConnected(true);
+      if (r.same && r.epoch === epoch) return;
+      const how = mergeState(r);
+      if (how) liveRefresh(how);
+    } catch (e) { setConnected(false); }
+  }
+  function setConnected(v) {
+    connected = v;
+    const dot = $("#syncdot"), txt = $("#syncmode");
+    if (!dot) return;
+    dot.classList.toggle("off", !(serverMode && v));
+    txt.textContent = !serverMode ? "Modo local: los datos se guardan solo en este navegador" : v ? "En línea · datos compartidos con todos" : "Sin conexión · reintentando…";
+  }
+  /* Cuentas: en modo compartido las valida el servidor; en modo local, este navegador (mismas reglas en core.js) */
+  async function doRegister(v) {
+    if (serverMode) {
+      const r = await api("register", v);
+      if (r.errors) return r;
+      mergeState(r); setSession(r.uid, r.token);
+      return { user: user(r.uid) };
+    }
+    const r = window.SME_CORE.register(db, v, localHash, nextId);
+    if (r.user) { setSession(r.user.id); save(); }
+    return r;
+  }
+  async function doLogin(email, pass) {
+    if (serverMode) {
+      try { const r = await api("login", { email, pass }); setSession(r.uid, r.token); return { user: user(r.uid) }; }
+      catch (e) { return { error: e.message }; }
+    }
+    const r = window.SME_CORE.login(db, email, pass, localHash);
+    if (r.user) setSession(r.user.id);
+    return r;
+  }
+  async function doResetRequest(email) {
+    if (serverMode) { try { return await api("reset/request", { email }); } catch (e) { return { error: e.message }; } }
+    const r = window.SME_CORE.resetRequest(db, email); save(); return r;
+  }
+  async function doResetConfirm(v) {
+    if (serverMode) { try { return await api("reset/confirm", v); } catch (e) { return { errors: { code: e.message } }; } }
+    const r = window.SME_CORE.resetConfirm(db, v, localHash); save(); return r;
+  }
+  async function uploadImage(dataUrl) {
+    if (!serverMode) return dataUrl;
+    const r = await api("upload", { data: dataUrl });
+    return r.url;
+  }
+
+  const nextId = () => (serverMode ? Date.now() * 1000 + Math.floor(Math.random() * 1000) : ++db.seq);
+  const user = (id) => db.users.find((u) => u.id === id);
+  const post = (id) => db.posts.find((p) => p.id === id);
+  const me = () => (sess.uid ? user(sess.uid) || null : null);
+  const role = () => (me() ? me().role : null);
+  function notify(userId, text, link, kind = "otro", postId = null) {
+    db.notifs.push({ id: nextId(), user: userId, kind, post: postId, text, link, read: false, at: now() });
+  }
+  /* Resumen agrupado de alertas sin leer: "Tienes 3 preguntas nuevas en …" (HUI-04 / HUI-08) */
+  const KIND_TXT = {
+    pregunta: ["pregunta nueva", "preguntas nuevas"], mensaje: ["mensaje nuevo", "mensajes nuevos"],
+    respuesta: ["respuesta nueva", "respuestas nuevas"], solicitud: ["solicitud nueva", "solicitudes nuevas"],
+    oferta: ["oferta nueva", "ofertas nuevas"], resena: ["aviso de reseña", "avisos de reseña"],
+    entrega: ["novedad de entrega", "novedades de entrega"],
+  };
+  function summaryHtml() {
+    const u = me(); if (!u) return "";
+    const groups = {};
+    db.notifs.filter((n) => n.user === u.id && !n.read && KIND_TXT[n.kind] && n.post && post(n.post)).forEach((n) => {
+      const k = n.kind + ":" + n.post; (groups[k] = groups[k] || { kind: n.kind, post: n.post, n: 0, link: n.link }).n++;
+    });
+    const list = Object.values(groups).sort((a, b) => b.n - a.n);
+    if (!list.length) return "";
+    return `<div class="alert summary" data-cy="resumen-alertas"><b>🔔 Tienes novedades</b>${list.map((g) => `<span data-cy="alerta">Tienes ${g.n} ${KIND_TXT[g.kind][g.n === 1 ? 0 : 1]} en <a href="#${g.link}">“${esc(post(g.post).title)}”</a></span>`).join("")}<a href="#notificaciones" class="small">Ver todas las notificaciones →</a></div>`;
+  }
+  function rating(userId) {
+    const r = db.reviews.filter((x) => x.to === userId);
+    return { avg: r.length ? r.reduce((a, b) => a + b.stars, 0) / r.length : 0, n: r.length };
+  }
+  const visiblePosts = () => db.posts.filter((p) => p.status === "activa" && !(user(p.owner) || {}).suspended);
+  const firstName = (id) => (user(id) ? user(id).name.split(" ")[0] : "Usuario");
+  const fdateShort = (d) => new Date(String(d) + "T12:00:00").toLocaleDateString("es-CO", { weekday: "short", day: "numeric", month: "short" });
+  const todayStr = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+  const STATUS_TXT = { activa: "Activa", pausada: "Pausada", reservada: "Entrega acordada", cerrada: "Cerrada", oculta: "Oculta", eliminada: "Eliminada" };
+  const STATUS_CLS = { activa: "venta", pausada: "gray", reservada: "donacion", cerrada: "gray", oculta: "bad", eliminada: "bad" };
+  const statusBadge = (p) => `<span class="badge ${STATUS_CLS[p.status] || "gray"}" data-cy="estado-publicacion">${STATUS_TXT[p.status] || p.status}</span>`;
+
+  /* ---------- HUI-11 favoritos ---------- */
+  const isFav = (pid) => !!(me() && (me().favs || []).includes(pid));
+  const favCount = () => (me() ? (me().favs || []).length : 0);
+  let pendingFav = null;
+  function toggleFav(pid, back) {
+    const u = me();
+    if (!u) { pendingFav = pid; needLogin(back || `pub-${pid}`); return null; }
+    if (u.admin) { toast("El administrador no usa la lista de favoritos."); return null; }
+    const on = !(u.favs || []).includes(pid);
+    u.favs = on ? [...(u.favs || []), pid] : u.favs.filter((x) => x !== pid);
+    save(); header();
+    toast(on ? "Guardado en Mis favoritos." : "Quitado de Mis favoritos.");
+    return on;
+  }
+  function applyPendingFav() {
+    const u = me(), pid = pendingFav; pendingFav = null;
+    if (!u || u.admin || !pid || !post(pid)) return;
+    if (!u.favs.includes(pid)) { u.favs = [...u.favs, pid]; save(); }
+    toast(`Guardamos “${post(pid).title}” en Mis favoritos.`);
+  }
+  const favBtn = (p, big) => { const on = isFav(p.id); return `<button type="button" class="fav ${big ? "big" : ""} ${on ? "on" : ""}" data-fav="${p.id}" aria-pressed="${on}" aria-label="${on ? "Quitar de favoritos" : "Agregar a favoritos"}" data-cy="${big ? "favorito-detalle" : "favorito"}">${on ? "♥" : "♡"}${big ? (on ? " En favoritos" : " Agregar a favoritos") : ""}</button>`; };
+  function wireFavs(after) {
+    $$("[data-fav]").forEach((b) => b.addEventListener("click", (e) => {
+      e.preventDefault(); e.stopPropagation();
+      if (toggleFav(Number(b.dataset.fav), (location.hash || "#catalogo").slice(1)) !== null && after) after();
+    }));
+  }
+
+  /* ---------- HUI-10 pausar, reactivar y eliminar ---------- */
+  function manageBtns(p) {
+    if (p.status === "reservada") return `<span class="small muted" data-cy="bloqueada-entrega">Tiene una entrega acordada: no se puede editar, pausar ni eliminar.</span>`;
+    if (p.status !== "activa" && p.status !== "pausada") return "";
+    return `<span class="rowactions"><a class="btn ghost sm" href="#editar-${p.id}" data-cy="editar">✏️ Editar</a>
+      <button type="button" class="btn ghost sm" data-pause="${p.id}" data-cy="${p.status === "pausada" ? "reactivar" : "pausar"}">${p.status === "pausada" ? "▶️ Reactivar" : "⏸️ Pausar"}</button>
+      <button type="button" class="btn ghost sm" data-del="${p.id}" data-cy="eliminar">🗑️ Eliminar</button></span>`;
+  }
+  function wireManage(done, afterDelete) {
+    $$("[data-pause]").forEach((b) => b.addEventListener("click", () => {
+      const p = post(Number(b.dataset.pause));
+      p.status = p.status === "pausada" ? "activa" : "pausada";
+      save();
+      toast(p.status === "pausada" ? "Publicación pausada. Ya no aparece en el catálogo ni en la búsqueda." : "Publicación reactivada. Volvió al catálogo.");
+      done();
+    }));
+    $$("[data-del]").forEach((b) => b.addEventListener("click", () => {
+      const p = post(Number(b.dataset.del));
+      modal(`<div style="display:grid;gap:12px" data-cy="confirmar-eliminar"><h2>¿Eliminar “${esc(p.title)}”?</h2>
+        <p>La publicación sale del catálogo y no se puede recuperar. Las solicitudes pendientes se rechazan automáticamente.</p>
+        <div class="actions"><button class="btn danger" id="do-del" data-cy="confirmar-eliminacion">Sí, eliminar</button><button class="btn ghost" data-close data-cy="cancelar-eliminacion">Cancelar</button></div></div>`, (s, close) => {
+        $("#do-del", s).addEventListener("click", () => {
+          p.status = "eliminada"; p.deletedAt = now();
+          db.requests.filter((r) => r.post === p.id && r.status === "pendiente").forEach((r) => {
+            r.status = "rechazada";
+            notify(r.requester, `“${p.title}” ya no está disponible: quien lo publicó lo eliminó.`, "mis-solicitudes", "otro", p.id);
+          });
+          save(); close(); toast("Publicación eliminada."); (afterDelete || done)();
+        });
+      });
+    }));
+  }
+
+  /* ---------- HUI-12 estado de la entrega: Acordada → Entregada ---------- */
+  const activeDelivery = (pid) => db.deliveries.find((d) => d.post === pid && d.status === "acordada");
+  function convFor(p, buyerId) {
+    let cv = db.convs.find((c) => c.post === p.id && c.buyer === buyerId);
+    if (!cv) { cv = { id: nextId(), post: p.id, buyer: buyerId, seller: p.owner, shared: {}, msgs: [] }; db.convs.push(cv); }
+    return cv;
+  }
+  function agreeModal(p, buyerIds, onDone, request) {
+    const one = buyerIds.length === 1;
+    modal(`<form id="agree" class="form" novalidate data-cy="form-acordar">
+      <h2>Acordar la entrega</h2><p class="muted small">“${esc(p.title)}”. La publicación sale del catálogo mientras la entrega está acordada.</p>
+      <div class="field"><label for="ag-b">${p.mode === "venta" ? "Comprador" : "Quien recibe"}</label>
+        <select id="ag-b" name="buyer" data-cy="acordar-con">${one ? "" : `<option value="">Selecciona…</option>`}${buyerIds.map((b) => `<option value="${b}">${esc(user(b).name)}</option>`).join("")}</select><span class="err"></span></div>
+      <div class="grid2">
+        <div class="field"><label for="ag-d">Fecha</label><input id="ag-d" name="date" type="date" min="${todayStr()}" data-cy="acordar-fecha"><span class="err"></span></div>
+        <div class="field"><label for="ag-t">Hora (opcional)</label><input id="ag-t" name="time" type="time" data-cy="acordar-hora"><span class="err"></span></div>
+      </div>
+      <div class="field"><label for="ag-p">Lugar de entrega</label><input id="ag-p" name="place" maxlength="80" placeholder="Ej.: Parque de Suba, entrada principal" data-cy="acordar-lugar"><span class="err"></span></div>
+      <div class="actions"><button class="btn" data-cy="confirmar-acuerdo">Acordar entrega</button><button type="button" class="btn ghost" data-close>Cancelar</button></div>
+    </form>`, (s, close) => {
+      const f = $("#agree", s);
+      f.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const buyer = Number(f.buyer.value), date = f.date.value, place = f.place.value.trim(), time = f.time.value;
+        let ok = setErr(f, "buyer", buyer ? "" : "Selecciona con quién acordaste la entrega.");
+        ok = setErr(f, "date", !date ? "Elige la fecha de la entrega." : date < todayStr() ? "La fecha no puede ser anterior a hoy." : "") && ok;
+        ok = setErr(f, "place", place.length < 3 ? "Escribe el lugar de entrega (mínimo 3 caracteres)." : "") && ok;
+        if (!ok) return;
+        if (activeDelivery(p.id)) { close(); toast("Este artículo ya tiene una entrega acordada."); return onDone(); }
+        if (request) request.status = "aceptada";
+        const u = me();
+        const d = { id: nextId(), post: p.id, seller: p.owner, buyer, status: "acordada", sellerOk: false, buyerOk: false, date, time, place, reason: "", at: now(), by: u.id };
+        db.deliveries.push(d); p.status = "reservada";
+        const cv = convFor(p, buyer);
+        cv.msgs.push({ from: 0, text: `🤝 Entrega acordada para el ${fdateShort(date)}${time ? " a las " + time : ""} en ${place}. Cuando se entregue, ${firstName(p.owner)} pulsa “Entregué” y ${firstName(buyer)} pulsa “Recibí”.`, at: now() });
+        notify(buyer, `${u.name} acordó contigo la entrega de “${p.title}” para el ${fdateShort(date)}.`, `chat-${cv.id}`, "entrega", p.id);
+        save(); close(); header();
+        toast("Entrega acordada. La publicación quedó reservada.");
+        onDone();
+      });
+    });
+  }
+  function confirmDelivery(d) {
+    const u = me(), p = post(d.post), isS = u.id === d.seller;
+    if (d.status !== "acordada") return;
+    if (isS) d.sellerOk = true; else if (u.id === d.buyer) d.buyerOk = true; else return;
+    const cv = convFor(p, d.buyer), other = isS ? d.buyer : d.seller;
+    cv.msgs.push({ from: 0, text: `${firstName(u.id)} confirmó: “${isS ? "Entregué" : "Recibí"}”.`, at: now() });
+    if (d.sellerOk && d.buyerOk) {
+      d.status = "entregada"; d.doneAt = now(); p.status = "cerrada";
+      const tx = { id: nextId(), post: p.id, seller: d.seller, buyer: d.buyer, delivery: d.id, at: now() };
+      db.txs.push(tx);
+      db.requests.filter((r) => r.post === p.id && r.status === "pendiente").forEach((r) => { r.status = "rechazada"; notify(r.requester, `“${p.title}” ya fue entregado a otra persona.`, "mis-solicitudes", "otro", p.id); });
+      cv.msgs.push({ from: 0, text: "✅ Entrega confirmada por ambas partes. La publicación se cerró y ya se puede calificar.", at: now() });
+      notify(d.buyer, `La entrega de “${p.title}” quedó como Entregada. Ya puedes calificar a ${user(d.seller).name} en Mis compras.`, "transacciones", "resena", p.id);
+      notify(d.seller, `${user(d.buyer).name} confirmó que recibió “${p.title}”. La entrega quedó como Entregada.`, "entregas", "entrega", p.id);
+      toast("Entrega confirmada por ambas partes. Estado: Entregada.");
+    } else {
+      notify(other, `${u.name} marcó “${isS ? "Entregué" : "Recibí"}” en “${p.title}”. Confirma tú también para cerrar la entrega.`, `chat-${cv.id}`, "entrega", p.id);
+      toast(`Marcaste “${isS ? "Entregué" : "Recibí"}”. Falta la confirmación de ${firstName(other)}.`);
+    }
+    save(); header();
+  }
+  function cancelModal(d, onDone) {
+    const p = post(d.post);
+    modal(`<form id="dcancel" class="form" novalidate data-cy="form-cancelar">
+      <h2>Cancelar la entrega</h2><p class="muted small">“${esc(p.title)}” volverá a estar disponible en el catálogo.</p>
+      <div class="field"><label for="dc-r">Motivo</label><textarea id="dc-r" name="reason" maxlength="200" placeholder="Ej.: Ya no puedo ir el sábado" data-cy="motivo-cancelacion"></textarea><span class="err"></span></div>
+      <div class="actions"><button class="btn danger" data-cy="confirmar-cancelacion">Confirmar cancelación</button><button type="button" class="btn ghost" data-close>Volver</button></div>
+    </form>`, (s, close) => {
+      const f = $("#dcancel", s);
+      f.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const reason = f.reason.value.trim();
+        if (!setErr(f, "reason", reason.length < 5 ? "Escribe el motivo de la cancelación (mínimo 5 caracteres)." : "")) return;
+        const u = me(), other = u.id === d.seller ? d.buyer : d.seller;
+        d.status = "cancelada"; d.reason = reason; d.cancelBy = u.id; d.cancelAt = now();
+        if (p.status === "reservada") p.status = "activa";
+        const rq = db.requests.find((r) => r.post === p.id && r.requester === d.buyer && r.status === "aceptada");
+        if (rq) rq.status = "cancelada";
+        convFor(p, d.buyer).msgs.push({ from: 0, text: `❌ ${firstName(u.id)} canceló la entrega. Motivo: “${reason}”. La publicación volvió al catálogo.`, at: now() });
+        notify(other, `${u.name} canceló la entrega de “${p.title}”. Motivo: “${reason}”.`, "entregas", "entrega", p.id);
+        save(); close(); header();
+        toast("Entrega cancelada. La publicación volvió al catálogo.");
+        onDone();
+      });
+    });
+  }
+  function deliveryHtml(d, withChat) {
+    const p = post(d.post), u = me(), isS = u && u.id === d.seller, isB = u && u.id === d.buyer;
+    const steps = `<div class="steps" data-cy="estado-entrega"><span class="st done">Acordada</span><span aria-hidden="true">→</span>${d.status === "cancelada" ? `<span class="st bad">Cancelada</span>` : `<span class="st ${d.status === "entregada" ? "done" : ""}">Entregada</span>`}</div>`;
+    const when = `<span class="small muted">${d.date ? "📅 " + fdateShort(d.date) + (d.time ? " · " + esc(d.time) : "") : ""}${d.place ? " · 📍 " + esc(d.place) : ""}</span>`;
+    let body = "";
+    if (d.status === "acordada") {
+      body = `<div class="checks"><span data-cy="check-vendedor">${d.sellerOk ? "✅" : "⏳"} ${esc(firstName(d.seller))}: Entregué</span><span data-cy="check-comprador">${d.buyerOk ? "✅" : "⏳"} ${esc(firstName(d.buyer))}: Recibí</span></div>
+        <div class="rowactions">${isS && !d.sellerOk ? `<button type="button" class="btn sm" data-dok="${d.id}" data-cy="entregue">Entregué</button>` : ""}${isB && !d.buyerOk ? `<button type="button" class="btn sm" data-dok="${d.id}" data-cy="recibi">Recibí</button>` : ""}${isS || isB ? `<button type="button" class="btn ghost sm" data-dcancel="${d.id}" data-cy="cancelar-entrega">Cancelar entrega</button>` : ""}</div>`;
+    } else if (d.status === "entregada") {
+      body = `<span class="small">Entregada ${ago(d.doneAt)}. ${isB ? `<a href="#transacciones" data-cy="ir-calificar">Calificar en Mis compras →</a>` : `${esc(firstName(d.buyer))} ya puede calificarte.`}</span>`;
+    } else {
+      body = `<span class="small">Cancelada por ${esc(firstName(d.cancelBy))}. Motivo: “${esc(d.reason)}”.</span>`;
+    }
+    const cv = withChat && db.convs.find((c) => c.post === d.post && c.buyer === d.buyer);
+    return `<div class="delivery" data-cy="entrega"><div class="pagehead" style="align-items:center"><b>🚚 ${esc(p.title)} · ${isS ? "con " + esc(user(d.buyer).name) : "de " + esc(user(d.seller).name)}</b>${when}</div>${steps}${body}${cv ? `<a class="small" href="#chat-${cv.id}">Abrir el chat →</a>` : ""}</div>`;
+  }
+  function wireDelivery(done) {
+    $$("[data-dok]").forEach((b) => b.addEventListener("click", () => { confirmDelivery(db.deliveries.find((d) => d.id === Number(b.dataset.dok))); done(); }));
+    $$("[data-dcancel]").forEach((b) => b.addEventListener("click", () => cancelModal(db.deliveries.find((d) => d.id === Number(b.dataset.dcancel)), done)));
+  }
+
+  /* ---------- UI comunes ---------- */
+  const main = () => $("#main");
+  let toastTimer;
+  function toast(msg) {
+    let t = $(".toast");
+    if (!t) { t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => (t.hidden = true), 2600);
+  }
+  function thumb(p, cls = "thumb") {
+    if (p.mode === "solicitud") return `<div class="${cls}" style="background:#DCE4EE"><span aria-hidden="true">🙋</span></div>`;
+    const src = (p.imgs || [])[0];
+    const inner = src ? `<img src="${esc(src)}" alt="${esc(p.title)}" loading="lazy">` : `<span aria-hidden="true">${CAT_ICON[p.cat] || "📦"}</span>`;
+    return `<div class="${cls}" style="background:${CAT_TINT[p.cat] || "#E6D9C2"}">${inner}</div>`;
+  }
+  const badge = (p) => p.mode === "venta" ? `<span class="badge venta" data-cy="badge-venta">Venta</span>`
+    : p.mode === "solicitud" ? `<span class="badge solicitud" data-cy="badge-solicitud">Solicitud</span>`
+    : `<span class="badge donacion" data-cy="badge-donacion">Donación</span>`;
+  const priceTag = (p) => p.mode === "venta" ? `<span class="price num" data-cy="precio">${money(p.price)}</span>`
+    : p.mode === "solicitud" ? `<span class="price need">Se necesita</span>`
+    : `<span class="price free" data-cy="precio">Gratis</span>`;
+  const modeLabel = (p) => p.mode === "venta" ? money(p.price) : p.mode === "solicitud" ? "Solicitud" : "Donación";
+  function gallery(p) {
+    const imgs = p.imgs || [];
+    if (imgs.length < 2) return thumb(p);
+    return `<div class="gallery" data-cy="galeria">${thumb(p)}<div class="thumbs">${imgs.map((src, i) => `<button type="button" class="${i ? "" : "on"}" data-gi="${i}" aria-label="Ver foto ${i + 1}"><img src="${esc(src)}" alt=""></button>`).join("")}</div></div>`;
+  }
+  function go(name) { if (location.hash === "#" + name) render(); else location.hash = name; }
+  function denied(msg) {
+    main().innerHTML = `<div class="wrap page"><div class="empty" data-cy="sin-permiso"><h2>No tienes permisos para ver esta página</h2><p class="muted">${esc(msg)}</p><a class="btn ghost" href="#catalogo">Ir al catálogo</a></div></div>`;
+  }
+  function needLogin(next) {
+    sessionNext = next; go("login"); toast("Inicia sesión para continuar.");
+  }
+  let sessionNext = null;
+  function modal(html, onReady) {
+    const s = document.createElement("div");
+    s.className = "scrim"; s.innerHTML = `<div class="modal" role="dialog" aria-modal="true">${html}</div>`;
+    document.body.appendChild(s);
+    const close = () => s.remove();
+    s.addEventListener("click", (e) => { if (e.target === s || e.target.closest("[data-close]")) close(); });
+    onReady && onReady(s, close);
+    const f = s.querySelector("input, select, textarea, button"); f && f.focus();
+  }
+  function setErr(form, name, msg) {
+    const f = form.querySelector(`[name="${name}"]`).closest(".field");
+    f.classList.toggle("bad", !!msg); f.querySelector(".err").textContent = msg || "";
+    return !msg;
+  }
+
+  /* ---------- encabezado ---------- */
+  function header() {
+    const u = me(), r = role();
+    const cur = (location.hash || "#catalogo").slice(1);
+    const a = (h, t, cy) => `<a href="#${h}" class="${cur === h ? "on" : ""}" data-cy="${cy || h}">${t}</a>`;
+    let links = a("catalogo", "Inicio");
+    if (!u) {
+      links += a("login", "Iniciar sesión") + a("registro", "Crear cuenta");
+    } else {
+      if (r === "V") links += a("publicar", "Vender") + a("mis-publicaciones", "Mis publicaciones");
+      if (r === "D") links += a("publicar", "Donar") + a("mis-publicaciones", "Mis publicaciones");
+      if (r === "C") links += a("pedir", "Pedir artículo") + a("mis-solicitudes", "Mis solicitudes") + a("transacciones", "Mis compras");
+      if (r === "A") links += a("admin", "Panel de reportes");
+      if (r !== "A") {
+        const pend = db.deliveries.filter((d) => d.status === "acordada" && ((d.seller === u.id && !d.sellerOk) || (d.buyer === u.id && !d.buyerOk))).length;
+        links += a("mensajes", "Mensajes") + a("entregas", `Entregas${pend ? `<span class="navbadge" data-cy="entregas-pendientes">${pend}</span>` : ""}`);
+        links += `<a href="#favoritos" class="navfav ${cur === "favoritos" ? "on" : ""}" data-cy="mis-favoritos">♥ Favoritos<span class="count" data-cy="contador-favoritos">${favCount()}</span></a>`;
+      }
+      const unread = db.notifs.filter((n) => n.user === u.id && !n.read).length;
+      links += `<a href="#notificaciones" class="bell ${cur === "notificaciones" ? "on" : ""}" data-cy="notificaciones" aria-label="Notificaciones, ${unread} sin leer">🔔<span class="bell-txt">Notificaciones</span>${unread ? `<span class="count" data-cy="contador">${unread}</span>` : ""}</a>`;
+      if (!u.admin) {
+        links += `<label class="rolesel">Rol <select id="role-select" data-cy="selector-rol">
+          ${["C", "V", "D"].map((k) => `<option value="${k}" ${r === k ? "selected" : ""}>${ROLES[k]}</option>`).join("")}</select></label>`;
+      }
+      links += a(`perfil-${u.id}`, esc(u.name.split(" ")[0]), "mi-perfil");
+      links += `<button class="link" id="logout" data-cy="salir">Salir</button>`;
+    }
+    $("#topnav").innerHTML = links;
+    const sel = $("#role-select");
+    sel && sel.addEventListener("change", () => {
+      me().role = sel.value; save();
+      toast(`Ahora usas la plataforma como ${ROLES[sel.value]}.`);
+      go("catalogo");
+    });
+    const lo = $("#logout");
+    lo && lo.addEventListener("click", () => {
+      if (serverMode) api("logout", {}).catch(() => {});
+      setSession(null); toast("Cerraste sesión."); go("catalogo");
+    });
+  }
+
+  /* ---------- HUI-03 catálogo ---------- */
+  const filters = { q: "", city: "", cat: "", mode: "", cond: "" };
+  const MODE_TXT = { venta: "Venta", donacion: "Donación", solicitud: "Solicitudes" };
+  function viewCatalogo() {
+    const total = visiblePosts().filter((p) => p.mode !== "solicitud").length;
+    const donations = visiblePosts().filter((p) => p.mode === "donacion").length;
+    const allRev = db.reviews, avg = allRev.length ? allRev.reduce((a, b) => a + b.stars, 0) / allRev.length : 0;
+    main().innerHTML = `
+      <section class="hero"><div class="wrap">
+        <div><h1>Lo que ya no usas, a <em>alguien</em> le sirve.</h1>
+        <p>Compra, vende o regala artículos de segunda mano y coordina la entrega por chat, sin intermediarios.</p></div>
+        <div class="stats" data-cy="banner-confianza">
+          <div><b class="num">${avg ? avg.toFixed(1) : "—"} ★</b><span>calificación promedio</span></div>
+          <div><b class="num">100%</b><span>coordinación por chat</span></div>
+          <div><b class="num">${total}</b><span>publicaciones activas</span></div>
+          <div><b class="num">${donations}</b><span>donaciones disponibles</span></div>
+        </div></div></section>
+      <div class="wrap page">
+        ${summaryHtml()}
+        <div class="filters">
+          <form class="searchrow" id="search-form" role="search">
+            <input class="input" id="q" name="q" type="search" placeholder="Busca bicicletas, libros, muebles…" value="${esc(filters.q)}" data-cy="buscador" aria-label="Buscar" autocomplete="off">
+            <select class="input" id="city" data-cy="filtro-ciudad" aria-label="Ciudad o municipio">
+              <option value="">Todas las ciudades</option>${CITIES.map((c) => `<option ${filters.city === c ? "selected" : ""}>${c}</option>`).join("")}
+            </select>
+            <select class="input" id="cond" data-cy="filtro-estado" aria-label="Estado del artículo">
+              <option value="">Cualquier estado</option>${CONDS.map((c) => `<option ${filters.cond === c ? "selected" : ""}>${c}</option>`).join("")}
+            </select>
+            <button class="btn" data-cy="buscar">Buscar</button>
+          </form>
+          <span class="lbl">Explora por categoría</span>
+          <div class="resultbar">
+            <div class="chips" role="group" aria-label="Categorías">
+              <button class="chip ${!filters.cat ? "on" : ""}" data-cat="" data-cy="cat-todas">Todas</button>
+              ${CATS.map((c) => `<button class="chip ${filters.cat === c ? "on" : ""}" data-cat="${c}" data-cy="cat-${c}">${CAT_ICON[c]} ${c}</button>`).join("")}
+            </div>
+            <div class="seg" role="group" aria-label="Modalidad">
+              ${[["", "Todas"], ["venta", "Venta"], ["donacion", "Donación"], ["solicitud", "Solicitudes"]].map(([v, t]) => `<button class="${filters.mode === v ? "on" : ""}" data-mode="${v}" data-cy="modo-${v || "todas"}">${t}</button>`).join("")}
+            </div>
+          </div>
+        </div>
+        <div id="results"></div>
+      </div>`;
+    const draw = () => {
+      const q = filters.q.trim().toLowerCase();
+      const items = visiblePosts().filter((p) =>
+        (!q || (p.title + " " + p.desc + " " + p.cat + " " + where(p)).toLowerCase().includes(q)) &&
+        (!filters.city || p.city === filters.city) && (!filters.cat || p.cat === filters.cat) &&
+        (!filters.mode || p.mode === filters.mode) && (!filters.cond || p.cond === filters.cond)
+      ).sort((a, b) => b.at - a.at);
+      const active = [filters.q && `“${filters.q}”`, filters.city, filters.cond, filters.cat, filters.mode && MODE_TXT[filters.mode]].filter(Boolean);
+      $("#results").innerHTML = `
+        <div class="resultbar" style="margin-bottom:14px"><p class="muted small" data-cy="conteo">${items.length} ${items.length === 1 ? "resultado" : "resultados"}${active.length ? " · " + esc(active.join(" · ")) : ""}</p>
+        ${active.length ? `<button class="btn ghost sm" id="clear" data-cy="limpiar">Quitar filtros</button>` : ""}</div>
+        ${items.length ? `<div class="cards">${items.map((p) => `
+          <div class="cardwrap"><a class="card ${p.mode === "solicitud" ? "req" : ""}" href="#pub-${p.id}" data-cy="tarjeta">
+            ${thumb(p)}
+            <div class="body">
+              <div class="meta">${badge(p)}<span>${esc(p.cat)}</span></div>
+              <h3>${esc(p.title)}</h3>
+              <div class="meta">${priceTag(p)}</div>
+              <div class="meta"><span data-cy="ubicacion">📍 ${esc(where(p))}</span></div>
+            </div></a>${p.mode !== "solicitud" && !(me() && me().id === p.owner) ? favBtn(p) : ""}</div>`).join("")}</div>`
+        : `<div class="empty" data-cy="sin-resultados"><h3>No encontramos publicaciones${q ? ` para “${esc(filters.q)}”` : ""}</h3><p class="muted">Prueba con otra palabra o quita algunos filtros.</p></div>`}`;
+      const c = $("#clear"); c && c.addEventListener("click", () => { Object.assign(filters, { q: "", city: "", cat: "", mode: "", cond: "" }); viewCatalogo(); });
+      wireFavs(draw);
+    };
+    $("#search-form").addEventListener("submit", (e) => { e.preventDefault(); filters.q = $("#q").value; filters.city = $("#city").value; filters.cond = $("#cond").value; draw(); });
+    $("#q").addEventListener("input", (e) => { filters.q = e.target.value; draw(); });
+    $("#city").addEventListener("change", (e) => { filters.city = e.target.value; draw(); });
+    $("#cond").addEventListener("change", (e) => { filters.cond = e.target.value; draw(); });
+    $$("[data-cat]").forEach((b) => b.addEventListener("click", () => { filters.cat = b.dataset.cat; $$("[data-cat]").forEach((x) => x.classList.toggle("on", x === b)); draw(); }));
+    $$("[data-mode]").forEach((b) => b.addEventListener("click", () => { filters.mode = b.dataset.mode; $$("[data-mode]").forEach((x) => x.classList.toggle("on", x === b)); draw(); }));
+    draw();
+  }
+
+  /* ---------- HUI-01 registro, inicio de sesión ---------- */
+  // Panel lateral decorativo: se oculta en pantallas de 880 px o menos
+  function authSide() {
+    const r = db.reviews, avg = r.length ? r.reduce((a, b) => a + b.stars, 0) / r.length : 0;
+    return `<aside class="auth-side" aria-hidden="true" data-cy="panel-lateral">
+      <h2>Una comunidad de <em>segunda mano</em> en la que puedes confiar</h2>
+      <ul><li>🛒 Compra artículos usados cerca de ti.</li><li>🏷️ Vende lo que ya no usas con precio justo.</li><li>🎁 Dona y ayuda a alguien que lo necesita.</li></ul>
+      <div class="stats" style="justify-content:flex-start"><div><b class="num">${avg ? avg.toFixed(1) : "—"} ★</b><span>calificación promedio</span></div><div><b class="num">100%</b><span>coordinación por chat</span></div></div>
+    </aside>`;
+  }
+  function viewRegistro() {
+    if (me()) return go("catalogo");
+    let picked = "";
+    main().innerHTML = `<div class="wrap page"><div class="auth">${authSide()}<div class="panel">
+      <form class="form" id="reg" novalidate>
+        <div><h1>Crea tu cuenta</h1><p class="muted">Una sola cuenta para comprar, vender y donar. Puedes cambiar de rol cuando quieras.</p></div>
+        <div class="field"><label for="r-name">Nombre completo</label><input id="r-name" name="name" autocomplete="name" data-cy="reg-nombre"><span class="err"></span></div>
+        <div class="grid2">
+          <div class="field"><label for="r-email">Correo electrónico</label><input id="r-email" name="email" type="email" autocomplete="email" data-cy="reg-correo"><span class="err"></span></div>
+          <div class="field"><label for="r-phone">Teléfono (opcional)</label><input id="r-phone" name="phone" inputmode="tel" autocomplete="tel" data-cy="reg-telefono" placeholder="Ej.: 3001234567"><span class="hint">Privado: solo se muestra si lo compartes en el chat.</span><span class="err"></span></div>
+          <div class="field"><label for="r-pass">Contraseña</label><input id="r-pass" name="pass" type="password" autocomplete="new-password" data-cy="reg-clave"><span class="hint">Mínimo 8 caracteres.</span><span class="err"></span></div>
+          <div class="field"><label for="r-city">Ciudad o municipio</label><select id="r-city" name="city" data-cy="reg-ciudad"><option value="">Selecciona…</option>${CITIES.map((c) => `<option>${c}</option>`).join("")}</select><span class="err"></span></div>
+        </div>
+        <div class="field"><span class="lbl">Elige tu rol para empezar</span>
+          <div class="roles" data-cy="cuadricula-roles"><input type="hidden" name="role">
+            <button type="button" class="rolecard" data-role="C" data-cy="rol-comprador"><b>🛒 Comprador</b><span class="small muted">${ROLE_DESC.C}</span></button>
+            <button type="button" class="rolecard" data-role="V" data-cy="rol-vendedor"><b>🏷️ Vendedor</b><span class="small muted">${ROLE_DESC.V}</span></button>
+            <button type="button" class="rolecard" data-role="D" data-cy="rol-donante"><b>🎁 Donante</b><span class="small muted">${ROLE_DESC.D}</span></button>
+          </div><span class="err"></span></div>
+        <button class="btn" data-cy="reg-enviar">Crear cuenta</button>
+        <p class="small muted">¿Ya tienes cuenta? <a href="#login">Inicia sesión</a></p>
+      </form></div></div></div>`;
+    const f = $("#reg");
+    $$(".rolecard", f).forEach((b) => b.addEventListener("click", () => {
+      picked = b.dataset.role; f.role.value = picked;
+      $$(".rolecard", f).forEach((x) => x.classList.toggle("on", x === b)); setErr(f, "role", "");
+    }));
+    f.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const v = { name: f.elements.name.value.trim(), email: f.email.value.trim().toLowerCase(), pass: f.pass.value, city: f.city.value, phone: f.phone.value.replace(/[\s-]/g, ""), role: picked };
+      const btn = f.querySelector("[data-cy=reg-enviar]"); btn.disabled = true;
+      let r;
+      try { r = await doRegister(v); } catch (err) { r = { errors: { email: err.message } }; }
+      btn.disabled = false;
+      ["name", "email", "pass", "city", "role", "phone"].forEach((k) => setErr(f, k, (r.errors || {})[k] || ""));
+      if (r.errors) return;
+      const u = r.user;
+      toast(`Bienvenido, ${u.name.split(" ")[0]}. Tu cuenta está lista. Modo activo: ${ROLES[u.role]}.`);
+      if (pendingFav) applyPendingFav();
+      go("catalogo");
+    });
+  }
+
+  let flash = "";
+  function viewLogin() {
+    if (me()) return go("catalogo");
+    setTimeout(() => (flash = ""), 0);
+    main().innerHTML = `<div class="wrap page"><div class="auth">${authSide()}<div class="panel">
+      <form class="form" id="login-form" novalidate>
+        <div><h1>Inicia sesión</h1><p class="muted">Entra para publicar, chatear y seguir tus solicitudes.</p></div>
+        <div id="login-alert">${flash ? `<div class="alert ok" data-cy="login-aviso">${esc(flash)}</div>` : ""}</div>
+        <div class="field"><label for="l-email">Correo electrónico</label><input id="l-email" name="email" type="email" autocomplete="email" data-cy="login-correo"><span class="err"></span></div>
+        <div class="field"><label for="l-pass">Contraseña</label><input id="l-pass" name="pass" type="password" autocomplete="current-password" data-cy="login-clave"><span class="err"></span></div>
+        <button class="btn" data-cy="login-enviar">Entrar</button>
+        <p class="small"><a href="#recuperar" data-cy="olvide-clave">¿Olvidaste tu contraseña?</a></p>
+        <p class="small muted">¿No tienes cuenta? <a href="#registro">Crea una</a></p>
+        <div class="alert demo"><b>Cuentas de demostración</b>
+          <span>Vendedora: <code>ana@ejemplo.com</code> · <code>demo1234</code></span>
+          <span>Comprador: <code>luis@ejemplo.com</code> · <code>demo1234</code></span>
+          <span>Donante: <code>marta@ejemplo.com</code> · <code>demo1234</code></span>
+          <span>Administrador: <code>admin@segundamano.co</code> · <code>admin1234</code></span></div>
+      </form></div></div></div>`;
+    const f = $("#login-form");
+    f.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = f.email.value.trim().toLowerCase();
+      let ok = setErr(f, "email", email ? "" : "Escribe tu correo electrónico.");
+      ok = setErr(f, "pass", f.pass.value ? "" : "Escribe tu contraseña.") && ok;
+      if (!ok) return;
+      const btn = f.querySelector("[data-cy=login-enviar]"); btn.disabled = true;
+      const r = await doLogin(email, f.pass.value);
+      btn.disabled = false;
+      if (!r.user) { $("#login-alert").innerHTML = `<div class="alert bad" data-cy="login-error">${esc(r.error)}</div>`; return; }
+      const u = r.user;
+      toast(`Hola, ${u.name.split(" ")[0]}.`);
+      if (pendingFav) applyPendingFav();
+      const n = sessionNext; sessionNext = null;
+      go(n || (u.admin ? "admin" : "catalogo"));
+    });
+  }
+
+  /* ---------- HUI-13 recuperación de contraseña ---------- */
+  function viewRecuperar() {
+    if (me()) return go("catalogo");
+    let email = "", demo = null, blocked = false;
+    const draw = () => {
+      main().innerHTML = `<div class="wrap page"><div class="narrow panel">
+        <div style="display:grid;gap:16px">
+          <div><h1>Recupera tu contraseña</h1><p class="muted">Te enviamos un código de 6 dígitos a tu correo. Vale 15 minutos y tienes 3 intentos.</p></div>
+          <form class="form" id="rq-form" novalidate>
+            <div class="field"><label for="rc-email">Correo electrónico de tu cuenta</label><input id="rc-email" name="email" type="email" autocomplete="email" value="${esc(email)}" data-cy="rec-correo"><span class="err"></span></div>
+            <button class="btn ${demo ? "ghost" : ""}" data-cy="rec-enviar">${demo ? "Enviar un código nuevo" : "Enviar código"}</button>
+          </form>
+          ${demo ? `<div class="alert ok" data-cy="rec-enviado">Si el correo está registrado, te enviamos un código de 6 dígitos. Revisa tu bandeja de entrada.</div>
+          <div class="mailbox" data-cy="correo-demo"><span class="small"><b>📬 Correo de demostración</b> · para ${esc(demo.to)}</span>
+            <span>Tu código de SegundaMano Express es:</span><span class="code" data-cy="codigo-demo">${esc(demo.code)}</span>
+            <span class="small muted">El prototipo no envía correos reales; por eso el mensaje se muestra aquí. Si el correo no tiene cuenta, el código no funcionará.</span></div>
+          <form class="form" id="rc-form" novalidate>
+            <div class="field"><label for="rc-code">Código de 6 dígitos</label><input id="rc-code" name="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" data-cy="rec-codigo"><span class="err" data-cy="rec-error-codigo"></span></div>
+            <div class="grid2">
+              <div class="field"><label for="rc-pass">Nueva contraseña</label><input id="rc-pass" name="pass" type="password" autocomplete="new-password" data-cy="rec-clave"><span class="hint">Mínimo 8 caracteres.</span><span class="err"></span></div>
+              <div class="field"><label for="rc-pass2">Repite la contraseña</label><input id="rc-pass2" name="pass2" type="password" autocomplete="new-password" data-cy="rec-clave2"><span class="err"></span></div>
+            </div>
+            <button class="btn" data-cy="rec-confirmar" ${blocked ? "disabled" : ""}>Confirmar</button>
+          </form>` : ""}
+          <p class="small muted"><a href="#login">← Volver a iniciar sesión</a></p>
+        </div></div></div>`;
+      const rq = $("#rq-form");
+      rq.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        email = rq.email.value.trim().toLowerCase();
+        if (!setErr(rq, "email", !email ? "Escribe tu correo electrónico." : "")) return;
+        const r = await doResetRequest(email);
+        if (r.error) return setErr(rq, "email", r.error);
+        demo = r.demo; blocked = false; draw();
+        toast("Código enviado. Revisa tu correo.");
+      });
+      const rc = $("#rc-form");
+      rc && rc.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const r = await doResetConfirm({ email, code: rc.code.value, pass: rc.pass.value, pass2: rc.pass2.value });
+        ["code", "pass", "pass2"].forEach((k) => setErr(rc, k, (r.errors || {})[k] || ""));
+        if (r.blocked) { blocked = true; rc.querySelector("[data-cy=rec-confirmar]").disabled = true; }
+        if (!r.ok) return;
+        flash = "Contraseña actualizada. Inicia sesión con tu nueva contraseña.";
+        toast("Contraseña actualizada");
+        go("login");
+      });
+    };
+    draw();
+  }
+
+  /* ---------- HUI-02 publicar · HUI-10 editar ---------- */
+  const MAX_PHOTOS = 4;
+  function compressImage(file, maxSide) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const im = new Image();
+      im.onload = () => {
+        const k = Math.min(1, maxSide / Math.max(im.naturalWidth, im.naturalHeight));
+        const c = document.createElement("canvas");
+        c.width = Math.max(1, Math.round(im.naturalWidth * k)); c.height = Math.max(1, Math.round(im.naturalHeight * k));
+        c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        resolve(c.toDataURL("image/jpeg", 0.8));
+      };
+      im.onerror = () => { URL.revokeObjectURL(url); reject(new Error("bad")); };
+      im.src = url;
+    });
+  }
+  function viewPublicar(editId) {
+    const editing = editId ? post(editId) : null;
+    if (!me()) return needLogin(editing ? `editar-${editId}` : "publicar");
+    if (editId && (!editing || editing.status === "eliminada")) return denied("Esta publicación no existe o ya fue eliminada.");
+    if (editing) {
+      if (editing.owner !== me().id) return denied("Solo quien publicó el artículo puede editarlo.");
+      if (editing.mode === "solicitud") return denied("Las solicitudes no se editan desde aquí.");
+      if (editing.status !== "activa" && editing.status !== "pausada") return denied(editing.status === "reservada" ? "No puedes editar una publicación con una entrega acordada. Cancela la entrega o espera a que se complete." : "Esta publicación ya no se puede editar.");
+    } else if (role() !== "V" && role() !== "D") return denied("Para publicar cambia tu rol a Vendedor (venta) o Donante (donación) en el selector de la parte superior o en tu perfil.");
+    const mode = editing ? editing.mode : role() === "V" ? "venta" : "donacion";
+    const ev = editing || {};
+    let imgs = editing ? [...(editing.imgs || [])] : [];
+    let pending = 0;
+    const opt = (list, cur) => list.map((c) => `<option ${cur === c ? "selected" : ""}>${c}</option>`).join("");
+    main().innerHTML = `<div class="wrap page"><div class="medium panel">
+      <form class="form" id="pub-form" novalidate>
+        <div><h1>${editing ? "Editar publicación" : mode === "venta" ? "Publicar un artículo en venta" : "Publicar una donación"}</h1><p class="muted">${editing ? "Los cambios se ven de inmediato en el catálogo." : "La entrega la coordinas por el chat interno."}</p></div>
+        ${editing ? "" : `<div class="alert" data-cy="modalidad-rol">Modalidad según tu rol activo (<b>${ROLES[role()]}</b>): ${mode === "venta" ? `<span class="badge venta">Venta</span> el precio es obligatorio.` : `<span class="badge donacion">Donación</span> el artículo se publica <b>Gratis</b>, sin precio.`}
+          <span class="small muted" style="display:block;margin-top:4px">Para ${mode === "venta" ? "donar" : "vender"}, cambia tu rol a ${mode === "venta" ? "Donante" : "Vendedor"}.</span></div>`}
+        <div class="field"><label for="p-title">Título</label><input id="p-title" name="title" maxlength="80" data-cy="pub-titulo" placeholder="Ej.: Bicicleta de montaña rin 29" value="${esc(ev.title || "")}"><span class="err"></span></div>
+        <div class="field"><label for="p-desc">Descripción</label><textarea id="p-desc" name="desc" maxlength="600" data-cy="pub-descripcion" placeholder="Estado, medidas, tiempo de uso, dónde lo entregas…">${esc(ev.desc || "")}</textarea><span class="err"></span></div>
+        <div class="grid2">
+          <div class="field"><label for="p-cat">Categoría</label><select id="p-cat" name="cat" data-cy="pub-categoria"><option value="">Selecciona…</option>${opt(CATS, ev.cat)}</select><span class="err"></span></div>
+          <div class="field"><label for="p-cond">Estado del artículo</label><select id="p-cond" name="cond" data-cy="pub-estado"><option value="">Selecciona…</option>${opt(CONDS, ev.cond)}</select><span class="err"></span></div>
+          ${mode === "venta" ? `<div class="field" id="price-field"><label for="p-price">Precio (COP)</label><input id="p-price" name="price" inputmode="numeric" data-cy="pub-precio" placeholder="Ej.: 150000" value="${editing ? esc(String(ev.price)) : ""}"><span class="hint">Solo números, mayor que 0.</span><span class="err"></span></div>` : ""}
+          <div class="field"><label for="p-city">Ciudad o municipio</label><select id="p-city" name="city" data-cy="pub-ciudad">${opt(CITIES, ev.city || me().city)}</select><span class="err"></span></div>
+          <div class="field"><label for="p-zone">Barrio o localidad</label><input id="p-zone" name="zone" maxlength="40" data-cy="pub-barrio" placeholder="Ej.: Suba" value="${esc(ev.zone || "")}"><span class="err"></span></div>
+        </div>
+        <div class="field photopick"><span class="lbl">Fotografías (opcional, hasta ${MAX_PHOTOS})</span>
+          <div class="btns">
+            <label class="btn ghost" for="p-cam" data-cy="tomar-foto">📷 Tomar foto</label>
+            <label class="btn ghost" for="p-img" data-cy="elegir-foto">🖼️ Elegir de la galería</label>
+          </div>
+          <input id="p-cam" type="file" accept="image/*" capture="environment" data-cy="pub-camara" tabindex="-1">
+          <input id="p-img" name="img" type="file" accept="image/*" multiple data-cy="pub-foto" tabindex="-1">
+          <span class="hint">En el celular, “Tomar foto” abre la cámara. Las fotos se reducen solas antes de subirlas (máximo 15 MB por archivo). La primera es la portada.</span>
+          <span class="err" data-cy="error-foto"></span>
+          <div class="photos" id="photos"></div>
+        </div>
+        <div class="actions"><button class="btn" data-cy="${editing ? "guardar" : "pub-enviar"}">${editing ? "Guardar" : "Publicar"}</button><a class="btn ghost" href="#mis-publicaciones">Cancelar</a></div>
+      </form></div></div>`;
+    const f = $("#pub-form");
+    const drawPhotos = () => {
+      $("#photos").innerHTML = imgs.map((src, i) => `<div class="ph" data-cy="foto"><img src="${esc(src)}" alt="Foto ${i + 1}">${i === 0 ? `<span class="cover">Portada</span>` : ""}<button type="button" data-rm="${i}" aria-label="Quitar foto ${i + 1}" data-cy="quitar-foto">✕</button></div>`).join("")
+        + (pending ? `<div class="ph" style="display:grid;place-items:center"><span class="small muted">Subiendo…</span></div>` : "");
+      $$("[data-rm]", f).forEach((b) => b.addEventListener("click", () => { imgs.splice(Number(b.dataset.rm), 1); drawPhotos(); }));
+    };
+    drawPhotos();
+    const addFiles = async (input) => {
+      const files = Array.from(input.files || []); input.value = "";
+      if (!files.length) return;
+      setErr(f, "img", "");
+      for (const file of files) {
+        if (imgs.length + pending >= MAX_PHOTOS) { setErr(f, "img", `Puedes subir máximo ${MAX_PHOTOS} fotos.`); break; }
+        if (!/^image\//.test(file.type) && !/\.(jpe?g|png|webp|heic|heif)$/i.test(file.name)) { setErr(f, "img", "El archivo debe ser una imagen (JPG, PNG, WEBP o foto de la cámara)."); continue; }
+        if (file.size > 15 * 1024 * 1024) { setErr(f, "img", "La imagen pesa más de 15 MB. Elige una más liviana."); continue; }
+        pending++; drawPhotos();
+        try {
+          const data = await compressImage(file, serverMode ? 1280 : 800);
+          imgs.push(await uploadImage(data));
+        } catch (err) {
+          setErr(f, "img", err.message === "bad" ? "No pudimos leer esta imagen. Prueba con una foto JPG o PNG." : "No pudimos subir la foto. Revisa la conexión e intenta de nuevo.");
+        }
+        pending--; drawPhotos();
+      }
+    };
+    $("#p-cam").addEventListener("change", (e) => addFiles(e.target));
+    $("#p-img").addEventListener("change", (e) => addFiles(e.target));
+    f.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (pending) return toast("Espera a que terminen de subir las fotos.");
+      const v = { title: f.elements.title.value.trim(), desc: f.desc.value.trim(), cat: f.cat.value, cond: f.cond.value, price: f.price ? f.price.value.trim() : "", city: f.city.value, zone: f.zone.value.trim() };
+      let ok = true;
+      ok = setErr(f, "zone", v.zone.length < 3 ? "Escribe el barrio o localidad (ej.: Suba)." : "") && ok;
+      ok = setErr(f, "title", v.title.length < 3 ? "Escribe un título de al menos 3 caracteres." : "") && ok;
+      ok = setErr(f, "desc", v.desc.length < 10 ? "Describe el artículo en al menos 10 caracteres." : "") && ok;
+      ok = setErr(f, "cat", !v.cat ? "Selecciona una categoría." : "") && ok;
+      ok = setErr(f, "cond", !v.cond ? "Selecciona el estado del artículo." : "") && ok;
+      if (mode === "venta") {
+        let pe = "";
+        if (!v.price) pe = "Escribe el precio.";
+        else if (!/^\d+$/.test(v.price)) pe = "El precio solo puede tener números, sin letras, puntos ni signos.";
+        else if (Number(v.price) <= 0) pe = "El precio debe ser mayor que 0.";
+        ok = setErr(f, "price", pe) && ok;
+      }
+      if (!ok) { const bad = $(".field.bad", f); bad && bad.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
+      const data = { title: v.title, desc: v.desc, cat: v.cat, cond: v.cond, price: mode === "venta" ? Number(v.price) : 0, city: v.city, zone: v.zone, imgs: [...imgs] };
+      if (editing) {
+        const oldPrice = editing.price;
+        Object.assign(editing, data, { editedAt: now() });
+        if (mode === "venta" && data.price < oldPrice) {
+          db.users.filter((x) => x.id !== editing.owner && (x.favs || []).includes(editing.id)).forEach((x) => notify(x.id, `Bajó el precio de “${editing.title}” en tus favoritos: ahora ${money(data.price)}.`, `pub-${editing.id}`, "otro", editing.id));
+        }
+        save(); toast("Publicación actualizada");
+        return go(`pub-${editing.id}`);
+      }
+      const p = Object.assign({ id: nextId(), owner: me().id, mode, status: "activa", at: now() }, data);
+      db.posts.push(p); save();
+      toast("Publicado. Ya aparece en el catálogo.");
+      go(`pub-${p.id}`);
+    });
+  }
+
+  /* ---------- HUI-05 publicar una solicitud (artículo que necesito) ---------- */
+  function viewPedir() {
+    if (!me()) return needLogin("pedir");
+    if (role() !== "C") return denied("Para pedir un artículo a la comunidad cambia tu rol a Comprador en el selector de la parte superior o en tu perfil.");
+    main().innerHTML = `<div class="wrap page"><div class="medium panel">
+      <form class="form" id="req-form" novalidate>
+        <div><h1>Pedir un artículo a la comunidad</h1><p class="muted">Describe lo que necesitas. Tu solicitud aparece en el catálogo y quien lo tenga puede ofrecértelo como donación. No necesitas fotos.</p></div>
+        <div class="field"><label for="s-title">¿Qué necesitas?</label><input id="s-title" name="title" maxlength="80" data-cy="sol-titulo" placeholder="Ej.: Silla de ruedas para adulto"><span class="err"></span></div>
+        <div class="field"><label for="s-desc">Descripción detallada</label><textarea id="s-desc" name="desc" maxlength="600" data-cy="sol-descripcion" placeholder="Para qué lo necesitas, medidas o talla, si puedes recogerlo…"></textarea><span class="err"></span></div>
+        <div class="grid2">
+          <div class="field"><label for="s-cat">Categoría</label><select id="s-cat" name="cat" data-cy="sol-categoria"><option value="">Selecciona…</option>${CATS.map((c) => `<option>${c}</option>`).join("")}</select><span class="err"></span></div>
+          <div class="field"><label for="s-city">Ciudad o municipio</label><select id="s-city" name="city" data-cy="sol-ciudad">${CITIES.map((c) => `<option ${me().city === c ? "selected" : ""}>${c}</option>`).join("")}</select><span class="err"></span></div>
+          <div class="field"><label for="s-zone">Barrio o localidad</label><input id="s-zone" name="zone" maxlength="40" data-cy="sol-barrio" placeholder="Ej.: Bosa"><span class="err"></span></div>
+        </div>
+        <div class="actions"><button class="btn" data-cy="sol-enviar">Publicar solicitud</button><a class="btn ghost" href="#mis-solicitudes">Cancelar</a></div>
+      </form></div></div>`;
+    const f = $("#req-form");
+    f.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const v = { title: f.elements.title.value.trim(), desc: f.desc.value.trim(), cat: f.cat.value, city: f.city.value, zone: f.zone.value.trim() };
+      let ok = true;
+      ok = setErr(f, "title", v.title.length < 3 ? "Escribe qué artículo necesitas (mínimo 3 caracteres)." : "") && ok;
+      ok = setErr(f, "desc", v.desc.length < 10 ? "Describe el artículo en al menos 10 caracteres." : "") && ok;
+      ok = setErr(f, "cat", !v.cat ? "Selecciona una categoría." : "") && ok;
+      ok = setErr(f, "zone", v.zone.length < 3 ? "Escribe el barrio o localidad (ej.: Bosa)." : "") && ok;
+      if (!ok) return;
+      const p = { id: nextId(), owner: me().id, mode: "solicitud", title: v.title, desc: v.desc, cat: v.cat, cond: "", price: 0, city: v.city, zone: v.zone, imgs: [], status: "activa", at: now() };
+      db.posts.push(p); save();
+      toast("Solicitud publicada. Ya aparece en el catálogo con la etiqueta Solicitud.");
+      go(`pub-${p.id}`);
+    });
+  }
+
+  /* ---------- detalle: HUI-04, HUI-05, HUI-06, HUI-09 ---------- */
+  function viewPost(id) {
+    const p = post(id);
+    if (!p || p.status === "eliminada" || (p.status === "oculta" && !(me() && (me().admin || me().id === p.owner)))) {
+      main().innerHTML = `<div class="wrap page"><div class="empty"><h2>Esta publicación no está disponible</h2><p class="muted">Puede que la hayan retirado o que no exista.</p><a class="btn ghost" href="#catalogo">Volver al catálogo</a></div></div>`;
+      return;
+    }
+    const owner = user(p.owner), u = me(), mine = u && u.id === p.owner;
+    const rt = rating(owner.id);
+    const req = u && db.requests.find((r) => r.post === p.id && r.requester === u.id);
+    const qs = db.questions.filter((q) => q.post === p.id).sort((a, b) => a.at - b.at);
+    let actions = "";
+    const dl = activeDelivery(p.id);
+    const inDelivery = dl && u && (dl.seller === u.id || dl.buyer === u.id);
+    if (p.status === "cerrada") actions = `<div class="alert" data-cy="pub-cerrada">Esta publicación está cerrada: el artículo ya se entregó. No se pueden iniciar conversaciones nuevas.</div>`;
+    else if (p.status === "oculta") actions = `<div class="alert bad">Esta publicación fue ocultada por moderación y no aparece en el catálogo.</div>`;
+    else if (p.status === "pausada" && !mine) actions = `<div class="alert" data-cy="pub-pausada">Quien publicó pausó este artículo. Por ahora no está disponible.</div>`;
+    else if (p.status === "reservada" && !mine && !inDelivery) actions = `<div class="alert" data-cy="pub-reservada">Este artículo tiene una entrega acordada con otra persona. Si se cancela, vuelve a estar disponible.</div>`;
+    else if (mine) actions = (p.status === "pausada" ? `<div class="alert" data-cy="aviso-pausada">Tu publicación está pausada: no aparece en el catálogo ni en la búsqueda.</div>` : "") + (p.mode === "solicitud"
+      ? `<div class="alert" data-cy="es-mia">Es tu solicitud. Las ofertas te llegan como conversaciones en <a href="#mensajes">Mensajes</a> y la gestionas en <a href="#mis-solicitudes">Mis solicitudes</a>.</div>`
+      : `<div class="alert" data-cy="es-mia">Es tu publicación. Las solicitudes y conversaciones están en <a href="#mis-publicaciones">Mis publicaciones</a> y <a href="#mensajes">Mensajes</a>.</div>${manageBtns(p)}`);
+    else if (p.mode === "solicitud") {
+      actions = `<button class="btn accent" id="offer" data-cy="ofrecer">🎁 Ofrecer artículo</button>`;
+    } else {
+      actions = `<button class="btn" id="contact" data-cy="contactar">Contactar</button>${favBtn(p, true)}`;
+      if (p.mode === "donacion") {
+        actions += req ? `<span class="badge ${req.status === "rechazada" ? "bad" : req.status === "aceptada" ? "venta" : "gray"}" data-cy="estado-solicitud">Solicitud ${req.status}</span>`
+          : `<button class="btn accent" id="ask-don" data-cy="solicitar-donacion">Solicitar donación</button>`;
+      }
+    }
+    main().innerHTML = `<div class="wrap page">
+      <a href="#catalogo" class="small muted">← Volver al catálogo</a>
+      <div class="detail">
+        ${gallery(p)}
+        <div style="display:grid;gap:16px">
+          <div class="meta" style="justify-content:flex-start;gap:10px">${badge(p)}<span>${esc(p.cat)}</span>${p.status !== "activa" ? statusBadge(p) : ""}</div>
+          <h1 data-cy="detalle-titulo">${esc(p.title)}</h1>
+          ${priceTag(p)}
+          <p>${esc(p.desc)}</p>
+          <dl class="facts">${p.mode === "solicitud" ? `<dt>Tipo</dt><dd>Artículo que la persona necesita (donación)</dd>` : `<dt>Estado</dt><dd>${esc(p.cond)}</dd>`}<dt>Ubicación</dt><dd data-cy="detalle-ubicacion">${esc(where(p))}</dd><dt>Publicado</dt><dd>${fdate(p.at)} (${ago(p.at)})</dd></dl>
+          <a class="seller" href="#perfil-${owner.id}" style="text-decoration:none">
+            <span class="avatar">${initials(owner.name)}</span>
+            <span><b>${esc(owner.name)}</b><br><span class="small muted">${rt.n ? `<span class="stars">${starsTxt(rt.avg)}</span> ${rt.avg.toFixed(1)} · ${rt.n} ${rt.n === 1 ? "reseña" : "reseñas"}` : "Sin reseñas todavía"}</span></span>
+          </a>
+          <div class="actions">${actions}</div>
+          ${inDelivery ? deliveryHtml(dl, true) : ""}
+          ${u && !mine ? `<button class="btn ghost sm" id="report" data-cy="reportar" style="justify-self:start">Reportar publicación</button>` : ""}
+        </div>
+      </div>
+      <section class="panel qa" aria-labelledby="qa-h">
+        <h2 id="qa-h">Preguntas públicas al ${p.mode === "venta" ? "vendedor" : p.mode === "solicitud" ? "solicitante" : "donante"}</h2>
+        <div id="qlist">${qs.length ? qs.map((q) => `
+          <div class="q" data-cy="pregunta">
+            <p>${esc(q.text)} <span class="small muted">· ${esc(user(q.author).name)}, ${fdate(q.at)} (${ago(q.at)})</span></p>
+            ${q.answer ? `<p class="a" data-cy="respuesta">${esc(q.answer)}</p>` : mine ? `
+              <form class="answer" data-q="${q.id}" style="display:grid;gap:4px"><div class="composer" style="padding:0;border:0"><input class="input" maxlength="300" placeholder="Escribe tu respuesta" aria-label="Respuesta" data-cy="campo-respuesta"><button class="btn sm" data-cy="responder">Responder</button></div><span class="err small" style="color:var(--danger)" data-cy="error-respuesta"></span></form>`
+              : `<p class="a small">Sin respuesta todavía.</p>`}
+          </div>`).join("") : `<p class="muted" data-cy="sin-preguntas">Nadie ha preguntado todavía.</p>`}</div>
+        ${(p.status === "activa" || p.status === "reservada") && !mine ? (u ? `
+          <form id="ask" class="form" novalidate>
+            <div class="field"><label for="q-text">Haz una pregunta pública</label>
+            <textarea id="q-text" name="q" maxlength="300" data-cy="campo-pregunta" placeholder="Ej.: ¿Tiene algún daño?"></textarea>
+            <span class="hint"><span id="qcount">0</span>/300 · Las preguntas son públicas: no se permite escribir teléfonos ni correos.</span><span class="err" data-cy="error-pregunta"></span></div>
+            <button class="btn sm" data-cy="preguntar" style="justify-self:start">Preguntar</button>
+          </form>` : `<button class="btn ghost sm" id="ask-login" data-cy="preguntar-login" style="justify-self:start">Inicia sesión para preguntar</button>`) : ""}
+      </section></div>`;
+
+    const c = $("#contact");
+    c && c.addEventListener("click", () => {
+      if (!u) return needLogin(`pub-${p.id}`);
+      let cv = db.convs.find((x) => x.post === p.id && x.buyer === u.id);
+      if (!cv) { cv = { id: nextId(), post: p.id, buyer: u.id, seller: p.owner, shared: {}, msgs: [] }; db.convs.push(cv); save(); }
+      go(`chat-${cv.id}`);
+    });
+    const of = $("#offer");
+    of && of.addEventListener("click", () => {
+      if (!u) return needLogin(`pub-${p.id}`);
+      let cv = db.convs.find((x) => x.post === p.id && x.buyer === u.id);
+      if (!cv) {
+        cv = { id: nextId(), post: p.id, buyer: u.id, seller: p.owner, offer: true, shared: {}, msgs: [{ from: 0, text: `${u.name} ofreció un artículo para esta solicitud. Coordinen aquí la entrega.`, at: now() }] };
+        db.convs.push(cv);
+        notify(p.owner, `${u.name} te ofreció un artículo para tu solicitud “${p.title}”.`, `chat-${cv.id}`, "oferta", p.id);
+        save();
+      }
+      toast("Abrimos el chat con quien hizo la solicitud.");
+      go(`chat-${cv.id}`);
+    });
+    const d = $("#ask-don");
+    d && d.addEventListener("click", () => {
+      if (!u) return needLogin(`pub-${p.id}`);
+      db.requests.push({ id: nextId(), post: p.id, requester: u.id, status: "pendiente", at: now() });
+      notify(p.owner, `${u.name} solicitó tu donación “${p.title}”.`, "mis-publicaciones", "solicitud", p.id);
+      save(); toast("Solicitud enviada. Te avisaremos cuando el donante responda."); viewPost(id); header();
+    });
+    const al = $("#ask-login"); al && al.addEventListener("click", () => needLogin(`pub-${p.id}`));
+    const ask = $("#ask");
+    if (ask) {
+      ask.q.addEventListener("input", () => ($("#qcount").textContent = ask.q.value.length));
+      ask.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const t = ask.q.value.trim();
+        const err = !t ? "La pregunta no puede estar vacía." : t.length < 5 ? "Escribe una pregunta de al menos 5 caracteres."
+          : hasContact(t) ? "No incluyas correos ni teléfonos en preguntas públicas. Para datos privados usa el chat interno (botón Contactar)." : "";
+        if (!setErr(ask, "q", err)) return;
+        db.questions.push({ id: nextId(), post: p.id, author: u.id, text: t, answer: null, at: now() });
+        notify(p.owner, `${u.name} preguntó en “${p.title}”.`, `pub-${p.id}`, "pregunta", p.id);
+        save(); toast("Pregunta publicada."); viewPost(id);
+      });
+    }
+    $$("form.answer").forEach((fm) => fm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const t = fm.querySelector("input").value.trim(), er = fm.querySelector(".err");
+      const err = !t ? "La respuesta no puede estar vacía." : hasContact(t) ? "No incluyas correos ni teléfonos en respuestas públicas. Usa el chat interno." : "";
+      er.textContent = err; if (err) return;
+      const q = db.questions.find((x) => x.id === Number(fm.dataset.q));
+      q.answer = t; notify(q.author, `${u.name} respondió tu pregunta en “${p.title}”.`, `pub-${p.id}`, "respuesta", p.id);      save(); toast("Respuesta publicada. Le avisamos a quien preguntó."); viewPost(id); header();
+    }));
+    const rp = $("#report"); rp && rp.addEventListener("click", () => reportModal("post", p.id, p.title));
+    const redraw = () => { viewPost(id); header(); };
+    wireFavs(redraw); wireManage(redraw, () => go("mis-publicaciones")); wireDelivery(redraw);
+    $$("[data-gi]").forEach((b) => b.addEventListener("click", () => {
+      const im = $(".detail .thumb img"); if (im) im.src = p.imgs[Number(b.dataset.gi)];
+      $$("[data-gi]").forEach((x) => x.classList.toggle("on", x === b));
+    }));
+  }
+
+  /* ---------- HUI-09 reportar ---------- */
+  function reportModal(type, target, label) {
+    modal(`<form id="rep" class="form" novalidate>
+      <h2>Reportar ${type === "post" ? "publicación" : "usuario"}</h2>
+      <p class="muted small">${esc(label)}. Un administrador revisará el reporte.</p>
+      <div class="field"><label for="rep-r">Motivo</label><select id="rep-r" name="reason" data-cy="motivo"><option value="">Selecciona…</option>${REASONS.map((r) => `<option>${r}</option>`).join("")}</select><span class="err"></span></div>
+      <div class="field"><label for="rep-c">Descripción</label><textarea id="rep-c" name="comment" maxlength="400" data-cy="comentario-reporte" placeholder="Cuéntale al moderador qué pasó."></textarea><span class="err" data-cy="error-descripcion"></span></div>
+      <div class="actions"><button class="btn danger" data-cy="enviar-reporte">Enviar reporte</button><button type="button" class="btn ghost" data-close>Cancelar</button></div>
+    </form>`, (s, close) => {
+      const f = $("#rep", s);
+      f.addEventListener("submit", (e) => {
+        e.preventDefault();
+        let ok = setErr(f, "reason", f.reason.value ? "" : "Elige un motivo para el reporte.");
+        ok = setErr(f, "comment", f.comment.value.trim().length < 10 ? "Agrega una descripción de al menos 10 caracteres." : "") && ok;
+        if (!ok) return;
+        if (db.reports.some((r) => r.reporter === me().id && r.type === type && r.target === target && r.status === "pendiente")) { close(); toast("Ya reportaste esto. Tu reporte sigue pendiente de revisión."); return; }
+        db.reports.push({ id: nextId(), reporter: me().id, type, target, reason: f.reason.value, comment: f.comment.value.trim(), status: "pendiente", action: null, at: now() });
+        db.users.filter((x) => x.admin).forEach((a) => notify(a.id, `Nuevo reporte (${f.reason.value}): ${label}.`, "admin", "reporte"));
+        save(); close(); header();
+        modal(`<div data-cy="reporte-confirmado" style="display:grid;gap:10px"><h2>✅ Reporte enviado</h2><p>Tu reporte por <b>${esc(f.reason.value)}</b> quedó en estado <span class="badge gray">Pendiente</span>. Un moderador lo revisará y te notificaremos la decisión.</p><button class="btn" data-close>Entendido</button></div>`);
+      });
+    });
+  }
+
+  /* ---------- mis publicaciones (Vendedor/Donante): HUI-10 gestión · HUI-12 entregas ---------- */
+  function viewMisPublicaciones() {
+    if (!me()) return needLogin("mis-publicaciones");
+    if (role() !== "V" && role() !== "D") return denied("Esta sección es de los roles Vendedor y Donante. Cámbialo en el selector de la parte superior o en tu perfil.");
+    const u = me();
+    const mine = db.posts.filter((p) => p.owner === u.id && p.mode !== "solicitud" && p.status !== "eliminada").sort((a, b) => b.at - a.at);
+    const count = (st) => mine.filter((p) => p.status === st).length;
+    main().innerHTML = `<div class="wrap page">
+      <div class="pagehead"><div><h1>Mis publicaciones</h1><p class="muted">${mine.length} publicaciones · ${count("activa")} activas · ${count("pausada")} pausadas · ${count("reservada")} con entrega acordada.</p></div><a class="btn" href="#publicar" data-cy="nueva-publicacion">Publicar artículo</a></div>
+      <div class="list">${mine.length ? mine.map((p) => {
+        const reqs = db.requests.filter((r) => r.post === p.id);
+        const buyers = [...new Set(db.convs.filter((c) => c.post === p.id).map((c) => c.buyer))];
+        const dl = activeDelivery(p.id);
+        return `<div class="row" data-cy="mi-publicacion">
+          ${thumb(p, "thumb mini")}
+          <div class="grow"><a href="#pub-${p.id}"><b>${esc(p.title)}</b></a>
+            <span class="small muted">${badge(p)} ${modeLabel(p)} · ${esc(where(p))} · ${ago(p.at)}</span></div>
+          ${statusBadge(p)}
+          ${manageBtns(p)}
+          ${p.status === "activa" && buyers.length ? `<select class="input" style="width:auto" data-agree="${p.id}" aria-label="Acordar entrega con" data-cy="acordar-entrega-con"><option value="">🤝 Acordar entrega con…</option>${buyers.map((b) => `<option value="${b}">${esc(user(b).name)}</option>`).join("")}</select>` : p.status === "activa" && !reqs.some((r) => r.status === "pendiente") ? `<span class="small muted">Sin interesados aún</span>` : ""}
+          ${dl ? `<div style="flex-basis:100%">${deliveryHtml(dl, true)}</div>` : ""}
+          ${reqs.length ? `<div style="flex-basis:100%;display:grid;gap:8px">${reqs.map((r) => `
+            <div class="row" style="background:var(--bg)" data-cy="solicitud">
+              <div class="grow"><b>${esc(user(r.requester).name)}</b><span class="small muted">solicitó esta donación ${ago(r.at)}</span></div>
+              <span class="badge ${r.status === "aceptada" ? "venta" : r.status === "rechazada" ? "bad" : "gray"}" data-cy="estado">${r.status}</span>
+              ${r.status === "pendiente" && p.status === "activa" ? `<button class="btn sm" data-acc="${r.id}" data-cy="aceptar">Aceptar</button><button class="btn ghost sm" data-rej="${r.id}" data-cy="rechazar">Rechazar</button>` : ""}
+            </div>`).join("")}</div>` : ""}
+        </div>`;
+      }).join("") : `<div class="empty"><h3>Todavía no has publicado nada</h3><p class="muted">Publica tu primer artículo para venderlo o donarlo.</p></div>`}</div></div>`;
+    const redraw = () => { viewMisPublicaciones(); header(); };
+    $$("[data-acc]").forEach((b) => b.addEventListener("click", () => {
+      const r = db.requests.find((x) => x.id === Number(b.dataset.acc)), p = post(r.post);
+      agreeModal(p, [r.requester], () => {
+        if (r.status === "aceptada") notify(r.requester, `${u.name} aceptó tu solicitud de “${p.title}”. Revisa el lugar y la fecha en Entregas.`, "entregas", "solicitud", p.id);
+        save(); redraw();
+      }, r);
+    }));
+    $$("[data-rej]").forEach((b) => b.addEventListener("click", () => {
+      const r = db.requests.find((x) => x.id === Number(b.dataset.rej)), p = post(r.post);
+      r.status = "rechazada";
+      notify(r.requester, `${u.name} rechazó tu solicitud de “${p.title}”.`, "mis-solicitudes", "otro", p.id);
+      save(); toast("Solicitud rechazada."); redraw();
+    }));
+    $$("[data-agree]").forEach((sel) => sel.addEventListener("change", () => {
+      if (!sel.value) return;
+      const p = post(Number(sel.dataset.agree)), buyer = Number(sel.value); sel.value = "";
+      agreeModal(p, [buyer], redraw);
+    }));
+    wireManage(redraw); wireDelivery(redraw);
+  }
+
+  /* ---------- HUI-05 mis solicitudes (Donante/Comprador) ---------- */
+  function viewMisSolicitudes() {
+    if (!me()) return needLogin("mis-solicitudes");
+    if (role() !== "C") return denied("Esta sección es del rol Comprador. Cámbialo en el selector de la parte superior o en tu perfil.");
+    const u = me();
+    const list = db.requests.filter((r) => r.requester === u.id).sort((a, b) => b.at - a.at);
+    const asks = db.posts.filter((p) => p.owner === u.id && p.mode === "solicitud").sort((a, b) => b.at - a.at);
+    main().innerHTML = `<div class="wrap page medium">
+      <div class="pagehead"><div><h1>Mis solicitudes</h1><p class="muted">Artículos que pediste a la comunidad y donaciones que solicitaste.</p></div><a class="btn" href="#pedir" data-cy="nueva-solicitud">Pedir un artículo</a></div>
+      <h2>Artículos que necesito</h2>
+      <div class="list">${asks.length ? asks.map((p) => { const offers = db.convs.filter((c) => c.post === p.id); return `
+        <div class="row" data-cy="mi-pedido">${thumb(p, "thumb mini")}
+          <div class="grow"><a href="#pub-${p.id}"><b>${esc(p.title)}</b></a><span class="small muted">${badge(p)} ${esc(where(p))} · ${ago(p.at)} · ${offers.length} ${offers.length === 1 ? "oferta" : "ofertas"}</span></div>
+          <span class="badge ${p.status === "activa" ? "solicitud" : "gray"}">${p.status}</span>
+          ${p.status === "activa" ? (offers.length ? `<select class="input" style="width:auto" data-got="${p.id}" aria-label="Lo recibí de" data-cy="lo-recibi"><option value="">Lo recibí de…</option>${offers.map((c) => `<option value="${c.buyer}">${esc(user(c.buyer).name)}</option>`).join("")}</select>` : `<span class="small muted">Sin ofertas aún</span>`) : ""}
+        </div>`; }).join("") : `<div class="empty"><h3>No has pedido artículos</h3><p class="muted">Publica lo que necesitas y la comunidad te lo puede ofrecer.</p></div>`}</div>
+      <h2>Donaciones que solicité</h2>
+      <div class="list">${list.length ? list.map((r) => { const p = post(r.post); return `
+        <div class="row" data-cy="mi-solicitud">${thumb(p, "thumb mini")}
+          <div class="grow"><a href="#pub-${p.id}"><b>${esc(p.title)}</b></a><span class="small muted">Donante: ${esc(user(p.owner).name)} · ${ago(r.at)}</span></div>
+          <span class="badge ${r.status === "aceptada" ? "venta" : r.status === "rechazada" ? "bad" : "gray"}" data-cy="estado">${r.status}</span>
+        </div>`; }).join("") : `<div class="empty"><h3>No has solicitado donaciones</h3><p class="muted">Filtra el catálogo por Donación y pide lo que necesites.</p><a class="btn ghost" href="#catalogo">Ver donaciones</a></div>`}</div></div>`;
+    $$("[data-got]").forEach((s) => s.addEventListener("change", () => {
+      if (!s.value) return;
+      const p = post(Number(s.dataset.got)), giver = Number(s.value);
+      p.status = "cerrada";
+      db.txs.push({ id: nextId(), post: p.id, seller: giver, buyer: u.id, at: now() });
+      notify(giver, `${u.name} confirmó que recibió tu donación para “${p.title}”. ¡Gracias!`, `perfil-${giver}`, "otro", p.id);
+      save(); toast("Solicitud cerrada. Ya puedes calificar a quien te donó en Mis compras."); viewMisSolicitudes();
+    }));
+  }
+
+  /* ---------- HUI-07 transacciones y reseñas ---------- */
+  function viewTransacciones() {
+    if (!me()) return needLogin("transacciones");
+    if (role() !== "C") return denied("Esta sección es del rol Comprador. Cámbialo en el selector de la parte superior o en tu perfil.");
+    const u = me();
+    const list = db.txs.filter((t) => t.buyer === u.id).sort((a, b) => b.at - a.at);
+    main().innerHTML = `<div class="wrap page medium">
+      <div><h1>Mis compras y donaciones recibidas</h1><p class="muted">Califica de 1 a 5 estrellas a quien te vendió o donó. Solo una reseña por transacción.</p></div>
+      <div class="list">${list.length ? list.map((t) => {
+        const p = post(t.post), rv = db.reviews.find((r) => r.tx === t.id);
+        return `<div class="row" data-cy="transaccion">${thumb(p, "thumb mini")}
+          <div class="grow"><b>${esc(p.title)}</b><span class="small muted">${modeLabel(p)} · ${esc(user(t.seller).name)} · entregado ${ago(t.at)}</span>
+          ${rv ? `<span class="small"><span class="stars">${starsTxt(rv.stars)}</span> ${esc(rv.comment || "Sin comentario")}</span>` : ""}</div>
+          ${rv ? `<span class="badge venta">Calificada</span><button class="btn ghost sm locked" disabled title="Solo se permite una reseña por transacción" data-cy="calificar-otra-vez">Ya calificaste</button>` : `<button class="btn accent sm" data-rate="${t.id}" data-cy="calificar">Calificar</button>`}
+        </div>`;
+      }).join("") : `<div class="empty"><h3>Aún no tienes transacciones</h3><p class="muted">Aparecen aquí cuando un vendedor marca la entrega o un donante acepta tu solicitud.</p></div>`}</div></div>`;
+    $$("[data-rate]").forEach((b) => b.addEventListener("click", () => rateModal(db.txs.find((t) => t.id === Number(b.dataset.rate)))));
+  }
+  function rateModal(t) {
+    const p = post(t.post), seller = user(t.seller);
+    let stars = 0;
+    modal(`<form id="rate" class="form" novalidate>
+      <h2>Califica a ${esc(seller.name)}</h2><p class="muted small">Por “${esc(p.title)}”.</p>
+      <div class="field"><span class="lbl">Calificación</span>
+        <div class="starpick" role="radiogroup" aria-label="Estrellas">${[1, 2, 3, 4, 5].map((n) => `<button type="button" data-s="${n}" aria-label="${n} ${n === 1 ? "estrella" : "estrellas"}" data-cy="estrella-${n}">★</button>`).join("")}</div>
+        <input type="hidden" name="stars"><span class="err" data-cy="error-estrellas"></span></div>
+      <div class="field"><label for="rv-c">Comentario (opcional)</label><textarea id="rv-c" name="comment" maxlength="300" data-cy="comentario-resena" placeholder="¿Cómo fue la entrega? ¿El artículo era como se describía?"></textarea><span class="err"></span></div>
+      <div class="actions"><button class="btn" data-cy="publicar-resena">Publicar reseña</button><button type="button" class="btn ghost" data-close>Cancelar</button></div>
+    </form>`, (s, close) => {
+      const f = $("#rate", s);
+      $$("[data-s]", f).forEach((b) => b.addEventListener("click", () => {
+        stars = Number(b.dataset.s); $$("[data-s]", f).forEach((x) => x.classList.toggle("on", Number(x.dataset.s) <= stars)); setErr(f, "stars", "");
+      }));
+      f.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (!setErr(f, "stars", stars < 1 || stars > 5 ? "Selecciona una calificación de 1 a 5 estrellas." : "")) return;
+        if (db.reviews.some((r) => r.tx === t.id)) { close(); toast("Ya calificaste esta transacción."); return; }
+        db.reviews.push({ id: nextId(), tx: t.id, from: me().id, to: t.seller, stars, comment: f.comment.value.trim(), at: now() });
+        notify(t.seller, `${me().name} te calificó con ${stars} ${stars === 1 ? "estrella" : "estrellas"} por “${p.title}”.`, `perfil-${t.seller}`, "resena", p.id);
+        save(); close(); toast("Reseña publicada en el perfil."); viewTransacciones();
+      });
+    });
+  }
+
+  /* ---------- perfil ---------- */
+  function viewPerfil(id) {
+    const p = user(id);
+    if (!p || p.admin) { main().innerHTML = `<div class="wrap page"><div class="empty"><h2>Este perfil no existe</h2></div></div>`; return; }
+    const rt = rating(p.id), revs = db.reviews.filter((r) => r.to === p.id).sort((a, b) => b.at - a.at);
+    const posts = db.posts.filter((x) => x.owner === p.id && x.status === "activa");
+    const self = me() && me().id === p.id;
+    main().innerHTML = `<div class="wrap page">
+      <div class="panel seller" style="flex-wrap:wrap">
+        <span class="avatar" style="width:64px;height:64px;font-size:1.3rem">${initials(p.name)}</span>
+        <div style="flex:1 1 220px"><h1 data-cy="perfil-nombre">${esc(p.name)}</h1>
+          <p class="muted">📍 ${esc(p.city)} · Miembro desde ${new Date(p.since).toLocaleDateString("es-CO", { month: "long", year: "numeric" })}${p.suspended ? ' · <span class="badge bad">Suspendida</span>' : ""}</p></div>
+        <div style="text-align:right"><div class="price num" data-cy="promedio">${rt.n ? rt.avg.toFixed(1) : "—"}</div><span class="stars">${rt.n ? starsTxt(rt.avg) : ""}</span><div class="small muted">${rt.n} ${rt.n === 1 ? "reseña" : "reseñas"}</div></div>
+        ${me() && !self && !me().admin ? `<button class="btn ghost sm" id="rep-user" data-cy="reportar-usuario">Reportar usuario</button>` : ""}
+      </div>
+      ${self ? (() => {
+        const hist = { pubs: db.posts.filter((x) => x.owner === p.id).length, compras: db.txs.filter((t) => t.buyer === p.id).length, ventas: db.txs.filter((t) => t.seller === p.id).length, resenas: db.reviews.filter((r) => r.from === p.id || r.to === p.id).length, chats: db.convs.filter((c) => c.buyer === p.id || c.seller === p.id).length };
+        return `<section class="panel" style="display:grid;gap:14px" data-cy="configuracion">
+        <div><h2>Configuración de la cuenta</h2><p class="muted small">Correo: ${esc(p.email)}${p.phone ? ` · Teléfono: ${esc(p.phone)}` : ""} (privados: otros usuarios no los ven)</p></div>
+        <div class="field"><span class="lbl">Rol activo (modo de uso)</span>
+          <div class="roles" data-cy="roles-perfil">${["C", "V", "D"].map((k) => `<button type="button" class="rolecard ${p.role === k ? "on" : ""}" data-prole="${k}" data-cy="perfil-rol-${k}"><b>${{ C: "🛒", V: "🏷️", D: "🎁" }[k]} ${ROLES[k]}${p.role === k ? " · activo" : ""}</b><span class="small muted">${ROLE_DESC[k]}</span></button>`).join("")}</div></div>
+        <p class="small muted" data-cy="historial">Tu historial se conserva al cambiar de rol: ${hist.pubs} publicaciones, ${hist.compras} compras o donaciones recibidas, ${hist.ventas} entregas, ${hist.resenas} reseñas y ${hist.chats} conversaciones.</p>
+      </section>`; })() : ""}
+      <section class="grid2" style="align-items:start">
+        <div class="panel" style="display:grid;gap:12px"><h2>Reseñas recibidas</h2>${revs.length ? revs.map((r) => `<div class="q" data-cy="resena"><span class="stars">${starsTxt(r.stars)}</span><p>${esc(r.comment || "Sin comentario")}</p><span class="small muted">${esc(user(r.from).name)} · ${fdate(r.at)}</span></div>`).join("") : `<p class="muted">Sin reseñas todavía.</p>`}</div>
+        <div class="panel" style="display:grid;gap:12px"><h2>Publicaciones activas</h2>${posts.length ? posts.map((x) => `<a class="row" href="#pub-${x.id}" style="text-decoration:none">${thumb(x, "thumb mini")}<div class="grow"><b>${esc(x.title)}</b><span class="small muted">${badge(x)} ${x.mode === "venta" ? money(x.price) : x.mode === "solicitud" ? "Se necesita" : "Gratis"}</span></div></a>`).join("") : `<p class="muted">No tiene publicaciones activas.</p>`}</div>
+      </section></div>`;
+    const r = $("#rep-user"); r && r.addEventListener("click", () => reportModal("user", p.id, p.name));
+    $$("[data-prole]").forEach((b) => b.addEventListener("click", () => {
+      const k = b.dataset.prole; if (k === p.role) return;
+      p.role = k; save();
+      toast(`Rol actualizado a ${ROLES[k]}. Tus permisos cambiaron y tu historial se conserva.`);
+      viewPerfil(id); header();
+    }));
+  }
+
+  /* ---------- HUI-04 mensajes ---------- */
+  function viewMensajes() {
+    if (!me()) return needLogin("mensajes");
+    if (me().admin) return denied("El administrador no participa en las conversaciones entre usuarios.");
+    const u = me();
+    const list = db.convs.filter((c) => c.buyer === u.id || c.seller === u.id)
+      .sort((a, b) => (b.msgs.at(-1)?.at || 0) - (a.msgs.at(-1)?.at || 0));
+    main().innerHTML = `<div class="wrap page medium"><div><h1>Mensajes</h1><p class="muted">Coordina la fecha, el lugar y el pago de cada entrega.</p></div>
+      <div class="list">${list.length ? list.map((c) => { const p = post(c.post), other = user(c.buyer === u.id ? c.seller : c.buyer), last = c.msgs.at(-1); return `
+        <a class="row" href="#chat-${c.id}" style="text-decoration:none" data-cy="conversacion">${thumb(p, "thumb mini")}
+          <div class="grow"><b>${esc(other.name)}</b><span class="small muted">${badge(p)} ${esc(p.title)}</span><span class="small">${last ? esc(showMsg(c, last)) : "Sin mensajes todavía"}</span></div>
+          <span class="small muted">${last ? ago(last.at) : ""}</span></a>`; }).join("") : `<div class="empty"><h3>No tienes conversaciones</h3><p class="muted">Abre una publicación y pulsa Contactar.</p></div>`}</div></div>`;
+  }
+  /* Los correos y teléfonos escritos en el chat se ocultan hasta que su autor comparta sus datos explícitamente */
+  function showMsg(c, m) {
+    if (m.from === 0 || m.contact) return m.text;
+    return (c.shared || {})[m.from] ? m.text : maskContact(m.text);
+  }
+  function viewChat(id) {
+    const c = db.convs.find((x) => x.id === id), u = me();
+    if (!u) return needLogin(`chat-${id}`);
+    if (!c || (c.buyer !== u.id && c.seller !== u.id)) return denied("Solo los participantes pueden ver esta conversación.");
+    c.shared = c.shared || {};
+    const p = post(c.post), other = user(c.buyer === u.id ? c.seller : c.buyer);
+    const closed = p.status === "oculta" || p.status === "eliminada";
+    const dlast = db.deliveries.filter((d) => d.post === p.id && d.buyer === c.buyer).sort((a, b) => b.at - a.at)[0];
+    const canAgree = p.mode !== "solicitud" && u.id === p.owner && p.status === "activa";
+    const iShared = !!c.shared[u.id], otherShared = !!c.shared[other.id];
+    main().innerHTML = `<div class="wrap page medium">
+      <a href="#mensajes" class="small muted">← Todas las conversaciones</a>
+      ${dlast ? deliveryHtml(dlast) : ""}
+      ${canAgree ? `<div class="alert installbar" data-cy="aviso-acordar"><span>¿Ya acordaron fecha y lugar con ${esc(other.name.split(" ")[0])}? Regístralo para reservar el artículo.</span><button class="btn sm" id="agree-btn" data-cy="acordar-entrega">🤝 Acordar entrega</button></div>` : ""}
+      <div class="chatbox" style="grid-template-rows:auto auto minmax(260px, 50vh) auto">
+        <div class="chathead"><span class="avatar">${initials(other.name)}</span>
+          <div class="grow" style="flex:1;min-width:0"><b>${esc(other.name)}</b><div class="small muted">Chat de la publicación <a href="#pub-${p.id}" data-cy="chat-publicacion">${esc(p.title)}</a> · ${badge(p)} ${modeLabel(p)}</div></div></div>
+        <div class="contactbox" data-cy="privacidad">
+          <span>🔒 Datos de ${esc(other.name.split(" ")[0])}: ${otherShared ? `<b data-cy="contacto-otro">${esc(other.email)}${other.phone ? " · " + esc(other.phone) : ""}</b>` : `<span data-cy="contacto-oculto">correo y teléfono ocultos</span>`}</span>
+          <span>${iShared ? `<span class="badge venta" data-cy="ya-compartido">Compartiste tus datos</span>` : `<button class="btn ghost sm" id="share" data-cy="compartir-datos">Compartir mis datos de contacto</button>`}</span>
+        </div>
+        <div class="msgs" id="msgs" data-cy="mensajes">${c.msgs.length ? c.msgs.map((m) => `<div class="msg ${m.from === 0 ? "sys" : m.from === u.id ? "me" : ""}" data-cy="mensaje">${esc(showMsg(c, m))}<small>${m.from === 0 ? "" : esc(user(m.from).name.split(" ")[0]) + " · "}${ago(m.at)}</small></div>`).join("") : `<p class="muted small" style="margin:auto">Escribe el primer mensaje para coordinar la fecha, el lugar y el pago de la entrega.</p>`}</div>
+        ${closed ? `<div class="alert" style="margin:10px">${p.status === "eliminada" ? "La publicación fue eliminada." : "La publicación fue ocultada por moderación."} Ya no se pueden enviar mensajes en esta conversación.</div>` : `
+        <form class="composer" id="send"><input class="input" name="m" maxlength="500" placeholder="Escribe un mensaje…" aria-label="Mensaje" data-cy="campo-mensaje" autocomplete="off"><button class="btn" data-cy="enviar-mensaje">Enviar</button></form>`}
+      </div></div>`;
+    const box = $("#msgs"); box.scrollTop = box.scrollHeight;
+    db.notifs.filter((n) => n.user === u.id && n.link === `chat-${c.id}` && !n.read).forEach((n) => (n.read = true)); save(); header();
+    const f = $("#send");
+    f && f.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const t = f.m.value.trim(); if (!t) return;
+      c.msgs.push({ from: u.id, text: t, at: now() });
+      notify(other.id, `${u.name} te escribió sobre “${p.title}”.`, `chat-${c.id}`, "mensaje", p.id);
+      save(); viewChat(id);
+      if (hasContact(t) && !c.shared[u.id]) toast("Ocultamos el correo o teléfono del mensaje. Usa “Compartir mis datos de contacto” si quieres darlos.");
+      $("#send [name=m]")?.focus();
+    });
+    const redraw = () => { viewChat(id); header(); };
+    wireDelivery(redraw);
+    const ag = $("#agree-btn"); ag && ag.addEventListener("click", () => agreeModal(p, [c.buyer], redraw));
+    const sh = $("#share");
+    sh && sh.addEventListener("click", () => {
+      modal(`<div style="display:grid;gap:12px"><h2>¿Compartir tus datos de contacto?</h2>
+        <p>${esc(other.name)} podrá ver tu correo <b>${esc(u.email)}</b>${u.phone ? ` y tu teléfono <b>${esc(u.phone)}</b>` : ""}. Solo se comparten en esta conversación.</p>
+        <div class="actions"><button class="btn" id="do-share" data-cy="confirmar-compartir">Sí, compartir</button><button class="btn ghost" data-close>Cancelar</button></div></div>`, (s, close) => {
+        $("#do-share", s).addEventListener("click", () => {
+          c.shared[u.id] = true;
+          c.msgs.push({ from: u.id, contact: true, text: `Mis datos de contacto: ${u.email}${u.phone ? " · " + u.phone : ""}`, at: now() });
+          notify(other.id, `${u.name} compartió sus datos de contacto contigo en “${p.title}”.`, `chat-${c.id}`, "mensaje", p.id);
+          save(); close(); toast("Compartiste tus datos de contacto en esta conversación."); viewChat(id);
+        });
+      });
+    });
+  }
+
+  /* ---------- HUI-12 mis entregas ---------- */
+  function viewEntregas() {
+    if (!me()) return needLogin("entregas");
+    if (me().admin) return denied("El administrador no participa en las entregas.");
+    const u = me(), order = { acordada: 0, entregada: 1, cancelada: 2 };
+    const list = db.deliveries.filter((d) => (d.seller === u.id || d.buyer === u.id) && post(d.post))
+      .sort((a, b) => order[a.status] - order[b.status] || b.at - a.at);
+    main().innerHTML = `<div class="wrap page medium">
+      <div><h1>Mis entregas</h1><p class="muted">Estado de cada entrega: <b>Acordada → Entregada</b>. Se cierra cuando quien entrega pulsa “Entregué” y quien recibe pulsa “Recibí”.</p></div>
+      <div class="list">${list.length ? list.map((d) => deliveryHtml(d, true)).join("") : `<div class="empty"><h3>No tienes entregas</h3><p class="muted">Cuando acuerdes una entrega desde el chat o desde Mis publicaciones, aparece aquí.</p></div>`}</div></div>`;
+    wireDelivery(() => { viewEntregas(); header(); });
+  }
+
+  /* ---------- HUI-11 mis favoritos ---------- */
+  function viewFavoritos() {
+    if (!me()) return needLogin("favoritos");
+    if (me().admin) return denied("El administrador no usa la lista de favoritos.");
+    const u = me();
+    const list = (u.favs || []).map(post).filter(Boolean).reverse();
+    main().innerHTML = `<div class="wrap page medium">
+      <div><h1>Mis favoritos</h1><p class="muted" data-cy="favoritos-conteo">${list.length} ${list.length === 1 ? "artículo guardado" : "artículos guardados"} para revisar con calma.</p></div>
+      <div class="list">${list.length ? list.map((p) => {
+        const ok = p.status === "activa" && !(user(p.owner) || {}).suspended;
+        return `<div class="row" data-cy="favorito-item">${thumb(p, "thumb mini")}
+          <div class="grow">${ok || p.status === "pausada" || p.status === "reservada" ? `<a href="#pub-${p.id}"><b>${esc(p.title)}</b></a>` : `<b>${esc(p.title)}</b>`}<span class="small muted">${badge(p)} ${modeLabel(p)} · 📍 ${esc(where(p))}</span></div>
+          ${ok ? `<span class="badge venta" data-cy="disponible">Disponible</span>` : `<span class="badge bad" data-cy="no-disponible">No disponible</span>`}
+          <button type="button" class="btn ghost sm" data-fav="${p.id}" data-cy="quitar-favorito">Quitar</button></div>`;
+      }).join("") : `<div class="empty"><h3>Aún no tienes favoritos</h3><p class="muted">Toca el corazón ♡ de un artículo del catálogo para guardarlo aquí.</p><a class="btn ghost" href="#catalogo">Ir al catálogo</a></div>`}</div></div>`;
+    wireFavs(() => viewFavoritos());
+  }
+
+  /* ---------- HUI-08 notificaciones ---------- */
+  function viewNotificaciones() {
+    if (!me()) return needLogin("notificaciones");
+    const list = db.notifs.filter((n) => n.user === me().id).sort((a, b) => b.at - a.at);
+    const unread = list.filter((n) => !n.read).length;
+    main().innerHTML = `<div class="wrap page medium">
+      <div class="pagehead"><div><h1>Notificaciones</h1><p class="muted" data-cy="sin-leer">${unread} sin leer</p></div>
+      ${unread ? `<button class="btn ghost sm" id="all-read" data-cy="marcar-todas">Marcar todas como leídas</button>` : ""}</div>
+      ${summaryHtml()}
+      <div class="list">${list.length ? list.map((n) => `
+        <button class="row ${n.read ? "" : "unread"}" data-n="${n.id}" style="text-align:left;cursor:pointer;font:inherit;color:inherit" data-cy="notificacion">
+          <div class="grow"><span>${esc(n.text)}</span><span class="small muted">${ago(n.at)}</span></div>
+          ${n.read ? "" : `<span class="badge donacion">Nueva</span>`}</button>`).join("") : `<div class="empty"><h3>No tienes notificaciones</h3><p class="muted">Aquí verás mensajes, preguntas, solicitudes y reseñas nuevas.</p></div>`}</div></div>`;
+    $$("[data-n]").forEach((b) => b.addEventListener("click", () => {
+      const n = db.notifs.find((x) => x.id === Number(b.dataset.n)); n.read = true; save();
+      let roleFor = { "mis-solicitudes": "C", transacciones: "C" }[n.link];
+      if (n.link === "mis-publicaciones" && me().role !== "V" && me().role !== "D") roleFor = (n.post && post(n.post) && post(n.post).mode === "venta") ? "V" : "D";
+      if (roleFor && !me().admin && me().role !== roleFor) { me().role = roleFor; save(); toast(`Cambiamos tu rol a ${ROLES[roleFor]} para abrir esta sección.`); }
+      go(n.link);
+    }));
+    const a = $("#all-read");
+    a && a.addEventListener("click", () => { list.forEach((n) => (n.read = true)); save(); viewNotificaciones(); header(); });
+  }
+
+  /* ---------- HUI-09 panel del administrador ---------- */
+  let adminTab = "pendiente";
+  function viewAdmin() {
+    if (!me()) return needLogin("admin");
+    if (!me().admin) return denied("El panel de reportes es exclusivo del administrador.");
+    const list = db.reports.filter((r) => r.status === adminTab).sort((a, b) => b.at - a.at);
+    const pend = db.reports.filter((r) => r.status === "pendiente").length;
+    const tgt = (r) => r.type === "post" ? (post(r.target) ? `Publicación: <a href="#pub-${r.target}">${esc(post(r.target).title)}</a>` : "Publicación eliminada") : `Usuario: <a href="#perfil-${r.target}">${esc(user(r.target).name)}</a>`;
+    main().innerHTML = `<div class="wrap page">
+      <div class="pagehead"><div><h1>Panel de reportes</h1><p class="muted">${pend} ${pend === 1 ? "reporte pendiente" : "reportes pendientes"} de revisión.</p></div>
+        <div class="seg">${[["pendiente", "Pendientes"], ["resuelto", "Resueltos"]].map(([v, t]) => `<button class="${adminTab === v ? "on" : ""}" data-tab="${v}" data-cy="tab-${v}">${t}</button>`).join("")}</div></div>
+      <div class="panel tablewrap">${list.length ? `<table><thead><tr><th>Reportado</th><th>Motivo</th><th>Quién reporta</th><th>Fecha</th><th>${adminTab === "pendiente" ? "Acción" : "Decisión"}</th></tr></thead><tbody>
+        ${list.map((r) => `<tr data-cy="reporte"><td>${tgt(r)}</td><td><b>${esc(r.reason)}</b>${r.comment ? `<br><span class="small muted">${esc(r.comment)}</span>` : ""}</td>
+          <td>${esc(user(r.reporter).name)}</td><td class="num">${ago(r.at)}</td>
+          <td>${r.status === "pendiente" ? `<div class="actions">
+            ${r.type === "post" ? `<button class="btn danger sm" data-act="ocultar" data-r="${r.id}" data-cy="ocultar">Ocultar publicación</button>` : ""}
+            <button class="btn ghost sm" data-act="suspender" data-r="${r.id}" data-cy="suspender">Suspender cuenta</button>
+            <button class="btn ghost sm" data-act="descartar" data-r="${r.id}" data-cy="descartar">Descartar</button></div>` : `<span class="badge gray">${esc(r.action)}</span>`}</td></tr>`).join("")}
+      </tbody></table>` : `<div class="empty"><h3>No hay reportes ${adminTab === "pendiente" ? "pendientes" : "resueltos"}</h3></div>`}</div></div>`;
+    $$("[data-tab]").forEach((b) => b.addEventListener("click", () => { adminTab = b.dataset.tab; viewAdmin(); }));
+    $$("[data-act]").forEach((b) => b.addEventListener("click", () => {
+      const r = db.reports.find((x) => x.id === Number(b.dataset.r));
+      const tp = r.type === "post" ? post(r.target) : null;
+      const ownerId = r.type === "post" ? (tp ? tp.owner : null) : r.target;
+      if (ownerId == null || !user(ownerId)) { r.status = "resuelto"; r.action = "Reporte descartado"; r.decidedAt = now(); save(); toast("El objetivo del reporte ya no existe. Lo marcamos como descartado."); return viewAdmin(); }
+      const act = b.dataset.act;
+      if (act === "ocultar") { post(r.target).status = "oculta"; r.action = "Publicación ocultada"; notify(ownerId, `Tu publicación “${post(r.target).title}” fue ocultada por moderación (${r.reason}).`, `pub-${r.target}`, "moderacion"); }
+      if (act === "suspender") { user(ownerId).suspended = true; r.action = "Cuenta suspendida"; notify(ownerId, `Tu cuenta fue suspendida por moderación (${r.reason}).`, "catalogo", "moderacion"); }
+      if (act === "descartar") { r.action = "Reporte descartado"; }
+      r.status = "resuelto"; r.decidedAt = now();
+      // Todos los reportes pendientes sobre el mismo objetivo quedan resueltos con la misma decisión
+      db.reports.filter((x) => x !== r && x.status === "pendiente" && x.type === r.type && x.target === r.target && act !== "descartar").forEach((x) => { x.status = "resuelto"; x.action = r.action; x.decidedAt = now(); notify(x.reporter, `Revisamos tu reporte (${x.reason}). Decisión: ${r.action.toLowerCase()}.`, "notificaciones", "moderacion"); });
+      notify(r.reporter, `Revisamos tu reporte (${r.reason}). Decisión: ${r.action.toLowerCase()}.`, "notificaciones", "moderacion");
+      save(); toast(`Reporte resuelto: ${r.action.toLowerCase()}.`); viewAdmin();
+    }));
+  }
+
+  /* ---------- enrutador por hash (#nombre) ---------- */
+  function render() {
+    const h = (location.hash || "#catalogo").slice(1);
+    const u = me();
+    if (u && u.suspended) { setSession(null); toast("Esta cuenta está suspendida por moderación."); }
+    header();
+    const nav = $("#topnav"); nav.classList.remove("open"); $("#menu-btn").setAttribute("aria-expanded", "false");
+    window.scrollTo(0, 0);
+    renderView(h);
+    main().focus({ preventScroll: true });
+  }
+  function renderView(h) {
+    let m;
+    if ((m = h.match(/^editar-(\d+)$/))) return viewPublicar(Number(m[1]));
+    if ((m = h.match(/^pub-(\d+)$/))) return viewPost(Number(m[1]));
+    if ((m = h.match(/^chat-(\d+)$/))) return viewChat(Number(m[1]));
+    if ((m = h.match(/^perfil-(\d+)$/))) return viewPerfil(Number(m[1]));
+    const views = {
+      catalogo: viewCatalogo, registro: viewRegistro, login: viewLogin, publicar: viewPublicar, pedir: viewPedir,
+      "mis-publicaciones": viewMisPublicaciones, "mis-solicitudes": viewMisSolicitudes, transacciones: viewTransacciones,
+      mensajes: viewMensajes, notificaciones: viewNotificaciones, admin: viewAdmin,
+      entregas: viewEntregas, favoritos: viewFavoritos, recuperar: viewRecuperar,
+    };
+    (views[h] || viewCatalogo)();
+  }
+  /* Actualiza la pantalla cuando llegan cambios de otras personas, sin borrar lo que se está escribiendo */
+  const LIVE = /^(catalogo|pub-\d+|chat-\d+|perfil-\d+|mensajes|notificaciones|mis-publicaciones|mis-solicitudes|transacciones|entregas|favoritos|admin)$/;
+  function liveRefresh(how) {
+    if (me() && me().suspended) return render();
+    header();
+    const h = (location.hash || "#catalogo").slice(1);
+    if (document.querySelector(".scrim")) return;
+    if (how !== "replace" && !LIVE.test(h)) return;
+    const a = document.activeElement;
+    const cy = a && a.closest && a.closest("#main") && a.dataset ? a.dataset.cy : null;
+    const val = cy && "value" in a ? a.value : null, y = window.scrollY;
+    renderView(h);
+    window.scrollTo(0, y);
+    if (cy) { const el = document.querySelector(`#main [data-cy="${cy}"]`); if (el) { if (val !== null && "value" in el) el.value = val; el.focus({ preventScroll: true }); } }
+  }
+
+  /* ---------- reiniciar datos de demostración ---------- */
+  function wireReset() {
+    $("#reset").addEventListener("click", () => {
+      if (serverMode && !(me() && me().admin)) return toast("En el modo compartido solo el administrador puede restablecer los datos de todos.");
+      modal(`<h2>¿Restablecer los datos de demostración?</h2><p class="muted">Se borran las cuentas, publicaciones y mensajes creados${serverMode ? " por todos los usuarios" : " en este navegador"} y vuelven los datos de ejemplo.</p>
+        <div class="actions"><button class="btn danger" id="do-reset" data-cy="confirmar-reset">Restablecer</button><button class="btn ghost" data-close>Cancelar</button></div>`, (s, close) => {
+        $("#do-reset", s).addEventListener("click", async () => {
+          if (serverMode) {
+            try { const r = await api("demo-reset", {}); setSession(null); mergeState(r); }
+            catch (e) { close(); return toast(e.message); }
+          } else { db = seed(); setSession(null); save(); }
+          close(); toast("Datos de demostración restablecidos."); go("catalogo"); render();
+        });
+      });
+    });
+  }
+
+  // Al corregir un campo con error, el mensaje desaparece
+  const clearFieldErr = (e) => { const f = e.target.closest && e.target.closest(".field.bad"); if (f) { f.classList.remove("bad"); const er = f.querySelector(".err"); if (er) er.textContent = ""; } };
+  document.addEventListener("input", clearFieldErr);
+  document.addEventListener("change", clearFieldErr);
+  window.addEventListener("hashchange", render);
+  window.addEventListener("storage", (e) => { if (!serverMode && (e.key === KEY || e.key === SKEY)) { db = loadLocal(); try { sess = JSON.parse(localStorage.getItem(SKEY)) || {}; } catch (x) { sess = {}; } render(); } });
+
+  /* ---------- menú del celular e instalación como app ---------- */
+  function wireMenu() {
+    const b = $("#menu-btn"), nav = $("#topnav");
+    b.addEventListener("click", () => { const open = nav.classList.toggle("open"); b.setAttribute("aria-expanded", String(open)); b.textContent = open ? "✕" : "☰"; });
+    nav.addEventListener("click", (e) => { if (e.target.closest("a")) { nav.classList.remove("open"); b.textContent = "☰"; } });
+  }
+  function wireInstall() {
+    let deferred = null;
+    const btn = $("#install");
+    window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); deferred = e; btn.hidden = false; });
+    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.navigator.standalone;
+    if (ios && serverMode) btn.hidden = false;
+    btn.addEventListener("click", async () => {
+      if (deferred) { deferred.prompt(); await deferred.userChoice; deferred = null; btn.hidden = true; return; }
+      modal(`<div style="display:grid;gap:10px"><h2>Instalar en el iPhone</h2><p>En Safari toca el botón <b>Compartir</b> (cuadro con flecha hacia arriba) y luego <b>“Agregar a pantalla de inicio”</b>.</p><button class="btn" data-close>Entendido</button></div>`);
+    });
+    window.addEventListener("appinstalled", () => { btn.hidden = true; toast("SegundaMano Express quedó instalada."); });
+    if ("serviceWorker" in navigator && serverMode) navigator.serviceWorker.register("sw.js").catch(() => {});
+  }
+
+  async function boot() {
+    if (/^https?:$/.test(location.protocol)) {
+      try { const r = await api("state"); if (r && r.state) { serverMode = true; mergeState(r); } } catch (e) { /* sin servidor: modo local */ }
+    }
+    if (!serverMode) save();
+    if (sess.uid && (!user(sess.uid) || (serverMode && !sess.token))) setSession(null);
+    setConnected(serverMode);
+    wireReset(); wireMenu(); wireInstall();
+    render();
+    if (serverMode) {
+      setInterval(poll, 2500);
+      document.addEventListener("visibilitychange", () => { if (!document.hidden) poll(); });
+      window.addEventListener("online", poll);
+    }
+  }
+  boot();
+})();
+
+</script>
+
+</body></html>

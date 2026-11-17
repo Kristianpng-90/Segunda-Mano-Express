@@ -1,0 +1,10 @@
+{
+  "name": "segundamano-express",
+  "version": "3.0.0",
+  "description": "SegundaMano Express — prototipo multiusuario (Sprints 1, 2 y 3). Patrones y Metodologías, UMB.",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" },
+  "license": "UNLICENSED",
+  "private": true
+}
